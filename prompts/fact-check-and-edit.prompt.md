@@ -40,6 +40,12 @@ Read the current file and extract every technical claim:
 - Configuration values, default settings, quotas
 - Code examples and syntax
 
+#### 1a. Resolve INCLUDES
+Scan the article for `[!INCLUDE ...]` references (e.g., `[!INCLUDE [description](path/to/include.md)]`). For each one:
+- Open and read the referenced include file
+- Extract technical claims from the include content just as you would for the main article
+- Track which claims originate from which include file so edits are applied to the correct file
+
 ### 2. Verify Against Official Sources
 For each claim:
 - Search `microsoft_docs_search` for the topic on learn.microsoft.com
@@ -55,12 +61,19 @@ For any inaccurate, outdated, or incomplete content:
 - Update `ms.date` to today's date
 - Do NOT add HTML comments or reference markers into the article itself — keep the article clean
 
+#### 3a. Edit INCLUDES Files
+If an inaccuracy originates from an INCLUDES file:
+- Make the correction directly in the include file, just as you would for the main article
+- Preserve the include file's existing formatting
+- Note in the chat summary which file was edited (main article vs. include file path)
+
 ### 4. Present References in Chat
 After ALL edits are complete, present a single summary in chat with this format for each change:
 
 ---
 
 **Edit N: [brief description]**
+- **File**: [main article or include file path]
 - **Line(s)**: [approximate line number(s)]
 - **What changed**: [original text] → [new text]
 - **Why**: [brief explanation]
@@ -85,6 +98,8 @@ End with:
 - **DO** present all sources and reasoning in the chat response
 - **DO** make edits incrementally so VS Code tracks each change
 - **DO** update `ms.date` in the YAML front matter to today's date
+- **DO** resolve and fact-check all `[!INCLUDE ...]` referenced files
+- **DO** edit INCLUDES files directly when they contain inaccuracies
 
 ## Quality Checklist
 Before finishing, confirm:
@@ -94,3 +109,5 @@ Before finishing, confirm:
 - [ ] Version/deprecation status confirmed
 - [ ] ms.date updated
 - [ ] Article formatting and style preserved
+- [ ] All `[!INCLUDE ...]` files read and fact-checked
+- [ ] INCLUDES edits noted with file path in chat summary
