@@ -26,9 +26,13 @@ Fact-check the currently open article against official Microsoft documentation a
 ## Authority Hierarchy
 
 Use sources in this priority order:
-1. **Tier 1 (Primary)**: learn.microsoft.com, azure.microsoft.com
-2. **Tier 2 (Secondary)**: techcommunity.microsoft.com, devblogs.microsoft.com, github.com/microsoft
-3. **Tier 3 (Cross-reference only)**: Stack Overflow, community blogs
+
+### Public Sources
+
+1. **Tier 1 (Primary)**: learn.microsoft.com, azure.microsoft.com — canonical product docs for names, features, configurations, limits, step-by-step guidance, and official recommendations.
+2. **Tier 2 (Secondary)**: techcommunity.microsoft.com, devblogs.microsoft.com, developer.microsoft.com, code.visualstudio.com — feature announcements, preview/GA dates, best practices, and design decisions from product teams.
+3. **Tier 3 (Code & Specs)**: github.com/microsoft, github.com/Azure — REST API specs (Azure/azure-rest-api-specs) as canonical API definitions; SDK, CLI, and PowerShell source repos for parameters, defaults, and code examples. Some documentation is generated directly from these codebases, making them a ground-truth source.
+4. **Tier 4 (Cross-reference only)**: Microsoft Q&A (official platform with Microsoft engineer responses), Stack Overflow, community blogs, GitHub Issues — edge-case clarifications, undocumented behaviors, and community-sourced solutions. Must not override Tier 1–3 sources.
 
 ## Steps
 
