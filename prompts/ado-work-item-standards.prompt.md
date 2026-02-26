@@ -19,6 +19,41 @@ tools:
 
 Create or validate Azure DevOps work items that comply with **Azure Core Content Standards**. Every work item must clearly articulate the customer problem, the proposed solution, measurable success criteria, and a tracking plan — before any work begins.
 
+## Title Naming Convention
+
+All ADO work item titles **must** follow this format:
+
+```
+<Service Name> | <Type of update> | Short description of work
+```
+
+**Types of updates:**
+
+| Type | Use when |
+|------|----------|
+| **Maintenance** | Ongoing content upkeep, bug fixes, link repairs, metadata updates |
+| **Freshness** | Scheduled freshness reviews to bring articles up to date |
+| **CAMP** | Content Architecture and Modernization Program work (curation, consolidation, restructuring) |
+
+**Examples:**
+- `Application Gateway | Maintenance | Update troubleshooting guide for 502 errors`
+- `Load Balancer | Freshness | Review top 5 articles for February`
+- `Virtual Network Manager | CAMP | Consolidate topology articles`
+
+## Required Tags
+
+Every work item **must** include at minimum:
+
+```
+<service>; Infra; Networking
+```
+
+- `<service>` — the Azure service slug (e.g., `azure-application-gateway`, `azure-load-balancer`, `azure-virtual-network-manager`, `ip-services`, `network-security-perimeter`)
+- `Infra` — infrastructure pillar tag
+- `Networking` — networking domain tag
+
+Additional tags (workflow type, semester, etc.) may be appended as needed.
+
 ## Required Information
 
 Gather the following from the user. If any field is missing, prompt for it before proceeding.
@@ -160,6 +195,8 @@ Review and update {service} documentation following Microsoft Writing Style Guid
 
 ## Quality Standards
 
+- **Title format**: `<Service Name> | <Type> | Short description` — no exceptions.
+- **Required tags**: `<service>; Infra; Networking` at minimum on every work item.
 - **Sentence casing** for all headings (capitalize only the first word and proper nouns).
 - **No internal jargon** in customer-facing problem statements — write as if the customer will read it.
 - **Specific file paths** in the solution section — not just "update the article."
