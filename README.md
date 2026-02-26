@@ -20,3 +20,10 @@ These prompt files are automatically available in VS Code via GitHub Copilot whe
 
 - **Skills** (`#` prefix): `#complete-fact-check`, `#fact-check-and-edit`, `#microsoft-researcher`, etc.
 - **Agents** (`@` prefix): `@microsoft-fact-checker`
+
+## Changelog
+
+### 2026-02-26 — [PR #1](https://github.com/mbender-ms/.github/pull/1)
+- Added `ado-work-item-standards.prompt.md` — ADO work item standards per Azure Core Content Standards
+- Added `CIA-Analysis.prompt.md` — Agent prompt for Customer Incidents Analysis reports
+- Added `Azure-Networking-incident-analysis.md` — Azure Networking incident analysis report
