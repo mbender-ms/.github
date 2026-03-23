@@ -48,6 +48,31 @@ Example: `Load Balancer | Maintenance | Github Issues & PR Review`
 
 Always include: service tag (e.g., `azure-load-balancer`), area tag (e.g., `Networking`), workflow type (e.g., `content-maintenance`), and `cda`.
 
+## Work completion summary
+
+Every ADO work item must include a **Summary of work completed** section before closing. This section provides a metrics table that quantifies the work delivered. Add this section to the work item description when the work is done.
+
+### Required metrics table
+
+```markdown
+## Summary of work completed
+
+| Metric | Count |
+|--------|-------|
+| Total PRs | |
+| PRs reviewed | |
+| Articles created | |
+| Articles updated | |
+| PRs merged | |
+| PRs closed (not merged) | |
+| Total files changed | |
+| Total line changes | |
+```
+
+- Fill in every row; use `0` when a metric does not apply.
+- Use `~` prefix for approximate counts (e.g., `~466`).
+- Derive counts from the linked GitHub PRs whenever possible.
+
 ## Prompt asset
 
 | File | Workflow |
