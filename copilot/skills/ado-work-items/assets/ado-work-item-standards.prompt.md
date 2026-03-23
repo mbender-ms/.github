@@ -159,6 +159,30 @@ Review and update {service} documentation following Microsoft Writing Style Guid
 4. Check for a linked GitHub PR.
 5. Report any gaps and suggest improvements.
 
+## Work Completion Summary
+
+Before closing or resolving a work item, add a **Summary of work completed** section to the description with the following metrics table:
+
+```markdown
+## Summary of work completed
+
+| Metric | Count |
+|--------|-------|
+| Total PRs | |
+| PRs reviewed | |
+| Articles created | |
+| Articles updated | |
+| PRs merged | |
+| PRs closed (not merged) | |
+| Total files changed | |
+| Total line changes | |
+```
+
+- Fill in every row; use `0` when a metric does not apply.
+- Use `~` prefix for approximate counts (e.g., `~466`).
+- Derive counts from the linked GitHub PRs whenever possible.
+- Add this section after all work is complete and before transitioning the work item to **Closed** or **Resolved**.
+
 ## Quality Standards
 
 - **Sentence casing** for all headings (capitalize only the first word and proper nouns).
