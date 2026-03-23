@@ -4,10 +4,7 @@
 	"servers": {
 		"cerebro": {
 			"type": "http",
-			"url": "https://livdhnxdbnhxxxlgcoge.supabase.co/functions/v1/cerebro-mcp",
-			"headers": {
-				"x-brain-key": "d0e41a7dc5c7718b59522bd254769f7b19419d3f69c3e98e7d4bcaabf0b89964"
-			}
+			"url": "https://mcp.sudbringlab.cloud/rw/"
 		},
 		"context7": {
 			"type": "http",
