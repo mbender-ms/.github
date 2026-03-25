@@ -4,7 +4,7 @@
 	"servers": {
 		"cerebro": {
 			"type": "http",
-			"url": "https://mcp.sudbringlab.cloud/rw/"
+			"url":"https://cerebro-ms-func.azurewebsites.net/cerebro-mcp"
 		},
 		"context7": {
 			"type": "http",
