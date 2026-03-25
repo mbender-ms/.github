@@ -41,6 +41,7 @@ Articles follow learn.microsoft.com frontmatter standards (`ms.service`, `ms.top
 - **content-developer-assistant MCP** — workflow orchestration (work items, git, PRs)
 - **Context7** — library and SDK documentation lookups
 - **Cerebro** — personal knowledge retrieval
+- **Context Mode** — codebase context indexing and search
 
 ## CLI Tools Available on All Workstations
 
