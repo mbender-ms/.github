@@ -107,6 +107,9 @@ The following tools are installed and available from the command line on all of 
   - Subscription: `00000000-0000-0000-0000-000000000000`
   - Public IPs: `203.0.113.x` (documentation range)
   - Private IPs: `10.0.0.x` or `192.168.0.x`
+- When performing git operations if the phrase is "push it", stage all changes, commit the changes with a detailed message, do a git pull upstream main --no-edit then push to fork:
+    - If its the first push, create a detailed pull request with the github mcp tools, the content-developer-assitant MCP server and the content-developer-assistant agent.
+    - If its not the first push, just push the changes to the fork.
 
 ## Quality Standards
 
