@@ -89,6 +89,17 @@ The following tools are installed and available from the command line on all of 
 |---|---|---|
 | context-mode | `ctx` | Codebase context indexing and search |
 
+### SSH Access
+
+SSH key-based authentication is configured for Allen's home lab servers. If SSH keys are not yet installed on the current machine, follow the instructions in [`docs/ssh-setup-agent.md`](https://github.com/asudbring/workstation/blob/main/docs/ssh-setup-agent.md) in the `asudbring/workstation` repo.
+
+| Host | User | Key |
+|---|---|---|
+| `media-server.sudbringlab.com` | `allenadmin` | `~/.ssh/sudbringlab` |
+| `media.sudbringlab.com` | `allenadmin` | `~/.ssh/sudbringlab` |
+
+When asked to "install SSH keys" or "set up SSH for sudbringlab", retrieve and follow the instructions from the workstation repo's `docs/ssh-setup-agent.md`.
+
 ### OS-Specific Tools
 
 - **Windows**: `winget`, `choco` (Chocolatey), Windows Terminal, WSL with Ubuntu
