@@ -8,6 +8,8 @@ user-invocable: true
 
 Evaluate romantic and intimate scenes with the expertise of a reader who has experienced hundreds of such scenes across the romantasy genre and knows exactly what makes them work.
 
+**All evaluation is through the female gaze.** These scenes are written by a woman, from a female POV, for a female audience. The critique must assess whether the scene delivers on that promise.
+
 ## When to Use
 
 - Critiquing a specific romantic tension scene (the almost-kiss, the confession, the charged moment)
@@ -128,7 +130,25 @@ The aftermath — how characters behave after crossing a physical threshold. Oft
 - Can either character say no? Would no be respected?
 - Are intoxicants, emotional distress, or power imbalances present? If so, are they handled thoughtfully?
 
-### Criterion 6: Narrative Purpose — Does This Scene NEED to Exist?
+### Criterion 6: Female Gaze — Is This Written For Women?
+
+| Rating | Description |
+|--------|-------------|
+| ⭐⭐⭐⭐⭐ | Pure female gaze. The scene is experienced through the protagonist's body and emotions. Male characters are felt, not catalogued. Desire is embodied, not performative. |
+| ⭐⭐⭐⭐ | Strong. Mostly female gaze with a rare slip into neutral territory. |
+| ⭐⭐⭐ | Mixed. Some passages read as written for a female audience, others feel gender-neutral or slip into male-gaze tropes. |
+| ⭐⭐ | Weak. Male-gaze framing intrudes — clinical anatomy, performative female desire, or love interests described as visual objects rather than felt presences. |
+| ⭐ | Male gaze. This reads like it was written by and for men. Total failure of the authorial voice. |
+
+**What to check:**
+- Are male characters described through sensation (warmth, roughness, weight, voice) rather than measurement?
+- Does the POV character's desire feel internal (heat, ache, awareness) or performative (posing, displaying)?
+- Is vulnerability present in the love interest — and is that vulnerability treated as attractive?
+- Are female bodies described with agency ("she arched into him") not objectification ("her body was...")?
+- Does restraint/control in the love interest serve as tension? The female gaze loves watching a powerful man hold himself back — for *her*.
+- Is the love interest's voice used as a sensory element? (Low, close, rough, what he says vs. what he holds back)
+
+### Criterion 7: Narrative Purpose — Does This Scene NEED to Exist?
 
 | Rating | Description |
 |--------|-------------|

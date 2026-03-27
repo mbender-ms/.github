@@ -146,3 +146,25 @@ When writing a scene, follow this internal structure:
 - ❌ Resolving romantic tension too early — the slow burn is the point
 - ❌ Perfect protagonists — they must have flaws, blind spots, and bad decisions that cost them
 - ❌ Forgetting the body — characters exist physically. They're tired, hungry, injured, aroused, cold. The body is always present.
+- ❌ Male-gaze descriptions of female characters — no anatomy inventories, no performative desire
+- ❌ Describing male love interests like character sheets — the female gaze *feels* a man (warmth, weight, voice, the way he moves), it doesn't measure him
+- ❌ Writing desire as something that happens *to* the female character — she wants, she chooses, she burns
+
+---
+
+## The Female Gaze in Prose
+
+All prose is written through the female author's voice. This shapes HOW characters are described:
+
+**Male characters through the female gaze:**
+- Movement and presence over physical inventory ("the way he filled the corridor" not "six-foot-two with broad shoulders")
+- Restraint as aphrodisiac — what he holds back is more charged than what he does
+- Vulnerability in power — the crack in his armor, the rawness he lets her see
+- Sensation over observation — how his touch feels, not how his body looks
+- Voice as sensory experience — low, rough, close, the words he almost says
+
+**Female POV desire:**
+- Desire is embodied: heat, ache, awareness, the catch of breath
+- Agency in wanting — she pursues, she decides, she surrenders by *choice*
+- The emotional stakes of intimacy — every scene of desire is also a scene of vulnerability
+- The body's history matters — scars, exhaustion, strength earned through suffering
