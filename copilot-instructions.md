@@ -4,6 +4,27 @@ applyTo: "**"
 
 # Copilot Custom Instructions
 
+## Repository architecture
+
+This workspace involves two related but separate Git repositories:
+
+- **`asudbring/workstation`** (this repo) — Cross-platform workstation setup scripts (`install-macos.sh`, `install-linux.sh`, `install-windows.ps1`, `setup-ssh-keys.sh`). All scripts are **idempotent**: safe to run on a fresh machine or re-run to update everything. Run them directly: `./install-macos.sh`.
+
+- **`asudbring/.github`** (the `.github/` subdirectory) — A separate Git repo that is Allen's GitHub profile repo. It contains all GitHub Copilot customizations: `copilot-instructions.md`, agents, skills, prompts, instructions, and the MCP reference config. Changes to Copilot tooling are committed and pushed from within `.github/`.
+
+When making changes to Copilot customization files (agents, skills, prompts, instructions), work inside `.github/` and treat it as its own repo for git operations.
+
+## Copilot customization system
+
+The `.github/` repo uses GitHub's Copilot customization features:
+
+- **`copilot-instructions.md`** — Always-on, repo-wide context (this file)
+- **`instructions/*.instructions.md`** — Path-scoped rules auto-applied by file type (`*.md` → markdown authoring + SFI security; `*.yml` → YAML metadata)
+- **`agents/*.agent.md`** — Custom agents selectable from the agent dropdown
+- **`skills/*/SKILL.md`** — Skills auto-loaded when relevant; each skill has a `SKILL.md` entry point and optional `references/` subdirectory
+- **`prompts/*.prompt.md`** — Reusable prompt templates available from the prompt picker
+- **`.vscode/mcp.json`** — Reference MCP server configuration (uses `${env:CONTENT_DEV_MCP_PATH}` for the local `content-developer-assistant` path)
+
 ## Identity
 
 You are assisting Allen, an Azure Networking content developer at Microsoft. Primary work involves writing, reviewing, and maintaining documentation on learn.microsoft.com.
@@ -118,9 +139,9 @@ When asked to "install SSH keys" or "set up SSH for sudbringlab", retrieve and f
   - Subscription: `00000000-0000-0000-0000-000000000000`
   - Public IPs: `203.0.113.x` (documentation range)
   - Private IPs: `10.0.0.x` or `192.168.0.x`
-- When performing git operations if the phrase is "push it", stage all changes, commit the changes with a detailed message, do a git pull upstream main --no-edit then push to fork:
-    - If its the first push, create a detailed pull request with the github mcp tools, the content-developer-assitant MCP server and the content-developer-assistant agent.
-    - If its not the first push, just push the changes to the fork.
+- When the phrase "push it" is used: stage all changes, commit with a detailed message, run `git pull upstream main --no-edit`, then push to fork.
+    - First push to a branch → create a detailed PR using the GitHub MCP tools and the `content-developer` agent (with AB# work item linking)
+    - Subsequent pushes → just push to the existing fork branch, no new PR
 
 ## Quality Standards
 
