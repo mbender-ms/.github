@@ -1,6 +1,6 @@
 ---
 name: reference-reader
-description: "Analyze reference books and source material to extract prose style, narrative structure, pacing patterns, and voice characteristics. Reads .txt files from reference-books/ directory and produces actionable style guides for fiction writing."
+description: "Analyze reference books and source material to extract prose style, narrative structure, pacing patterns, and voice characteristics. Uses context-mode to read indexed .txt files from reference-books/ directory and produces actionable style guides for fiction writing."
 argument-hint: "Describe what to analyze, e.g. 'analyze the romantic tension scenes in ACOTAR' or 'extract chapter structure patterns from ACOMAF'"
 user-invocable: true
 ---
@@ -18,18 +18,42 @@ Read and analyze reference books to extract style patterns, voice characteristic
 
 ---
 
+## ⚠️ MANDATORY: Use Context-Mode for All Reading
+
+Reference books are 80,000–150,000 words. **Never use `readFile`, `cat`, or any direct file read on reference text files.** This will destroy the context window.
+
+**Always use context-mode:**
+
+```
+# Step 1: Index the book (or check if already indexed this session)
+ctx_index(path="reference-books/[Title - Author].txt", source="ref:[short-title]")
+
+# Step 2: Search for what you need
+ctx_search(queries=["romantic tension physical awareness", "chapter opening hooks"], source="ref:[short-title]")
+```
+
+**Source labels** are in `reference-books/INDEX.md`. Check INDEX.md first.
+
+**Note**: Context-mode indexes are session-scoped. Re-index at the start of each session before searching.
+
+---
+
 ## Reference Library
 
 Reference books are stored in the repository at:
 
 ```
 reference-books/
-├── A Court of Thorns and Roses - Sarah J. Maas.txt
-├── A Court of Mist and Fury - Sarah J. Maas.txt
-└── [additional books as added]
+├── INDEX.md                                        ← Source labels and metadata
+├── raw/                                            ← Original source files (do not read directly)
+├── summaries/                                      ← Pre-built style analysis documents
+│   └── [Title - Author].summary.md
+└── [Title - Author].txt                            ← Clean text (index with context-mode, never read directly)
 ```
 
-**Supported formats**: `.txt` files are preferred for analysis (direct text access). `.epub` and `.pdf` are stored as backup but `.txt` is the working format.
+**First check `summaries/`** — if a summary already exists for the book you need, read it directly. It is a markdown document and safe to read with `readFile`. Only re-run full analysis if the summary is missing or you need something the summary doesn't cover.
+
+**Supported formats**: `.txt` files are the working format. Raw epub/docx/pdf live in `raw/` and must be processed by the **reference-librarian agent** before use.
 
 ---
 
