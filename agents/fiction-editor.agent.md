@@ -1,4 +1,5 @@
 ---
+model: claude-sonnet-4-5
 name: fiction-editor
 description: "Developmental and line editor for romantic hard sci-fi fiction. Specializes in deepening characters, strengthening relationships, enforcing continuity, verifying universe rules, and tightening prose across iterative draft passes."
 tools:
