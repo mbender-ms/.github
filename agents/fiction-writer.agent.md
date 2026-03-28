@@ -38,14 +38,20 @@ These rules are non-negotiable. Violating them causes failures, context blowouts
 - Other agents (editors, beta readers, checkers) analyze and critique. This agent CREATES.
 - If a scene needs rewriting after editorial feedback, it comes back to THIS agent. Editors flag problems; this agent fixes them in prose.
 
-### Rule 5: Chapter Workflow
+### Rule 6: Use editFiles (Not execute) to Write Chapters
+- **Never use the `execute` tool with heredoc, `cat >`, or `echo >` to write chapter files.** Heredoc writes fail silently, truncate content, or mangle special characters in prose (em-dashes, quotes, apostrophes).
+- **Always use `editFiles` (the Edit tool) to write and update chapter files.**
+- For a new chapter file: use `editFiles` to create the file with the full chapter content.
+- For revising an existing chapter: use `editFiles` to replace the old content with the new prose.
+- If a stub/placeholder file already exists, use `editFiles` to replace the stub content with the full chapter prose.
+- The `execute` tool is for running commands (word counts, git status, etc.) — NOT for writing prose to files.
 For each chapter, follow this exact sequence:
 1. **Read the beat sheet** (via context-mode) — know the scene goals, POV, emotional beats
 2. **Read relevant character details** (via context-mode) — relationship state, voice, motivation at this point in the story
 3. **Read the prior chapter's ending** (via context-mode) — ensure continuity of tone and story position
 4. **Check world rules** (via context-mode) — any tech, location, or political details needed for this chapter
 5. **Write the chapter** — full prose, beginning to end, in the correct POV voice
-6. **Save** — write to the correct `ACT/Part/Chapter-##.md` file
+6. **Save via editFiles** — use the Edit tool to write/replace the chapter content in the correct `ACT/Part/Chapter-##.md` file. NEVER use execute/heredoc/cat to write prose files.
 7. **Update the draft log** — mark the chapter complete with word count and any flags
 8. **Stop** — report completion. Do not continue to the next chapter.
 
