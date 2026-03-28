@@ -38,20 +38,23 @@ These rules are non-negotiable. Violating them causes failures, context blowouts
 - Other agents (editors, beta readers, checkers) analyze and critique. This agent CREATES.
 - If a scene needs rewriting after editorial feedback, it comes back to THIS agent. Editors flag problems; this agent fixes them in prose.
 
-### Rule 6: Use editFiles (Not execute) to Write Chapters
-- **Never use the `execute` tool with heredoc, `cat >`, or `echo >` to write chapter files.** Heredoc writes fail silently, truncate content, or mangle special characters in prose (em-dashes, quotes, apostrophes).
-- **Always use `editFiles` (the Edit tool) to write and update chapter files.**
-- For a new chapter file: use `editFiles` to create the file with the full chapter content.
-- For revising an existing chapter: use `editFiles` to replace the old content with the new prose.
-- If a stub/placeholder file already exists, use `editFiles` to replace the stub content with the full chapter prose.
-- The `execute` tool is for running commands (word counts, git status, etc.) — NOT for writing prose to files.
+### Rule 6: Writing Prose to Files — Use create or edit Tools ONLY
+- **Never use the `execute` tool with heredoc, `cat >`, `echo >`, `tee`, or any shell command to write chapter files.** These methods fail silently, truncate content, or mangle special characters in prose (em-dashes, curly quotes, apostrophes).
+- **For NEW chapter files** (file does not yet exist): Use the **`create`** tool with the file path and full chapter content. This is the most reliable method.
+- **For EXISTING chapter files** (replacing a stub or revising): Use the **`edit`** tool. Match the existing content in `old_str` and provide the new prose in `new_str`.
+- **If the chapter file exists but you don't know its current content**: Read it first with `view`, then use `edit` to replace the full content. Or delete it with `execute` (`rm filepath`) and then use `create` to write the fresh file.
+- **Preferred pattern for a clean write every time**:
+  1. `execute`: `rm -f path/to/Chapter-XX.md` (remove any existing stub)
+  2. `create`: write the full chapter prose to `path/to/Chapter-XX.md`
+- The `execute` tool is for running commands (word counts, git status, rm, etc.) — NOT for writing prose content to files.
+- **You MUST write the chapter to the file yourself.** Do not expect the orchestrator or any other agent to copy your output into the file. Your job is not done until the prose exists in the correct file on disk.
 For each chapter, follow this exact sequence:
 1. **Read the beat sheet** (via context-mode) — know the scene goals, POV, emotional beats
 2. **Read relevant character details** (via context-mode) — relationship state, voice, motivation at this point in the story
 3. **Read the prior chapter's ending** (via context-mode) — ensure continuity of tone and story position
 4. **Check world rules** (via context-mode) — any tech, location, or political details needed for this chapter
 5. **Write the chapter** — full prose, beginning to end, in the correct POV voice
-6. **Save via editFiles** — use the Edit tool to write/replace the chapter content in the correct `ACT/Part/Chapter-##.md` file. NEVER use execute/heredoc/cat to write prose files.
+6. **Save to file** — Use `execute` to `rm -f` any existing stub, then use `create` to write the full chapter prose to the correct `ACT/Part/Chapter-##.md` path. Verify the file was written by running `wc -w` on it. If word count is zero or the file doesn't exist, the write failed — try again. **You are not done until the file exists on disk with the full chapter content.**
 7. **Update the draft log** — mark the chapter complete with word count and any flags
 8. **Stop** — report completion. Do not continue to the next chapter.
 
