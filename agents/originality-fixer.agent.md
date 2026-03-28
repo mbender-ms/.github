@@ -1,5 +1,5 @@
 ---
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 name: originality-fixer
 description: "Take findings from originality checker agents and generate replacement names, reworked scenes, and redesigned concepts that maintain the story's intent while being verifiably original. Propagate all changes across every document in the project."
 tools:

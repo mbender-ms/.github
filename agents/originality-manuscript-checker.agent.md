@@ -1,5 +1,5 @@
 ---
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 name: originality-manuscript-checker
 description: "Scene-by-scene scan of finished manuscript prose for character names, nicknames, and scene structures that are exact or close matches to published works. The fine-grained companion to the world-level checker — this one reads every paragraph."
 tools:
