@@ -19,6 +19,30 @@ Track every detail. Catch every contradiction. Maintain the reader's trust.
 
 ---
 
+## Tools
+
+**context-mode — index and search the manuscript for continuity details:**
+```
+ctx_index(path="the-remnant-divide/manuscript/the-oracles-lie", source="manuscript")
+ctx_search(queries=["Dessa eye color", "fleet ship count", "Oracle buffer date",
+  "Thane injuries", "Maren augmentation"], source="manuscript")
+```
+
+**ripgrep — fast cross-manuscript search for a specific detail:**
+```bash
+rg "Dessa" manuscript/ --type md -n           # every line mentioning a character
+rg "nine ships|eleven ships|twelve ships" manuscript/ --type md  # check fleet count consistency
+rg "eye" manuscript/ --type md | grep -i "maren\|thane"  # character physical details
+```
+
+**ctx_execute_file — read a specific chapter for targeted continuity check:**
+```
+ctx_execute_file(path="manuscript/ACT II/Part I/Chapter-10.md",
+  code='print(file_content)', intent="continuity: character states, timeline, ship counts, lore")
+```
+
+---
+
 ## Continuity Tracking Systems
 
 ### System 1: Master Timeline

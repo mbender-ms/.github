@@ -14,7 +14,24 @@ tools:
 
 Generate a comprehensive Customer Incidents Analysis report for the specified **Azure Service Area or Product/Feature**. The report should mirror the structure and depth of an internal Microsoft CSS (Customer Service and Support) incident analysis, identifying recurring patterns, high-impact issue categories, and documentation gaps that can drive targeted content projects.
 
-## Inputs
+## Tools
+
+**context-mode — fetch and index web sources without flooding context:**
+```
+# Fetch and index a Microsoft docs page for analysis
+ctx_fetch_and_index(url="https://learn.microsoft.com/azure/...", source="ms-docs-vnet")
+ctx_search(queries=["known issues", "common errors", "troubleshoot"], source="ms-docs-vnet")
+
+# Index multiple fetched sources and search across all
+ctx_search(queries=["timeout", "connection refused", "authentication failed"], source="ms-docs")
+```
+
+**xh — structured HTTP requests for any API sources:**
+```bash
+xh GET "https://api.example.com/incidents" Accept:application/json
+```
+
+
 
 The user will provide one or more of:
 - **Service Area**: A broad Azure domain (e.g., "Azure Networking", "Azure Compute", "Azure Storage", "Azure Identity")

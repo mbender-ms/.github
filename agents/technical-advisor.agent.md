@@ -15,7 +15,23 @@ tools:
 
 **Purpose**: Automate CSS (Customer Support Services) workflows for PACE documentation bug fixing in Azure Networking.
 
-## Role overview
+## Tools
+
+**context-mode — read large PACE escalations or doc articles without flooding context:**
+```
+ctx_execute_file(path="articles/networking/article.md",
+  code='print(file_content)', intent="content gaps, outdated steps, missing info")
+ctx_fetch_and_index(url="https://learn.microsoft.com/azure/...", source="ms-ref")
+ctx_search(queries=["specific claim to verify", "step being questioned"], source="ms-ref")
+```
+
+**ripgrep — search docs for the term/step reported in a PACE bug:**
+```bash
+rg "error message or term" articles/ --type md     # find where it appears
+rg -l "deprecated feature" articles/ --type md    # which articles need updating
+```
+
+
 
 This agent helps CSS Technical Advisors:
 - Create Content Bug work items from PACE escalations

@@ -22,7 +22,36 @@ tools:
 
 ---
 
-## First time setup
+## Tools
+
+**context-mode — read large docs and search without flooding context:**
+```
+# Read a doc file before editing
+ctx_execute_file(path="articles/networking/article.md",
+  code='print(file_content)', intent="content structure, prerequisites, code blocks")
+
+# Search across a service area's articles
+ctx_index(path="articles/virtual-network", source="vnet-docs")
+ctx_search(queries=["NSG rule format", "subnet delegation", "peering setup"], source="vnet-docs")
+
+# Fetch and index an external reference doc
+ctx_fetch_and_index(url="https://learn.microsoft.com/azure/virtual-network/...", source="ms-docs")
+```
+
+**ripgrep — search across documentation files:**
+```bash
+rg "deprecated term" articles/ --type md          # find all occurrences to update
+rg "ms.author: " articles/ --type md              # audit metadata fields
+rg -l "placeholder-value" articles/ --type md     # find articles needing updates
+```
+
+**fd — find articles by pattern:**
+```bash
+fd "*.md" articles/virtual-network/ --type f      # list all articles in a service area
+fd "quickstart-*.md" articles/ --type f           # find all quickstarts
+```
+
+
 
 1. **Sign into GitHub Copilot** in VS Code (bottom right status bar)
 2. **Authenticate CLI tools**:

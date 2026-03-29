@@ -68,7 +68,40 @@ You format, convert, validate, and publish.
 
 ---
 
-## Skills
+## Tools
+
+**fd — find and assemble manuscript files:**
+```bash
+fd "Chapter-*.md" the-remnant-divide/manuscript/ --type f | sort   # ordered chapter list
+fd "*.md" manuscript/ --type f | xargs wc -w | tail -1             # total word count
+```
+
+**context-mode — read manuscript without loading into context:**
+```
+# Read a chapter to check formatting before conversion
+ctx_execute_file(path="manuscript/ACT I/Part I/Chapter-01.md",
+  code='print(file_content)', intent="markdown formatting, scene breaks, front matter")
+
+# Index the full manuscript to search for formatting inconsistencies
+ctx_index(path="the-remnant-divide/manuscript", source="manuscript")
+ctx_search(queries=["scene break markers", "chapter heading format", "italic markup"], source="manuscript")
+```
+
+**ctx_execute — run Pandoc and EPUBCheck in sandbox:**
+```
+ctx_execute(code="pandoc assembled.md --metadata-file=metadata.yaml -o book.epub",
+  language="shell")
+ctx_execute(code="epubcheck book.epub 2>&1", language="shell")
+```
+
+**ripgrep — find formatting issues before conversion:**
+```bash
+rg "^# " manuscript/ --type md          # chapter headings
+rg "\*\*\*|---" manuscript/ --type md  # scene breaks
+rg "â€"|â€˜|â€™" manuscript/ --type md  # detect encoding corruption before it enters the epub
+```
+
+
 
 | Skill | Purpose | Invoke | Order |
 |-------|---------|--------|-------|

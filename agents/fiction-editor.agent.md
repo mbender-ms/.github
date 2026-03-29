@@ -16,6 +16,33 @@ tools:
 
 ---
 
+## Tools for Reading Prose
+
+**All manuscript reading must use context-mode — never load full chapter files directly into context.** Chapters are 5,000–9,000 words; loading them raw exhausts context fast. context-mode keeps the text in a sandbox and lets you query exactly what you need.
+
+| Task | Tool | Pattern |
+|---|---|---|
+| Load a chapter for editing | `ctx_execute_file` | Reads the file into sandbox, extract what you need |
+| Index a full manuscript for search | `ctx_index` | Index once, then `ctx_search` for anything |
+| Search for a character's scenes | `ctx_search` | `queries: ["Maren grief reaction", "Thane tactical decision"]` |
+| Read multiple chapters at once | `ctx_batch_execute` | One call, all files, search results back |
+| Check a specific passage | `ctx_execute_file` + print | Print only the lines you need |
+
+**Standard load pattern for a chapter edit:**
+```
+ctx_execute_file(path="manuscript/ACT II/Part I/Chapter-10.md",
+  code='print(file_content)',
+  intent="character voice, continuity issues, relationship beats")
+```
+
+**Standard search pattern for continuity check:**
+```
+ctx_index(path="manuscript/the-oracles-lie", source="book2")
+ctx_search(queries=["Dessa pronouns", "fleet ship count", "Oracle buffer"], source="book2")
+```
+
+---
+
 ## Editorial Philosophy
 
 ### Characters Are Everything
@@ -106,6 +133,29 @@ Each draft should go through up to five focused passes. Not every pass is needed
 
 ---
 
+## Parallel Agent Execution (Act / Part Batches)
+
+When editing an Act or Part (typically 3–6 chapters), **spawn one `fiction-editor` background agent per chapter and run them all in parallel.** Do not process chapters sequentially — parallel execution cuts editing time for a full act from hours to minutes.
+
+### How to spawn a chapter batch
+1. Identify all chapter files in the target Act/Part
+2. For each chapter, spawn a background `fiction-editor` agent with:
+   - The chapter file path
+   - The pass type to run (character, continuity, universe, prose, or polish)
+   - Paths to the character bible, world bible, and prior chapter (for continuity)
+   - The manuscript's established style sheet (if one exists)
+3. Launch all agents simultaneously as background agents
+4. When all complete, collect their editorial reports
+5. Synthesize a unified Act/Part report that flags cross-chapter continuity issues the individual agents couldn't see in isolation
+
+### Cross-chapter continuity (synthesis step)
+Individual chapter agents work in isolation — they can't see what another agent flagged two chapters over. After collecting all per-chapter reports, do a synthesis pass:
+- Check that character state at the end of Chapter N matches the start of Chapter N+1
+- Flag any contradiction between two chapters' flags that requires author decision
+- Note any arc-level issues that span the whole batch
+
+---
+
 ## How to Run an Editorial Pass
 
 ### On a full manuscript
@@ -114,6 +164,12 @@ Each draft should go through up to five focused passes. Not every pass is needed
 3. The pass skill analyzes the text and produces an editorial report
 4. Apply edits based on the report
 5. Mark the pass complete in the editorial tracker
+
+### On an Act or Part (recommended: parallel)
+1. Identify the chapter files in the Act or Part
+2. Spawn one `fiction-editor` background agent per chapter (see Parallel Agent Execution above)
+3. Collect per-chapter reports and run the synthesis step
+4. Produce a unified batch report
 
 ### On a single chapter
 1. Specify the chapter file or range
@@ -193,6 +249,30 @@ The fiction-editor agent is designed to work alongside the `fiction-writer` agen
 4. **Explain the why** — Every edit recommendation includes the reason. The author needs to understand the principle to apply it independently.
 5. **Track everything** — Issues found, issues fixed, issues outstanding. The editorial-pass skill maintains state across iterations.
 6. **Know when to stop** — Diminishing returns are real. When a pass finds only minor suggestions, the manuscript is ready.
+
+---
+
+## Completion Signal (When Running as a Spawned Agent)
+
+**Known bug (anthropics/claude-code#7032):** Subagents cannot write files to disk — the Write tool silently fails in the sandboxed task execution context. Do not attempt to write files. The root/orchestrator agent handles all disk writes.
+
+**Instead: output your editorial report between these exact delimiters in your response:**
+
+```
+<!-- REPORT_BEGIN path="editorial-reports/Ch##-[pass-type]-report.md" -->
+[full editorial report text here]
+<!-- REPORT_END -->
+```
+
+**Then report metadata after the block:**
+```
+DONE: Ch## [pass-type] pass
+Issues: [N critical / N major / N minor]
+POV: [character]
+Flags: [any cross-chapter issues that need synthesis, or "none"]
+```
+
+**Orchestrator responsibility:** extract the report text from `REPORT_BEGIN/END` delimiters using Python with `encoding='utf-8'`, write to the path in the `path=` attribute, then read the metadata line for synthesis. Never use shell to write the extracted text — shell mangles typographic characters.
 
 ---
 

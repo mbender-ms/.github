@@ -17,7 +17,25 @@ Write publication-quality fiction scenes that blend the emotional intensity of S
 
 ---
 
-## Point of View
+## Tools
+
+**context-mode — read prior chapters and worldbuilding without loading raw files:**
+```
+# Read the previous chapter ending for tone continuity
+ctx_execute_file(path="manuscript/ACT I/Part II/Chapter-05.md",
+  code='print(file_content[-2000:])', intent="ending tone, last beat, POV voice")
+
+# Search worldbuilding for scene-specific details
+ctx_search(queries=["location description", "tech capability", "character voice notes"],
+  source="worldbuilding")
+```
+
+**ripgrep — check how a character's voice has appeared before:**
+```bash
+rg "^.*Maren.*said\|Maren thought\|Maren's" manuscript/ --type md -n | tail -20
+```
+
+
 
 ### Default: Deep First-Person POV
 The primary narrator is a strong female protagonist. Write in deep first-person present or past tense (match the manuscript's established tense).

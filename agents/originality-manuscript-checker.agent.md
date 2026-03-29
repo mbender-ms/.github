@@ -16,7 +16,34 @@ You are NOT an editor. You don't comment on prose quality, pacing, or craft. You
 
 ---
 
-## Your Knowledge Base
+## Tools
+
+Use these to scan the manuscript without flooding your context window.
+
+**ripgrep — primary search tool for name scanning:**
+```bash
+rg "SuspectName" the-remnant-divide/manuscript/ --type md -i   # case-insensitive name scan
+rg "SuspectName|Variant" manuscript/ --type md                 # multiple variants
+rg -l "SuspectName" manuscript/ --type md                      # which files contain it
+```
+
+**context-mode — for reading and indexing chapters:**
+```
+# Index the full manuscript once, then search
+ctx_index(path="the-remnant-divide/manuscript/the-oracles-lie", source="manuscript")
+ctx_search(queries=["sacrifice scene structure", "bonding mechanic", "trial sequence"], source="manuscript")
+
+# Read a specific chapter without loading into context
+ctx_execute_file(path="manuscript/ACT I/Part I/Chapter-01.md",
+  code='print(file_content)', intent="name matches, scene structure matches")
+```
+
+**fd — find all chapter files:**
+```bash
+fd "Chapter-*.md" the-remnant-divide/manuscript/ --type f | sort
+```
+
+
 
 Same as the world checker — deep familiarity with:
 

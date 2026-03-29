@@ -61,8 +61,92 @@ Articles follow learn.microsoft.com frontmatter standards (`ms.service`, `ms.top
 - **GitHub MCP** — PR operations
 - **content-developer-assistant MCP** — workflow orchestration (work items, git, PRs)
 - **Context7** — library and SDK documentation lookups
-- **Cerebro** — personal knowledge retrieval
+- **Cerebro** — personal knowledge retrieval; all installed apps and tools are stored here
 - **Context Mode** — codebase context indexing and search
+
+## Context Mode & AI-Optimized Tools (All Agents)
+
+All agents and skills should use **context-mode** for reading large files and **AI-optimized CLI tools** for search and file operations. These tools are installed on all Allen's machines and available in every agent session.
+
+### context-mode MCP tools
+
+Use context-mode to process files without loading them into context. This is critical for any task involving large documents — manuscripts, reference books, documentation, codebases.
+
+| Tool | Purpose |
+|---|---|
+| `ctx_execute_file` | Process a file in sandbox — reads the file but only your `print()` output enters context |
+| `ctx_index` | Index a file or directory for BM25 full-text search |
+| `ctx_search` | Search indexed content with natural language queries |
+| `ctx_batch_execute` | Run multiple commands + queries in one call |
+| `ctx_execute` | Run shell commands in sandbox without flooding context |
+| `ctx_fetch_and_index` | Fetch a URL and index it for search |
+| `ctx_stats` | See context usage statistics |
+
+**Read a file without flooding context:**
+```
+ctx_execute_file(path="path/to/file.md", code='print(file_content)', intent="what you're looking for")
+```
+
+**Index a directory and search it:**
+```
+ctx_index(path="path/to/dir", source="label")
+ctx_search(queries=["query one", "query two"], source="label")
+```
+
+**Fetch and search web content:**
+```
+ctx_fetch_and_index(url="https://...", source="label")
+ctx_search(queries=["specific detail"], source="label")
+```
+
+### AI-Optimized CLI Tools
+
+All installed via Homebrew (macOS) or equivalent. Prefer these over standard shell tools.
+
+| Tool | Command | Use instead of |
+|---|---|---|
+| ripgrep | `rg` | `grep` — faster, respects `.gitignore`, better output |
+| fd | `fd` | `find` — faster, cleaner syntax |
+| fzf | `fzf` | Manual list scanning — interactive fuzzy selection |
+| DuckDB | `duckdb` | CSV/JSON data queries without loading into context |
+| git-delta | `delta` | Raw `git diff` — better structured diff for AI reading |
+| xh | `xh` | `curl` — cleaner structured HTTP output |
+| watchexec | `watchexec` | Manual polling — auto-rerun commands on file changes |
+| just | `just` | Shell scripts — simple named task runner |
+| semgrep | `semgrep` | Manual pattern review — cross-file code/text pattern rules |
+
+**Common patterns:**
+```bash
+rg "term" path/ --type md                    # Search across all markdown files
+fd "*.md" path/ --type f | sort              # Find and list files in order
+fd "*.md" path/ | xargs wc -w | sort -n      # Word count all files
+watchexec -w path/ -e md -- echo "changed"  # Watch for file changes
+duckdb -c "SELECT * FROM read_csv('data.csv')"  # Query structured data
+```
+
+### Fiction Pipeline Patterns
+
+**Read a manuscript chapter:**
+```
+ctx_execute_file(path="the-remnant-divide/manuscript/the-oracles-lie/ACT II/Part I/Chapter-10.md",
+  code='print(file_content)', intent="continuity, character voice, beats")
+```
+
+**Scan full manuscript for a name or phrase:**
+```bash
+rg "character name" the-remnant-divide/manuscript/ --type md
+```
+
+**Index full manuscript for search:**
+```
+ctx_index(path="the-remnant-divide/manuscript/the-oracles-lie", source="book2")
+ctx_search(queries=["Oracle buffer", "fleet ship count", "Dessa pronouns"], source="book2")
+```
+
+**Find all chapter files in order:**
+```bash
+fd "Chapter-*.md" the-remnant-divide/manuscript/ --type f | sort
+```
 
 ## CLI Tools Available on All Workstations
 

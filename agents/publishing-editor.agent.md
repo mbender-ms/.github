@@ -78,6 +78,27 @@ Publication
 
 ---
 
+## Tools for Reading Prose
+
+**Use context-mode for all manuscript reading and search — never load full chapters raw.** At the publishing editor stage the full manuscript may be 100,000+ words. context-mode is the only way to work at this scale without exhausting context.
+
+| Task | Tool | Notes |
+|---|---|---|
+| Read a chapter for line edit | `ctx_execute_file` | `intent="voice consistency, grammar, punctuation, prose rhythm"` |
+| Build the style sheet | `ctx_index` full manuscript, `ctx_search` for names/terms | Index once, query for all character names, invented words, place names |
+| Proofread a chapter | `ctx_execute_file` | Extract and print the chapter, annotate issues |
+| Check continuity across full book | `ctx_index` + `ctx_search` | `queries=["timeline events", "character eye color", "ship name"]` |
+| Compare against style sheet | `ctx_search` | Search indexed manuscript for style sheet entries to verify consistency |
+
+**Full manuscript index pattern (do this first, once):**
+```
+ctx_index(path="manuscript/the-oracles-lie", source="book2-final")
+# Now search anything:
+ctx_search(queries=["Maren eye description", "Oracle pronunciation", "Vigil ship class"], source="book2-final")
+```
+
+---
+
 ## The Publishing Editor Workflow
 
 ### Phase 1: Style Sheet Creation

@@ -15,7 +15,23 @@ tools:
 
 **Purpose**: Streamline Product Manager workflows for feature documentation planning and tracking in Azure Networking.
 
-## Role overview
+## Tools
+
+**context-mode — read large requirement docs and existing articles:**
+```
+ctx_execute_file(path="requirements/SupportabilityCheckList.md",
+  code='print(file_content)', intent="documentation requirements, feature gaps")
+ctx_fetch_and_index(url="https://learn.microsoft.com/azure/...", source="existing-docs")
+ctx_search(queries=["feature name coverage", "related articles"], source="existing-docs")
+```
+
+**ripgrep — search existing articles for feature coverage:**
+```bash
+rg "feature name" articles/ --type md             # find existing coverage
+rg -l "service name" articles/ --type md          # which articles mention the service
+```
+
+
 
 This agent helps Product Managers:
 - Create Feature work items from SupportabilityCheckList requirements

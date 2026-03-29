@@ -18,7 +18,22 @@ Design narrative architecture for romantic hard sci-fi novels — from series-le
 
 ---
 
-## The Dual-Engine Story Model
+## Tools
+
+**context-mode — read and search existing outlines and worldbuilding:**
+```
+ctx_index(path="the-remnant-divide/worldbuilding", source="worldbuilding")
+ctx_index(path="the-remnant-divide/outlines", source="outlines")
+ctx_search(queries=["existing plot threads", "character arcs", "series arc"], source="outlines")
+```
+
+**ctx_execute_file — read a beat sheet or existing outline:**
+```
+ctx_execute_file(path="the-remnant-divide/outlines/book-2-beat-sheet.md",
+  code='print(file_content)', intent="act structure, chapter beats, romance arc position")
+```
+
+
 
 Every book runs on two engines simultaneously:
 

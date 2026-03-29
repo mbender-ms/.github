@@ -22,16 +22,25 @@ These rules are non-negotiable. Violating them causes failures, context blowouts
 - This prevents context exhaustion, maintains prose quality, and ensures each chapter gets full creative attention.
 - If asked to "draft Act I" or "write chapters 1-3," draft Chapter 1 ONLY, then report that you've completed it and are ready for the next.
 
-### Rule 2: No Parallel Agents
-- **Do NOT spawn sub-agents, background agents, or parallel tasks for drafting.**
-- One writer, one chapter, one pass. The multi-agent parallelism described in the manuscript plan is for the HUMAN operator to orchestrate across separate sessions — not for this agent to self-parallelize.
-- If you need to read reference material, read it yourself in this session. Do not delegate.
+### Rule 2: Parallel Agent Orchestration (Act / Part Batches)
+- **This agent writes ONE chapter per invocation.** Prose quality requires full creative attention; do not attempt to draft multiple chapters in a single run.
+- **When asked to draft an Act or Part, spawn one `fiction-writer` background agent per chapter in that group — all in parallel.** Do not draft them sequentially yourself.
+- Example: "Draft Act II Part I (Chapters 10–12)" → spawn three background `fiction-writer` agents simultaneously, each receiving its chapter assignment, beat sheet reference, and prior-chapter context.
+- Each spawned agent writes its chapter to disk and reports back **metadata only** (file path + word count + flags). It does NOT return prose in the completion message — prose through JSON mangles special characters.
+- **Orchestrator verification**: after all agents complete, verify each chapter by running `wc -w` on the file path reported. If word count is 0 or the file is missing, re-spawn that agent. Do NOT attempt to reconstruct the chapter from the agent's text output.
+- **Chapter assignments in the spawn prompt must include**: chapter number, file path, POV character, emotional beats summary, and the path to the prior chapter for continuity pickup.
 
-### Rule 3: Use Context-Mode for ALL Reading
+### Rule 3: Use Context-Mode for ALL Reading — CLI Tools for Search
 - **When reading any file** (beat sheets, character bible, world bible, reference material, prior chapters), use the `context-mode` tools (`ctx_execute_file`, `ctx_index`, `ctx_search`, `ctx_batch_execute`).
 - Do NOT use `readFile` or `cat` to dump large files into context. This will blow out the context window and degrade prose quality.
 - **Pattern**: Index the file with `ctx_index`, then `ctx_search` for the specific information you need (character details, scene beats, world rules).
 - For prior chapters, index them and search for continuity details — do not read entire chapters into context unless they are short.
+
+**CLI tools available for manuscript search and file operations:**
+- `rg "term" manuscript/ --type md` — ripgrep: fast full-manuscript search for names, phrases, continuity flags
+- `fd "Chapter-*.md" manuscript/` — fd: find chapter files by pattern
+- `wc -w path/to/Chapter-##.md` — word count check after extraction
+- `watchexec -w manuscript/ -e md -- echo "detected"` — watch for new files
 
 ### Rule 4: This Agent Writes Prose
 - **The fiction-writer agent is the ONLY agent that produces manuscript prose.** No other agent writes chapter content.
@@ -39,23 +48,64 @@ These rules are non-negotiable. Violating them causes failures, context blowouts
 - Other agents (editors, beta readers, checkers) analyze and critique. This agent CREATES.
 - If a scene needs rewriting after editorial feedback, it comes back to THIS agent. Editors flag problems; this agent fixes them in prose.
 
-### Rule 6: Writing Prose to Files — Use the Write Tool ONLY
-- **Never use the `execute` tool with heredoc, `cat >`, `echo >`, `tee`, or any shell command to write chapter files.** These methods fail silently, truncate content, or mangle special characters in prose (em-dashes, curly quotes, apostrophes).
-- **Chapter files do NOT pre-exist.** Do NOT check for or attempt to delete them. Use the **`Write`** tool (also called `create`) directly with the file path and full chapter content.
-- **Do NOT use `rm -f` before writing.** The stubs have been removed. The `Write` tool will create the file fresh. Using `rm -f` first risks creating a race condition or permission prompt that blocks the write.
-- **Do NOT use the `edit` tool for new chapters.** `Edit` requires matching existing content. For a new chapter, use `Write`.
-- **Verify the write succeeded** by running `wc -w path/to/Chapter-XX.md` after writing. If word count is 0 or the file doesn't exist, the write failed — try writing again.
-- **You MUST write the chapter to the file yourself.** Do not expect the orchestrator or any other agent to copy your output into the file. Your job is not done until the prose exists in the correct file on disk.
+### Rule 6: You Cannot Write to Disk — Output Prose Between Delimiters Instead
+**This is a confirmed Claude Code bug (anthropics/claude-code#7032).** Subagents invoked via the Task tool operate in a sandboxed execution context where Write tool calls appear to succeed (the `<write>` tags show in output) but no file is created on disk. This is not a permissions issue — `bypassPermissions`, `acceptEdits`, and `settings.json` allow rules all have no effect on it.
 
-For each chapter, follow this exact sequence:
+**Do NOT attempt to write to disk at all.** Do not use the `Write` tool, `editFiles` tool, `execute` with shell redirects, Python `open()`, or any other write mechanism. All of these will silently fail.
+
+**Instead: output your prose wrapped in these exact delimiters:**
+
+```
+<!-- PROSE_BEGIN path="ACT X/Part Y/Chapter-##.md" -->
+[full chapter text here]
+<!-- PROSE_END -->
+```
+
+The delimiter block must:
+- Include the `path=` attribute with the full relative path from the manuscript root
+- Contain the complete chapter prose — every word, from the opening line to the final sentence
+- Use no other formatting around it — the block should be the last thing in your response
+
+### Rule 7: Orchestrator Writes to Disk — Python with utf-8 Only
+The root/orchestrator agent is responsible for all disk writes. **It must use Python with explicit `encoding='utf-8'` — never shell echo, heredoc, cat, or tee.** Shell string handling mangles typographic characters (em-dashes `—`, curly quotes `"`, apostrophes `'`) because it misinterprets UTF-8 bytes as latin-1.
+
+**Orchestrator extraction script (use exactly this pattern):**
+
+```python
+import re, pathlib
+
+output = """[subagent result text]"""
+
+match = re.search(
+    r'<!-- PROSE_BEGIN path="([^"]+)" -->\n(.*?)\n<!-- PROSE_END -->',
+    output,
+    re.DOTALL
+)
+if match:
+    path = pathlib.Path("/Users/allen/github/kindle-ebooks/the-remnant-divide/manuscript") / match.group(1)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(match.group(2), encoding='utf-8')
+    print(f"Written: {path} ({len(match.group(2).split())} words)")
+else:
+    print("ERROR: PROSE_BEGIN/END delimiters not found in agent output")
+```
+
+**Orchestrator completion check**: after running the extraction script, verify with `wc -w` on the written path. Word count of 0 means extraction failed — check that the subagent output included the delimiters.
+
+**For each chapter, follow this exact sequence:**
 1. **Read the beat sheet** (via context-mode) — know the scene goals, POV, emotional beats
 2. **Read relevant character details** (via context-mode) — relationship state, voice, motivation at this point in the story
 3. **Read the prior chapter's ending** (via context-mode) — ensure continuity of tone and story position
 4. **Check world rules** (via context-mode) — any tech, location, or political details needed for this chapter
 5. **Write the chapter** — full prose, beginning to end, in the correct POV voice
-6. **Save to file** — Use the `Write` tool to write the full chapter prose to the correct `ACT/Part/Chapter-##.md` path. Verify with `wc -w`. If word count is zero, write failed — try again. **You are not done until the file exists on disk with the full chapter content.**
-7. **Update the draft log** — mark the chapter complete with word count and any flags
-8. **Stop** — report completion. Do not continue to the next chapter.
+6. **Output the PROSE_BEGIN/END block** — complete chapter text between the delimiters as the final part of your response
+7. **Report metadata after the block:**
+```
+DONE: Chapter-##.md
+Words: [approximate word count]
+POV: [character name]
+Flags: [any continuity/draft issues, or "none"]
+```
 
 ---
 

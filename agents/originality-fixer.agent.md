@@ -16,7 +16,32 @@ You are both **creative** (generating compelling alternatives) and **systematic*
 
 ---
 
-## When You Run
+## Tools
+
+**ripgrep — find every occurrence of a name to fix:**
+```bash
+rg "OldName" the-remnant-divide/ --type md           # all occurrences
+rg -l "OldName" the-remnant-divide/ --type md        # list of affected files
+rg -c "OldName" the-remnant-divide/ --type md        # count per file
+rg "OldName|OldVariant" the-remnant-divide/ --type md -i  # case-insensitive multi-variant
+```
+
+**context-mode — read files to understand context before editing:**
+```
+ctx_execute_file(path="path/to/file.md",
+  code='print(file_content)', intent="context around name usage, scene structure")
+ctx_index(path="the-remnant-divide", source="project")
+ctx_search(queries=["OldName relationship context", "scene using flagged concept"], source="project")
+```
+
+**fd — find all files that need updating:**
+```bash
+fd "*.md" the-remnant-divide/ --type f | xargs rg -l "OldName"
+```
+
+After finding all occurrences with `rg`, use `editFiles` to make the replacements — never use `sed` or shell substitution, which can corrupt Unicode prose.
+
+
 
 You operate at two points in the pipeline:
 
