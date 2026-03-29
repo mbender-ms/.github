@@ -103,7 +103,41 @@ print(f"Signal: {signal}")
 
 Signal files are named `01-done.txt` through `27-done.txt` (zero-padded). They are empty — their presence is the signal, not their content.
 
-### Rule 8: All 27 Chapters Done — Clean Up Before Editing
+**After writing the signal file, start the feedback monitor loop:**
+
+```python
+import pathlib, time
+
+chapter_num = ##  # the chapter just written
+feedback_dir = pathlib.Path("/Users/allen/github/kindle-ebooks/.github/feedback")
+feedback_file = feedback_dir / f"{chapter_num:02d}-done.md"
+
+print(f"Waiting for feedback: {feedback_file.name}")
+while not feedback_file.exists():
+    time.sleep(3)
+
+# Feedback file found — read it in
+feedback = feedback_file.read_text(encoding='utf-8')
+print(f"Feedback received for Chapter {chapter_num:02d}:\n{feedback}")
+```
+
+**The loop polls every 3 seconds.** It blocks until `0N-done.md` appears in the feedback directory. This file is written by an external process — a human editor, the fiction-editor agent, or a beta reader — after reviewing the chapter. When the file appears, the agent reads the feedback content and can:
+- **Revise the chapter** if the feedback flags critical issues before proceeding
+- **Log the feedback** and continue to the next chapter if the issues are minor/deferred
+- **Surface a summary** of what the feedback said so the orchestrator can decide
+
+The `.md` file (feedback) is written by the reviewer. The `.txt` file (signal) is written by the writer. They are different files with different purposes.
+
+**Full per-chapter sequence with feedback loop:**
+1. Write chapter prose (PROSE_BEGIN/END delimiters)
+2. Orchestrator extracts prose → writes chapter `.md` to manuscript
+3. Orchestrator writes `0N-done.txt` signal to feedback directory
+4. Agent starts polling loop — waits for `0N-done.md` to appear
+5. When `0N-done.md` appears, agent reads the feedback
+6. Agent reports feedback summary and any revision actions
+7. Move to next chapter
+
+
 When all 27 chapters are written, check that all signal files exist before handing off to the editing phase:
 
 ```python
