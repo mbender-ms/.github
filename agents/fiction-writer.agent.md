@@ -92,6 +92,37 @@ else:
 
 **Orchestrator completion check**: after running the extraction script, verify with `wc -w` on the written path. Word count of 0 means extraction failed — check that the subagent output included the delimiters.
 
+**After writing the chapter file, the orchestrator must also write a signal file:**
+```python
+# Write empty signal file to feedback directory
+signal = pathlib.Path("/Users/allen/github/kindle-ebooks/.github/feedback") / f"{chapter_num:02d}-done.txt"
+signal.parent.mkdir(parents=True, exist_ok=True)
+signal.write_text("", encoding='utf-8')
+print(f"Signal: {signal}")
+```
+
+Signal files are named `01-done.txt` through `27-done.txt` (zero-padded). They are empty — their presence is the signal, not their content.
+
+### Rule 8: All 27 Chapters Done — Clean Up Before Editing
+When all 27 chapters are written, check that all signal files exist before handing off to the editing phase:
+
+```python
+import pathlib
+
+feedback = pathlib.Path("/Users/allen/github/kindle-ebooks/.github/feedback")
+missing = [n for n in range(1, 28) if not (feedback / f"{n:02d}-done.txt").exists()]
+
+if missing:
+    print(f"NOT DONE — missing chapters: {missing}")
+else:
+    print("All 27 chapters complete. Cleaning up signal files before editing...")
+    for f in feedback.glob("*-done.txt"):
+        f.unlink()
+    print("Feedback directory cleared. Ready for editing phase.")
+```
+
+**Do not start the editing phase until this cleanup step runs successfully with zero missing chapters.**
+
 **For each chapter, follow this exact sequence:**
 1. **Read the beat sheet** (via context-mode) — know the scene goals, POV, emotional beats
 2. **Read relevant character details** (via context-mode) — relationship state, voice, motivation at this point in the story
