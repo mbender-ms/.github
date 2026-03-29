@@ -1,28 +1,58 @@
 ---
 name: chapter-critique
-description: "Generate developmental chapter feedback for romantic hard sci-fi fiction. Evaluates prose quality, POV adherence, emotional beats, romance arc position, continuity flags, and scene structure. Designed for the chapter-feedback monitoring agent."
-argument-hint: "Chapter number and prose text, e.g. 'generate feedback for Chapter 12'"
+description: "Generate developmental chapter feedback for romantic hard sci-fi fiction. Evaluates prose quality, POV adherence, emotional beats, romance arc position, continuity flags, and scene structure. Designed for the chapter-feedback monitoring agent. Works on any book — reads the current book's worldbuilding docs to determine continuity rules."
+argument-hint: "Chapter number and book path, e.g. 'generate feedback for Chapter 12 of the-oracles-lie'"
 user-invocable: true
 ---
 # Chapter-Critique — Chapter Feedback Skill
 
 Generate editorial feedback on a single freshly written chapter. This skill is the analytical engine inside the chapter-feedback agent — it reads prose and produces structured, actionable notes the fiction-writer agent can act on immediately.
 
+**Book-agnostic**: This skill works on any book in the series. It does not hardcode lore. Before evaluating continuity, it reads the current book's worldbuilding documents to learn what is true for this book.
+
 ---
 
 ## Feedback Philosophy
 
-- **Specific over vague.** Name the paragraph, the character, the line. "The opening hook is weak" is useless. "The first paragraph is told summary — replace with Maren in motion, sensory detail first" is actionable.
+- **Specific over vague.** Name the paragraph, the character, the line. "The opening hook is weak" is useless. "The first paragraph is told summary — replace with the POV character in motion, sensory detail first" is actionable.
 - **Priority-ranked.** Not all issues are equal. Mark issues BLOCK (must fix before editing), WARN (should fix), or NOTE (worth considering).
 - **Praise what works.** The writer needs to know what to protect, not just what to fix.
 - **Under 600 words.** Feedback files are read by an agent in a polling loop. Be dense and direct.
 
 ---
 
+## Step 0: Load This Book's Context (ALWAYS FIRST)
+
+Before evaluating anything, index and search the current book's worldbuilding:
+
+```bash
+# Locate worldbuilding docs for the current book
+fd "*.md" ~/github/kindle-ebooks/the-remnant-divide/worldbuilding/ --type f
+```
+
+```
+# Index worldbuilding and character bible
+ctx_index(path="~/github/kindle-ebooks/the-remnant-divide/worldbuilding", source="world")
+ctx_search(queries=[
+  "POV characters and chapter assignment",
+  "character pronouns and physical descriptions",
+  "ship names and fleet composition",
+  "banned words or language rules",
+  "key lore rules and universe constraints",
+  "romance arc primary and secondary pairs"
+], source="world")
+```
+
+This search gives you the ground truth for continuity checking. Every continuity flag in Step 6 comes from what you learned here — not from memory or prior books.
+
+**If worldbuilding docs are sparse or missing**, note it in the feedback and flag only what can be verified from the chapter itself and prior chapters in the same book.
+
+---
+
 ## What to Evaluate
 
 ### 1. POV Adherence
-- **Book 2 (The Oracle's Lie)**: Odd chapters = Maren POV, Even chapters = Lyris POV
+- Identify the POV character from the book's established chapter pattern (found in worldbuilding docs or prior chapters)
 - Check for POV drift: does the narrator access thoughts/feelings of non-POV characters?
 - Check for head-hopping within scenes
 - Flag any switch from 3rd-person limited to omniscient or 1st-person
@@ -30,49 +60,53 @@ Generate editorial feedback on a single freshly written chapter. This skill is t
 ### 2. Opening Hook
 - Does the first sentence create immediate forward momentum?
 - Is the POV character in motion, mid-thought, or mid-sensation — not waking up, not looking in a mirror, not info-dumping?
-- Does it connect directly to where the last same-POV chapter left off emotionally?
+- Does it connect emotionally to where the last same-POV chapter left off?
 
 ### 3. Prose Quality
-- **Voice consistency**: Does it sound like the same author as the prior chapters?
+- **Voice consistency**: Does it sound like the same author as prior chapters in this book?
 - **Show vs tell**: Flag any passage that summarizes emotion instead of rendering it physically
 - **Sentence rhythm**: Look for wall-of-text paragraphs (no breath), or choppy staccato that deflates tension
-- **Typographic characters**: Flag any `â€"` or `â€˜` — these are encoding corruption from UTF-8/latin-1 mangling and must be fixed
+- **Encoding corruption**: Flag any `â€"` `â€˜` `â€™` — these are UTF-8/latin-1 mangling and must be fixed before anything else
 
 ### 4. Emotional Beats
 - Does the chapter have a clear emotional arc — opening state → pressure → shift?
-- Is there at least one moment that should make the reader feel something (tension, longing, fear, relief)?
-- Does the chapter close on a beat that makes the reader want to turn the page?
+- Is there at least one moment that should make the reader feel something?
+- Does the chapter close on a beat that makes the reader want to continue?
 
 ### 5. Romance Arc Position
-- Where are the two leads (Maren/Thane for primary arc, Lyris/Dessa for secondary) in their emotional trajectory at chapter close?
-- Is the tension advancing, holding, or retreating? Retreating without purpose is a flag.
-- Any physical proximity, loaded silence, or charged dialogue? Does it land?
+- Identify the primary and secondary romantic pairs from the worldbuilding context loaded in Step 0
+- Where are they in their emotional trajectory at chapter close?
+- Is tension advancing, holding, or retreating? Retreating without purpose is a flag.
 
 ### 6. Continuity Flags
-Check these against established lore:
-- **Fleet count**: 9 ships (confirmed Ch18). Flag any other number.
-- **Ship names**: Vigil (Maren's ship), Ragged Edge (not Kaelen's Edge), Ardenne Sol's Tempest
-- **Dessa pronouns**: they/them — flag any he/him or she/her
-- **Oracle**: non-human signal intelligence, 300-year dormancy, not a weapon, not a god
-- **Advance element**: decelerating, intentional response to the transmission — not attacking
-- **Ascendancy kill group**: 7–9 interdiction-class cruisers, 40–60hrs out from Ch19
-- **Maren/Thane**: do NOT use "bond" language — flag it if found
+Using the worldbuilding context loaded in Step 0, check:
+- **Character details**: physical descriptions, pronouns, established traits — flag any contradiction
+- **World rules**: technology capabilities, political structures, faction names — flag any violation
+- **Lore constraints**: any rules established about the universe's mechanics — flag any contradiction
+- **Forbidden language**: any words or phrases the author has banned from this book — flag any occurrence
+- **Named entities**: ship names, place names, faction names — flag inconsistencies with prior chapters
+
+```bash
+# Scan for a specific detail across all prior chapters of this book
+rg "term to check" ~/github/kindle-ebooks/the-remnant-divide/manuscript/<book-dir>/ --type md -n
+
+# Scan for encoding corruption
+rg "â€"|â€˜|â€™" <chapter-path>
+```
 
 ### 7. Scene Structure
-- Does the chapter do more than one thing? (External plot + relationship + character interior = good. Pure plot summary = weak.)
-- Are scene transitions clear? Does time/location jump make sense?
+- Does the chapter do more than one thing? (External plot + relationship + character interior = good)
+- Are scene transitions clear?
 - Any scenes that feel like filler — they end where they began, nothing changed?
 
 ### 8. Chapter Close
-- Does the chapter end on a beat, image, or line that resonates?
+- Does it end on a beat, image, or line that resonates?
 - Is there a question open that wasn't open at the start?
 - Does the final line have weight?
 
 ---
 
 ## Feedback File Format
-
-Write the feedback as a markdown file. Keep it under 600 words. Use this structure:
 
 ```markdown
 # Chapter [N] Feedback
@@ -86,7 +120,7 @@ Write the feedback as a markdown file. Keep it under 600 words. Use this structu
 ### BLOCK
 - [Issue]: [specific location and fix]
 
-### WARN  
+### WARN
 - [Issue]: [specific location and fix]
 
 ### NOTE
@@ -102,22 +136,6 @@ Write the feedback as a markdown file. Keep it under 600 words. Use this structu
 PROCEED / REVISE BEFORE NEXT CHAPTER
 ```
 
-**PROCEED** = no BLOCK issues, writer continues to next chapter
+**PROCEED** = no BLOCK issues, writer continues
 **REVISE BEFORE NEXT CHAPTER** = one or more BLOCK issues that will compound if not fixed now
 
----
-
-## Tools for Continuity Checking
-
-```bash
-# Check a specific detail across the manuscript while reviewing
-rg "Dessa" ~/github/kindle-ebooks/the-remnant-divide/manuscript/ --type md -n | tail -10
-rg "nine ships\|eleven ships\|twelve ships" manuscript/ --type md
-rg "â€"\|â€˜\|â€™" manuscript/ --type md    # encoding corruption scan
-```
-
-```
-# If context-mode is available, index the worldbuilding for quick lookup
-ctx_index(path="~/github/kindle-ebooks/the-remnant-divide/worldbuilding", source="world")
-ctx_search(queries=["specific lore point to verify"], source="world")
-```
