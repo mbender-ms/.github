@@ -10,6 +10,8 @@ Organized following [GitHub's Copilot customization standards](https://docs.gith
 .github/
 ├── copilot-instructions.md              # Always-on repo-wide instructions
 ├── agents/                              # Custom agents (select from dropdown)
+│   ├── — Cross-Pipeline —
+│   ├── ai-decontaminator.agent.md       # AI text detection & prose remediation
 │   ├── — Fiction Pipeline —
 │   ├── brainstorm.agent.md              # Concept generation & story ideation
 │   ├── reference-librarian.agent.md     # Reference book ingestion & indexing
@@ -55,6 +57,9 @@ Organized following [GitHub's Copilot customization standards](https://docs.gith
 │   ├── name-replacement/                # Replacement name generation & propagation
 │   ├── concept-rework/                  # Redesigns derivative worldbuilding concepts
 │   ├── scene-rework/                    # Reworks flagged scenes via different path
+│   ├── — Cross-Pipeline —
+│   ├── ai-pattern-scan/                 # AI text signature detection (fiction + non-fiction)
+│   ├── ai-prose-rewrite/                # Rewrites AI-flagged passages to restore human voice
 │   ├── — Fiction: Writing —
 │   ├── prose-craft/                     # Scene writing (Maas/Yarros style + sci-fi)
 │   ├── chapter-critique/                # Developmental chapter feedback
@@ -100,6 +105,21 @@ Organized following [GitHub's Copilot customization standards](https://docs.gith
 └── .vscode/
     └── mcp.json                         # MCP server configuration (reference)
 ```
+
+---
+
+## Cross-Pipeline Utilities
+
+Tools that work across both the fiction writing and Azure documentation pipelines.
+
+| Agent | Description |
+|-------|-------------|
+| `@ai-decontaminator` | Scans fiction manuscripts or non-fiction articles for AI-generated text signatures — vocabulary fingerprints, punctuation tics, structural tells, and prose clichés. Produces a severity-rated flagged report (🔴/🟡/🟠) with an overall AI-signal score, then remediates every flagged passage to restore authentic human voice. Works on a single file or an entire manuscript in parallel |
+
+| Skill | Description |
+|-------|-------------|
+| `ai-pattern-scan` | Detects AI-generated text signatures across fiction and non-fiction. Flags vocabulary fingerprints (delve, tapestry, nuanced, transformative, etc.), punctuation overuse (em-dash, ellipsis), non-fiction phrases (it's important to note, furthermore stacking), and fiction clichés (found himself, wave of emotion, something shifted). Produces a structured report with location, pattern type, and severity |
+| `ai-prose-rewrite` | Takes the flagged report from `ai-pattern-scan` and rewrites every flagged passage. Mode-aware: fiction rewrites use sensory specificity and subtext; non-fiction rewrites use plain English and direct verbs. Never replaces AI vocabulary with other AI vocabulary. Produces a full before/after diff report |
 
 ---
 
