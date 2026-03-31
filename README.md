@@ -257,6 +257,7 @@ Customizations for Azure Networking documentation workflows on [learn.microsoft.
 | `microsoft-doc-verifier` | Cross-product documentation verification with single article, batch, and PR review modes |
 | `azure-quickstart-templates` | Review, validate, or create Azure Quickstart Templates following contribution guidelines |
 | `bug-reporter` | Report bugs in Content Developer tooling with structured ADO Bug creation and parent linking |
+| `learn-chunk-analyzer` | Analyze how Microsoft Learn content chunks and surfaces via the Learn MCP server — accepts a search query or article URL, returns a chunk inventory with relevance scoring, 7-pattern signal analysis, and recommendations for article authors and the retrieval pipeline |
 
 ---
 
@@ -270,6 +271,7 @@ Customizations for Azure Networking documentation workflows on [learn.microsoft.
 | `fact-check-and-edit` | Quick in-place fact-check with inline corrections |
 | `microsoft-researcher` | Research a topic using official Microsoft documentation with full citations |
 | `ado-work-item-standards` | Create or validate ADO work items per Azure Core Content Standards |
+| `learn-chunk-analyzer` | Analyze how Microsoft Learn content chunks for a search query or article URL — chunk inventory, relevance scoring, signal-to-noise ratio, and retrieval improvement recommendations |
 
 ## Instructions
 
