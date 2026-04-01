@@ -18,6 +18,8 @@ Write production-ready how-to, concept, quickstart, tutorial, or overview articl
 
 ## Workflow
 
+If the user asks for phase-based model selection (plan/draft/verify/polish), scaffold first with this skill, then delegate execution phases to [model-routing-authoring/skills.md](../model-routing-authoring/skills.md).
+
 ### Step 1 — Determine the Article Type
 
 Ask the user or infer from context:

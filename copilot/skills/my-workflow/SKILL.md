@@ -37,6 +37,7 @@ Before processing a request inline, check whether a sibling skill or sub-agent s
 | Task pattern | Delegate to | How |
 |---|---|---|
 | Write/scaffold a new article | `doc-writer` skill | Invoke skill directly |
+| Route authoring phases by model (Auto mode) | `model-routing-authoring` skill | Use for plan/draft/verify/polish phase execution |
 | Fact-check or verify accuracy | `doc-verifier` skill or `microsoft-fact-checker` agent | Use agent for deep checks; skill for quick fixes |
 | Create/validate ADO work items | `ado-work-items` skill | Invoke skill directly |
 | SEO, metadata, editorial review | `documentor-workflow` skill | Invoke skill directly |

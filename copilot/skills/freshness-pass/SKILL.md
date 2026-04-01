@@ -24,6 +24,20 @@ Run a comprehensive freshness pass on Microsoft documentation articles. Combines
 - **"Freshness pass on articles/container-apps/"** → Workflow 2
 - **"Check these 10 files for freshness"** → Workflow 2
 
+## Model routing (dispatcher mode)
+
+This skill orchestrates phases and delegates specialized logic. Do not duplicate sibling skill logic inline.
+
+- **Phase A (Fact-check)**: Delegate verification depth to `doc-verifier`; when code/config is present, apply strict verify routing (Codex-first behavior from `model-routing-authoring`).
+- **Phase B (Editorial pass)**: Delegate editorial quality tasks to `documentor-workflow`; model selection is advisory in Auto mode.
+- **Phase C (Consolidation)**: Merge outputs, apply edits, and produce a single consolidated report.
+
+Auto behavior for freshness-pass:
+
+- Strict for code/config verification paths in Phase A
+- Advisory for planning, drafting, and editorial polish paths
+- If a preferred model is unavailable, continue with the best available equivalent and report the substitution
+
 ## Prompt assets
 
 | File | Workflow |
