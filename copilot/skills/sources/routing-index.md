@@ -1,6 +1,6 @@
 # Sources Routing Index
 
-Lightweight lookup table for the sources catalog. Use this to identify which category YAML to load for Tier 2 source verification.
+Lightweight lookup table for the sources catalog. Use this to identify which category YAML to load for Tier 2 source verification — **load the full YAML only when you need repo-level detail**.
 
 ## Category index
 
