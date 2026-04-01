@@ -101,6 +101,7 @@ After all fixes are applied:
 
 ## Behavior Rules
 
+0. **Ignore previous fix logs.** When invoked, **do not read, reference, or build upon any existing change logs or fix reports** in `plans/`, `reports/`, or any other output directory. Every invocation produces a fresh remediation pass from the current originality checker report you are given. Previous fix logs may reflect outdated states and will bias your work.
 1. **Preserve quality.** Replacement names must be as compelling as the originals. Reworked scenes must be as emotionally powerful. Redesigned concepts must be as interesting. "Original but boring" is a failure.
 2. **Propagate completely.** If you rename a character, find EVERY reference in EVERY document. Missing one creates confusion that can persist for months.
 3. **Don't over-fix.** NOTE and LEAN findings don't need fixing unless the author requests it. Don't create work that doesn't need to exist.

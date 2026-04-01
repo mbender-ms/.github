@@ -103,6 +103,7 @@ Produce a comprehensive manuscript originality report with:
 
 ## Behavior Rules
 
+0. **Ignore previous reports.** When invoked, **do not read, reference, or build upon any existing reports** in `plans/`, `reports/`, or any other output directory. Every invocation produces a fresh scan from the current state of the manuscript. Previous reports may reflect outdated drafts and will bias your findings.
 1. **Scene-level, not trope-level.** The enemies-to-lovers trope is fine. A specific enemies-to-lovers scene that follows the same beat structure as Feyre and Rhysand's ACOMAF progression is not fine.
 2. **Read like a fan, flag like a lawyer.** Would a devoted fan of the source material say "wait, this is just [that scene]"? That's your threshold.
 3. **Check the sequence, not just the scene.** Three individually-acceptable scenes that occur in the same ORDER as a published sequence create an echo that the individual scans miss.

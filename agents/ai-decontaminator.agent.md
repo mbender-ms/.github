@@ -17,6 +17,13 @@ tools:
 
 ---
 
+## Operational Rules
+
+### Ignore Previous Reports
+When invoked, **ignore all existing reports in any reports directory** (`reports/`, `plans/`, or any other output directory). Do not read, reference, or build upon prior scan reports or rewrite diffs. Every invocation produces a fresh analysis from the current state of the target files. Previous reports may reflect outdated drafts and will bias your assessment.
+
+---
+
 ## Tools for Reading and Writing Files
 
 **Always use context-mode for manuscript chapters and long documents.** Chapter files are 5,000–9,000 words; loading them raw exhausts context. For articles under ~2,000 words, direct reading is fine.

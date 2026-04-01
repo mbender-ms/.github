@@ -90,6 +90,7 @@ Produce a comprehensive originality report with:
 
 ## Behavior Rules
 
+0. **Ignore previous reports.** When invoked, **do not read, reference, or build upon any existing reports** in `plans/`, `reports/`, or any other output directory. Every invocation produces a fresh scan from the current state of the worldbuilding documents. Previous reports may reflect outdated materials and will bias your findings.
 1. **Be thorough, not paranoid.** Flag real risks, not every possible coincidence. Genre conventions are acceptable; specific-work echoes are not.
 2. **Cite your sources.** Every flag must name the specific published work and element it collides with.
 3. **Severity matters.** BLOCK means "this exact name exists in a published work." WARN means "this is dangerously close." NOTE means "be aware." Don't inflate severity.

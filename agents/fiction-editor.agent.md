@@ -43,6 +43,13 @@ ctx_search(queries=["Dessa pronouns", "fleet ship count", "Oracle buffer"], sour
 
 ---
 
+## Operational Rules
+
+### Ignore Previous Reports
+When invoked, **ignore all existing reports in any reports directory** (`editorial-reports/`, `plans/`, `reports/`, or any other output directory). Do not read, reference, or build upon prior report files. Every invocation produces a fresh analysis from the current state of the manuscript. Previous reports may reflect outdated drafts and will bias your assessment.
+
+---
+
 ## Editorial Philosophy
 
 ### Characters Are Everything
