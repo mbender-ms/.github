@@ -47,6 +47,11 @@ copilot/skills/<skill-name>/
 |--------|-------------|
 | **git-workflow** | Stage, commit, push, branch, and create PRs — one commit per file, `gh` CLI for PRs |
 | **pr-description-template** | Generate PR title and description following Azure Core Content standards |
+| **clone-remote-setup** | Clone `azure-docs-pr` and configure `origin` + `upstream` remotes with idempotent checks |
+| **clone-remote-setup-oneshot** | Run a compact one-shot clone + remote setup flow for `azure-docs-pr` with minimal output |
+| **clone-remote-setup-ssh** | SSH-first variant for `azure-docs-pr` that enforces SSH `origin` + `upstream` and fetches upstream |
+| **clone-remote-additional-repo** | Clone any additional repo/fork URL or path into `C:/github`, with optional `upstream` setup |
+| **clone-remote-batch-install** | Batch-install multiple repos/forks into `C:/github` from URLs/paths with optional per-repo `upstream` setup |
 
 Prompts live in `prompts/` and are deployed to VS Code via `sync-prompts.ps1`.
 
@@ -75,6 +80,11 @@ cd C:\github\.github && git pull origin main && .\sync-prompts.ps1
 **New prompts:**
 - **git-workflow.prompt.md** — Full git automation: sync upstream → create branch → stage + commit per file → push (with confirmation gate) → create PR via `gh` CLI. Supports partial execution ("just commit", "commit and push", "create PR").
 - **pr-description-template.prompt.md** — PR title and description generator following Azure Core Content standards. Structured format: Summary → Changes → Impact → Testing → Related work items.
+- **clone-remote-setup.prompt.md** — Clone and remote bootstrap for `azure-docs-pr` with safe, repeatable setup of `origin` and `upstream` plus verification and fetch.
+- **clone-remote-setup-oneshot.prompt.md** — Compact one-shot variant that executes clone + remote enforcement + upstream fetch and returns a short status summary.
+- **clone-remote-setup-ssh.prompt.md** — SSH-first one-shot variant for `azure-docs-pr` that enforces SSH remotes for `origin` and `upstream`.
+- **clone-remote-additional-repo.prompt.md** — Generic additional repo/fork installer that accepts a source URL/path, clones into `C:/github`, and optionally configures `upstream`.
+- **clone-remote-batch-install.prompt.md** — Batch installer for multiple repo/fork sources in one run with per-item folder override, optional upstream, and compact success/failure totals.
 
 **Skill enhancements:**
 - **doc-verifier** — Consolidated from previous `fact-checker` and `microsoft-doc-verifier` skills. Expanded to 10 workflows (Quick In-Place, Single Article, Full Report, Internal + Public, Freshness Review, Deep Agent, Batch Report, PR Review, Research, CIA Analysis). Three agent variants: full (~95 tools), slim (25 tools, default), CIA (31 tools with ADO access).
