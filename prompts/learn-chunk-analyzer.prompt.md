@@ -16,8 +16,8 @@ Analyze how Microsoft Learn content is chunked and surfaced by the Learn MCP ser
 ## Input
 
 The user provides either:
-- A **search query** ΓÇö run `microsoft_docs_search` and analyze all returned chunks
-- An **article URL** ΓÇö run `microsoft_docs_fetch` and simulate how the page would be chunked by section
+- A **search query** — run `microsoft_docs_search` and analyze all returned chunks
+- An **article URL** — run `microsoft_docs_fetch` and simulate how the page would be chunked by section
 
 If the input is ambiguous, ask the user which one they mean before proceeding.
 
@@ -25,30 +25,30 @@ If the input is ambiguous, ask the user which one they mean before proceeding.
 
 A structured **Chunk Analysis Report** with:
 
-1. **Chunk inventory table** ΓÇö every result listed with: article title, section heading, character count, detected deployment method (portal/CLI/PowerShell/ARM/Bicep/Terraform), and relevance rating
+1. **Chunk inventory table** — every result listed with: article title, section heading, character count, detected deployment method (portal/CLI/PowerShell/ARM/Bicep/Terraform), and relevance rating
 
 2. **Relevance ratings** for each chunk:
-   - Γ£à **Direct** ΓÇö directly answers the query
-   - ΓÜá∩╕Å **Partial** ΓÇö related but incomplete or missing key steps
-   - ≡ƒöÇ **Tangential** ΓÇö same topic area, different task or scenario
-   - Γ¥î **Noise** ΓÇö wrong method, post-task step, or unrelated service
+   - ✅ **Direct** — directly answers the query
+   - ⚠️ **Partial** — related but incomplete or missing key steps
+   - 🔀 **Tangential** — same topic area, different task or scenario
+   - ❌ **Noise** — wrong method, post-task step, or unrelated service
 
-3. **Signal summary** ΓÇö check all 7 patterns and report which are present:
-   - **A ΓÇö Same-article duplication**: > 2 results from one article
-   - **B ΓÇö Procedure truncation**: chunk ends mid-procedure
-   - **C ΓÇö Method cross-contamination**: wrong deployment method in results
-   - **D ΓÇö Orphaned intro chunk**: intro-only chunk with < 600 chars
-   - **E ΓÇö Missing URLs**: blank `url` field on any result
-   - **F ΓÇö Post-task noise**: downstream steps returned for an earlier-task query
-   - **G ΓÇö Oversized sections** (URL only): sections > 2,500 chars likely to be split
+3. **Signal summary** — check all 7 patterns and report which are present:
+   - **A — Same-article duplication**: > 2 results from one article
+   - **B — Procedure truncation**: chunk ends mid-procedure
+   - **C — Method cross-contamination**: wrong deployment method in results
+   - **D — Orphaned intro chunk**: intro-only chunk with < 600 chars
+   - **E — Missing URLs**: blank `url` field on any result
+   - **F — Post-task noise**: downstream steps returned for an earlier-task query
+   - **G — Oversized sections** (URL only): sections > 2,500 chars likely to be split
 
-4. **Key observations** ΓÇö 3ΓÇô5 prose findings with specific evidence
+4. **Key observations** — 3–5 prose findings with specific evidence
 
 5. **Recommendations** split into two audiences:
-   - **For article authors** ΓÇö structural changes to the markdown (H2 naming, section grouping, procedure completeness)
-   - **For pipeline / platform** ΓÇö MCP server, chunk size config, metadata tagging, deduplication
+   - **For article authors** — structural changes to the markdown (H2 naming, section grouping, procedure completeness)
+   - **For pipeline / platform** — MCP server, chunk size config, metadata tagging, deduplication
 
-6. **Signal-to-noise ratio**: `(Direct + Partial) / Total ├ù 100` ΓÇö rate as Good (ΓëÑ70%), Moderate (50ΓÇô69%), or Poor (<50%)
+6. **Signal-to-noise ratio**: `(Direct + Partial) / Total × 100` — rate as Good (≥70%), Moderate (50–69%), or Poor (<50%)
 
 ## Report format
 
@@ -74,13 +74,13 @@ A structured **Chunk Analysis Report** with:
 
 | Pattern | Detected | Detail |
 |---------|----------|--------|
-| A ΓÇö Same-article duplication | Γ£à/Γ¥î | |
-| B ΓÇö Procedure truncation | Γ£à/Γ¥î | |
-| C ΓÇö Method cross-contamination | Γ£à/Γ¥î | |
-| D ΓÇö Orphaned intro chunk | Γ£à/Γ¥î | |
-| E ΓÇö Missing URLs | Γ£à/Γ¥î | |
-| F ΓÇö Post-task noise | Γ£à/Γ¥î | |
-| G ΓÇö Oversized sections | Γ£à/Γ¥î | |
+| A — Same-article duplication | ✅/❌ | |
+| B — Procedure truncation | ✅/❌ | |
+| C — Method cross-contamination | ✅/❌ | |
+| D — Orphaned intro chunk | ✅/❌ | |
+| E — Missing URLs | ✅/❌ | |
+| F — Post-task noise | ✅/❌ | |
+| G — Oversized sections | ✅/❌ | |
 
 ---
 
@@ -102,7 +102,7 @@ A structured **Chunk Analysis Report** with:
 ---
 
 ## Most relevant chunks
-[Top 2ΓÇô3 chunks that best answer the query]
+[Top 2–3 chunks that best answer the query]
 
 ## Least relevant chunks
 [Chunks that should not have been returned and why]
@@ -115,10 +115,10 @@ A structured **Chunk Analysis Report** with:
 
 ## Rules
 
-- DO analyze every returned chunk ΓÇö don't skip any
-- DO check all 7 patterns (AΓÇôG) and report each explicitly
+- DO analyze every returned chunk — don't skip any
+- DO check all 7 patterns (A–G) and report each explicitly
 - DO provide at least 3 specific, actionable recommendations
 - DO use `microsoft_docs_fetch` to get full content for any truncated chunk before assessing truncation
 - DO note character counts for all chunks
 - DO calculate and report the signal-to-noise ratio
-- DO NOT skip the pattern checklist ΓÇö all 7 must appear in the report even if not detected
+- DO NOT skip the pattern checklist — all 7 must appear in the report even if not detected
