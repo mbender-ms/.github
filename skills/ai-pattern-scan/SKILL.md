@@ -18,6 +18,87 @@ Finds the fingerprints AI leaves in prose. Every flag includes the exact quoted 
 
 ---
 
+## ⚠️ Mandatory Scan Protocol (Full Manuscript)
+
+**A full manuscript scan is NOT a random sample and NOT a thematic pass.** It must scan **every word in every chapter**. The only valid full-manuscript scan runs all of the following steps in sequence. No chapter may be skipped.
+
+### Step 1 — Build the chapter inventory
+```bash
+find <manuscript_dir> -name "Chapter-*.md" \
+  -not -path "*/editorial*" \
+  -not -path "*/reports*" \
+  -not -path "*/beta*" | sort
+```
+
+### Step 2 — Per-chapter word-level counts
+Run these commands on **each chapter individually** and record results in a per-chapter table (see Report Format below):
+
+```bash
+wc -w "$FILE"                                          # Word count
+grep -ic "warm" "$FILE"                                # Tier 2 frequency
+grep -ic "steady" "$FILE"
+grep -ic "sharp" "$FILE"
+grep -ic "\bquiet" "$FILE"
+grep -ic "careful" "$FILE"
+grep -ic "\bjust\b" "$FILE"
+grep -ic "\bvery\b" "$FILE"
+grep -ic "\balmost\b" "$FILE"
+grep -ic "\blike a\b" "$FILE"                          # Simile density
+grep -ic "sternum" "$FILE"                             # Cross-chapter phrase fatigue
+grep -ic "copper taste\|taste.*copper\|copper.*throat" "$FILE"
+grep -ic "recycled air" "$FILE"
+grep -ic "said quietly\|said softly\|said gently\|said firmly" "$FILE"   # Dialogue adverbs
+grep -ic "found himself\|found herself" "$FILE"        # Tier 1 tells
+grep -ic "breath caught" "$FILE"
+grep -ic "washed over" "$FILE"
+grep -ic "air between" "$FILE"
+grep -ic "\bjust barely\b\|just slightly\b" "$FILE"    # Filter pairs
+grep -c "^Not " "$FILE"                                # Negation-pivot lines
+```
+
+### Step 3 — Full-manuscript Tier 1 vocabulary sweep
+```bash
+# Concatenate all chapters to temp file
+find <manuscript_dir> -name "Chapter-*.md" \
+  -not -path "*/editorial*" -not -path "*/reports*" \
+  -exec cat {} \; > /tmp/full_manuscript.txt
+
+# Tier 1 vocabulary — any count > 0 is a flag
+for word in "delv" "tapestry" "nuanced" "multifaceted" "intricate" \
+            "testament to" "pivotal" "paramount" "transformative" \
+            "myriad" "embark" "harness" "groundbreaking" "cutting.edge" \
+            "underscore" "game.changing" "holistic" "plethora" "vibrant" \
+            "synergy" "leverage" "seamless" "foster" "elevate" "showcase"; do
+  echo "$word: $(grep -ic "$word" /tmp/full_manuscript.txt)"
+done
+```
+
+### Step 4 — Staccato and paired adjective patterns
+```bash
+# Known AI staccato pairs (any hit is a flag)
+grep -rin "Controlled\. Measured\.\|Steady\. Unwavering\.\|Professional\. Contained\.\|Careful\. Precise\." <manuscript_dir>
+
+# Known AI paired adjectives
+for pat in "vast and patient" "low and steady" "raw and unguarded" "raw and open" \
+           "warm and steady" "warm and certain" "quiet and deliberate" "quiet and measured" \
+           "hot and electric" "sharp and electric" "keen and steady" "dark and careful"; do
+  echo "$pat: $(grep -ic "$pat" /tmp/full_manuscript.txt)"
+done
+```
+
+### Step 5 — Cross-chapter phrase repetition
+```bash
+for phrase in "sternum" "copper taste\|taste.*copper" \
+              "recycled air" "air between them"; do
+  echo "$phrase: $(grep -ic "$phrase" /tmp/full_manuscript.txt)"
+done
+```
+
+### Step 6 — Write the report
+**Do not write the report until all chapters have been scanned.** Every chapter must appear in the per-chapter table with actual counts, not estimates or approximations.
+
+---
+
 ## Modes
 
 | Mode | Use When |
@@ -37,9 +118,11 @@ Specify mode in your invocation or let the skill infer it. When in doubt, it wil
 | Target | Tool |
 |--------|------|
 | Single chapter or long article | `ctx_execute_file` with `intent="AI pattern detection"` |
-| Full manuscript (multiple files) | `ctx_index` the directory, then `ctx_search` for flagged patterns |
+| Full manuscript (multiple files) | **Mandatory Scan Protocol (grep-based)** — see above |
 | Short article or scene (< 2,000 words) | `readFile` directly |
 | Multiple chapters in parallel | `ctx_batch_execute` — one call, all files, search all at once |
+
+> ⚠️ **Do NOT use `ctx_index` + `ctx_search` alone for a full manuscript scan.** Index search finds concepts; it does not count word occurrences. You will miss frequency density patterns entirely. Always use the grep-based Mandatory Scan Protocol for full-manuscript frequency analysis.
 
 **Standard pattern for a chapter scan:**
 ```
@@ -50,21 +133,7 @@ ctx_execute_file(
 )
 ```
 
-**Standard pattern for a full manuscript scan:**
-```
-ctx_index(path="manuscript/", source="manuscript")
-ctx_search(queries=[
-  "delve tapestry nuanced multifaceted",
-  "found himself she couldn't help breath caught",
-  "wave of emotion washed over something shifted",
-  "it's important to note furthermore moreover additionally",
-  "in the realm of cutting-edge groundbreaking transformative",
-  "Not a question Not anger Not quite Not exactly Not a command",
-  "vast and patient low and steady raw and unguarded warm and",
-  "warm warmth steady sharp careful quietly",
-  "Controlled Measured Contained Professional Steady Unwavering"
-], source="manuscript")
-```
+**Standard pattern for a full manuscript scan — use the Mandatory Scan Protocol above.** Do not substitute ctx_search index queries — they miss frequency density patterns.
 
 ---
 
@@ -175,13 +244,29 @@ Individually inconclusive, but clusters of these are a pattern. Flag each instan
 #### Fiction Frequency Words (🟡)
 These are ordinary English words that become AI tells through *volume*. One or two per chapter is fine. Flag when they exceed the threshold across a manuscript.
 
-| Word | Threshold | Why It Signals AI |
-|------|-----------|-------------------|
-| warm / warmth | > 5 per chapter or > 100 per manuscript | AI's default positive descriptor for comfort, safety, attraction, and approval. Used for voices, touches, expressions, rooms, feelings — anything the AI wants to code as "good." |
-| steady | > 4 per chapter or > 60 per manuscript | AI's default descriptor for male characters, reliable things, and calm states |
-| sharp | > 4 per chapter or > 60 per manuscript | AI's go-to intensity descriptor — sharp pain, sharp gaze, sharp intake of breath |
-| careful / carefully | > 4 per chapter or > 60 per manuscript | AI's default adverb for any action performed with attention |
-| quiet / quietly | > 5 per chapter or > 80 per manuscript | AI's default modifier for emotional moments, voice descriptions, and transitions |
+| Word | Per-Chapter Threshold | Manuscript Threshold | Why It Signals AI |
+|------|----------------------|---------------------|-------------------|
+| warm / warmth | > 5 | > 100 | AI's default positive descriptor for comfort, safety, attraction, and approval |
+| steady | > 4 | > 60 | AI's default descriptor for male characters, reliable things, and calm states |
+| sharp | > 4 | > 60 | AI's go-to intensity descriptor — sharp pain, sharp gaze, sharp intake of breath |
+| careful / carefully | > 4 | > 60 | AI's default adverb for any action performed with attention |
+| quiet / quietly | > 5 | > 80 | AI's default modifier for emotional moments, voice descriptions, and transitions |
+| just | > 10 | > 150 | AI's most overused qualifier/filler — weakens every sentence it enters |
+| almost | > 5 | > 60 | Hedging qualifier — AI avoids commitment to sensation or action |
+| like a (simile) | > 8 | > 150 | Simile density: AI defaults to "like a [concrete noun]" for all abstract sensations rather than direct statement |
+| as if / as though | > 5 | > 50 (combined) | Hypothetical framing — AI overuses to describe character perception |
+
+#### Cross-Chapter Setting Phrase Fatigue (🟡)
+These phrases are individually defensible but become an AI tell through cross-chapter repetition. Flag when they exceed the per-chapter threshold or appear in 5+ chapters:
+
+| Phrase | Per-Chapter Threshold | Total Threshold | Notes |
+|--------|----------------------|-----------------|-------|
+| "[in/behind] her/his sternum" | > 3 | > 12 | AI's default location for emotional/communion sensation |
+| "copper taste / tasted like copper" | > 3 | > 12 | Fine as a sensory signal marker; flagged when used non-specifically |
+| "recycled air" | > 2 | > 20 | Setting-appropriate; flag as atmosphere filler above threshold |
+| "air between them" | > 1 | > 4 | Cross-chapter pattern fatigue; each use must do different work |
+| "deck plates" | > 2 | > 15 | Grounding detail; flag non-functional atmospheric uses |
+| "said quietly / softly / gently" (dialogue) | > 2 | > 20 | Adverb-loaded tags; show via action beats instead |
 
 #### Non-Fiction Phrases
 - "As mentioned above/previously…"
@@ -248,19 +333,24 @@ Not every instance of a flagged pattern requires a fix. Use this framework to cl
 
 **Pattern fatigue rule**: Even an individually acceptable pattern becomes an AI tell when repeated 5+ times in a manuscript. If the same construction appears in 5+ chapters, it's a pattern regardless of whether each individual instance is "earned." Flag all instances and recommend reducing to 2–3 total.
 
+**Thematic motif exception**: A word used as a *deliberate thematic motif* within a single chapter (e.g., "warmth" used 10× to establish warmth-as-manipulation as the chapter's central theme) is EARNED even at high frequency — provided the repetition is intentional and forms a chapter-level pattern, not random filler. Distinguish by checking whether the repetition spreads across many chapters (AI tell) or saturates one chapter with clear thematic purpose (earned motif).
+
 **Scanning with triage**: When producing the AI Pattern Report, classify every flag as EARNED / BORDERLINE / AI CLICHÉ in the "Recommended Action" column. The triage classification drives what `ai-prose-rewrite` does with each flag.
 
 ---
 
 ### Frequency Analysis (Fiction)
 
-Beyond vocabulary and phrase tells, AI leaves fingerprints in *word frequency*. Run these counts across the full manuscript:
+Beyond vocabulary and phrase tells, AI leaves fingerprints in *word frequency*. Run these counts across the full manuscript **and per chapter individually**:
 
-1. **Single-word frequency**: Count occurrences of every Tier 2 Fiction Frequency Word. Flag any that exceed the threshold.
+1. **Single-word frequency**: Count occurrences of every Tier 2 Fiction Frequency Word. Flag any that exceed the per-chapter or manuscript threshold.
 2. **Paired adjective frequency**: Count all `[adj] and [adj]` constructions in descriptive (non-dialogue) text. More than 3 per chapter or 50+ per manuscript = flag.
 3. **Fragment frequency**: Count all 1–3 word sentence fragments in non-dialogue text. More than 3 per chapter or 40+ per manuscript = flag.
 4. **Negation-pivot frequency**: Count all "Not X. Y." / "Not X — Y." constructions. More than 2 per chapter or 30+ per manuscript = flag.
 5. **Cross-chapter repetition**: Any specific phrase or construction appearing in 5+ chapters is a pattern — even if each instance looks fine in isolation.
+6. **Setting phrase fatigue**: Count Cross-Chapter Setting Phrase Fatigue words (sternum, copper taste, recycled air, air between them). Exceeding total threshold or 3+ per chapter = flag.
+7. **Simile density**: Count total "like a" and "as if/as though" per chapter. More than 8 "like a" per chapter or 150 total = flag. Simile overuse is as consistent an AI tell as vocabulary: AI describes all abstract sensation through concrete simile instead of direct statement.
+8. **Filter word density**: Count `just`, `very`, `almost`, `quite`, `rather`. Flag chapters exceeding per-word thresholds. Total `just` > 150 across a manuscript is a systematic flag.
 
 Include the frequency analysis as a section in the AI Pattern Report.
 
@@ -281,8 +371,9 @@ Include the frequency analysis as a section in the AI Pattern Report.
 | 🔴 Fiction/non-fiction phrase tells | [count] | Critical |
 | 🔴 Structural tells (negation-pivot, paired adj, staccato) | [count] | Critical |
 | 🟡 Medium-signal vocabulary | [count] | Important |
-| 🟡 Fiction frequency words (warm, steady, etc.) | [count] | Important |
-| 🟡 Pattern clusters | [count] | Important |
+| 🟡 Fiction frequency words (warm, steady, just, etc.) | [count] | Important |
+| 🟡 Cross-chapter setting phrase fatigue | [count] | Important |
+| 🟡 Simile / filter word density | [count] | Important |
 | 🟠 Context-dependent | [count] | Review |
 | Punctuation tics | [count] | [severity] |
 | Structural patterns | [count] | [severity] |
@@ -302,6 +393,19 @@ Include the frequency analysis as a section in the AI Pattern Report.
 - **MODERATE** (6–15): AI signatures present but not dominant — targeted rewrites sufficient
 - **HIGH** (16–30): Significant AI footprint — systematic rewrite pass recommended
 - **VERY HIGH** (31+): Heavy AI generation detected — full prose-rewrite pass required
+
+---
+
+## Per-Chapter Scan Table (Required for Full-Manuscript Scans)
+
+Every chapter must appear. Bold any cell exceeding the per-chapter threshold.
+
+| Chapter | Words | warm | steady | sharp | quiet | careful | just | almost | like_a | sternum | copper | recycled_air | T1_vocab | fiction_tells | said_quietly | negation_Not |
+|---------|-------|------|--------|-------|-------|---------|------|--------|--------|---------|--------|-------------|----------|--------------|-------------|-------------|
+| Ch01 | [count] | | | | | | | | | | | | | | | |
+| Ch02 | | | | | | | | | | | | | | | | |
+| ...  | | | | | | | | | | | | | | | | |
+| **TOTAL** | | | | | | | | | | | | | | | | |
 
 ---
 
@@ -361,10 +465,11 @@ Include the frequency analysis as a section in the AI Pattern Report.
 Scan one chapter, article, or document. Produce the AI Pattern Report for that file.
 
 ### Directory / Full Manuscript
-Scan every `.md` file in a directory tree. Produce:
-1. A per-file summary (file path, flag count, score)
-2. A consolidated AI Pattern Report for the full manuscript
-3. A ranked list of "worst offenders" (files with the most flags)
+**Use the Mandatory Scan Protocol above.** Scan every `.md` file in the directory tree. No sampling. No skipping. Produce:
+1. **The per-chapter scan table** — all chapters, all metrics (required)
+2. A full-manuscript Tier 1 vocabulary sweep result
+3. A consolidated AI Pattern Report
+4. A ranked list of "worst offenders" (chapters with the most flags, sorted by total flag count)
 
 ### Pasted Text
 Accept inline text directly in the conversation. Useful for quick checks without file system access.
@@ -396,6 +501,8 @@ Run before:
 
 ## Anti-Patterns
 
+- ❌ **Sampling instead of full scan** — a "representative sample" always misses patterns; every chapter must be individually scanned
+- ❌ **Using `ctx_search` index queries alone for a full manuscript scan** — index search finds concepts, not word counts; it will miss frequency density patterns entirely
 - ❌ Flagging every em-dash as an error — em-dashes are legitimate punctuation; only *overuse* is the signal
 - ❌ Flagging words from the medium/context-dependent tiers without counting occurrences — one use of "robust" is not a pattern
 - ❌ Rewriting inside this skill — scan only; remediation belongs to `ai-prose-rewrite`
@@ -403,5 +510,7 @@ Run before:
 - ❌ Confusing "sounds like AI" with "is bad writing" — some AI patterns overlap with genuine clichés; flag both, distinguish in the report
 - ❌ Flagging every paired adjective — only flag when frequency exceeds threshold (4+ per chapter) or the pair is a known AI repeat offender
 - ❌ Flagging every sentence fragment — fragments are legitimate prose tools; only flag when they match the staccato sub-patterns (near-synonyms, abstract noun pairs, past-participle escalation)
-- ❌ Ignoring cross-chapter repetition — a pattern that appears once per chapter for 15 chapters is a tell even if each instance looks fine alone
+- ❌ Ignoring cross-chapter repetition — a pattern appearing once per chapter for 15 chapters is a tell even if each instance looks fine alone
 - ❌ Skipping triage classification — every flag must be classified as EARNED / BORDERLINE / AI CLICHÉ to guide remediation
+- ❌ Treating thematic word saturation (one word used 10× in one chapter for clear thematic purpose) the same as frequency spread (same word in 20 different chapters) — the former is often earned; the latter is always a flag
+- ❌ Skipping the per-chapter scan table — aggregate counts hide per-chapter hotspots; the table is required
