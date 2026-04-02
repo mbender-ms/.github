@@ -1,5 +1,5 @@
 ---
-model: claude-opus-4-6
+model: claude-opus-4.6
 name: fiction-writer
 description: "Write romantic hard sci-fi fiction in the style of Sarah J. Maas and Rebecca Yarros — adapted from fantasy romantasy into space-based epic science fiction. Coordinates prose-craft, story-architecture, world-builder, character-forge, and reference-reader skills."
 tools:

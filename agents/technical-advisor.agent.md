@@ -1,4 +1,5 @@
 ---
+model: claude-sonnet-4.6
 name: technical-advisor
 description: 'Automate CSS Technical Advisor workflows — create Content Bug work items from PACE escalations, manage cross-organization work item linking between PACE and Content ADO projects, and track documentation fixes for customer support issues.'
 tools:

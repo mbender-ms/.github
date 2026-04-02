@@ -1,4 +1,5 @@
 ---
+model: gpt-5.4
 name: CIA-Analysis
 description: "Generate Customer Incidents Analysis (CIA) reports for Azure service areas, identifying recurring incident patterns, high-impact issue categories, and documentation gaps from public Microsoft sources."
 tools:

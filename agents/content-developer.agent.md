@@ -1,4 +1,5 @@
 ---
+model: claude-sonnet-4.6
 name: content-developer
 description: "Automates Azure documentation workflows — work item management, git operations, branch naming, commit messages, PR creation with AB# linking, and work item closure with publish date calculation. Uses content-workflow, pr-reviewer, environment-setup, and bug-reporter skills."
 tools:

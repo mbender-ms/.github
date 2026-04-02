@@ -1,5 +1,5 @@
 ---
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 name: chapter-feedback
 description: "Monitor the .github/feedback directory for 0N-done.txt chapter completion signals. When a signal appears, reads the corresponding chapter from the manuscript, generates developmental feedback, and writes 0N-done.md back to the feedback directory. Loops continuously until all 27 chapters are processed."
 tools:

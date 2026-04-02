@@ -1,5 +1,5 @@
 ---
-model: claude-sonnet-4-6
+model: gpt-5.4
 name: originality-world-checker
 description: "Scan worldbuilding documents, character bibles, outlines, beat sheets, and political maps for character names, place names, faction names, and concepts that are exact matches or dangerously close to published works in SFF and romantasy. Runs at the pre-writing checkpoint before drafting begins."
 tools:

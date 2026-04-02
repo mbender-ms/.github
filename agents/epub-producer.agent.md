@@ -1,5 +1,5 @@
 ---
-model: claude-haiku-4-5
+model: claude-haiku-4.5
 name: epub-producer
 description: "Convert a finished markdown manuscript into a flawless KDP-ready EPUB. Handles manuscript preparation, Pandoc conversion, CSS styling, EPUBCheck validation, and KDP upload guidance. The final step from finished prose to published book."
 tools:

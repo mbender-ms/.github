@@ -1,5 +1,5 @@
 ---
-model: claude-opus-4-6
+model: claude-opus-4.6
 name: brainstorm
 description: "Fiction concept brainstorming agent. Takes anything from a single sentence to a detailed premise and generates multiple distinct story concepts. Works at any specificity — vague genre instincts, comp title mashups, character archetypes, or half-formed worlds. Hands winning concepts off to story-architecture and world-builder."
 tools:

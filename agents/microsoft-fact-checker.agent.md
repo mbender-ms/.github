@@ -1,4 +1,5 @@
 ---
+model: gpt-5.4
 name: microsoft-fact-checker
 description: "Specialized fact-checking agent for Microsoft technologies and documentation. Verifies technical accuracy against authoritative Microsoft sources with evidence-based recommendations and complete citations."
 tools:

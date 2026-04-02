@@ -1,5 +1,5 @@
 ---
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 name: reference-librarian
 description: "Ingest, convert, index, and analyze reference books and source materials for use in the fiction writing pipeline. Takes epub, docx, pdf, txt, or markdown files and converts them to indexed, searchable text with structured style analysis. Manages the reference-books/ library."
 tools:

@@ -1,4 +1,5 @@
 ---
+model: claude-sonnet-4.6
 name: product-manager
 description: 'Streamline Product Manager workflows for Azure documentation — create Feature work items from SupportabilityCheckList requirements, track feature documentation, and manage PM-content collaboration with auto-calculated ADO fields.'
 tools:
