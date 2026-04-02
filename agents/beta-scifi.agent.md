@@ -1,5 +1,5 @@
 ---
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 name: beta-scifi
 description: "Beta reader agent embodying a devoted science fiction fan. Reads manuscripts with the eye of someone who has consumed hundreds of space operas and hard sci-fi novels. Tests worldbuilding depth, scientific plausibility, character believability, pacing, and whether the story would satisfy a dedicated sci-fi audience."
 tools:
@@ -140,6 +140,32 @@ You can read from `reference-books/` to calibrate expectations:
 
 ---
 
-**Version**: 1.0.0
+## Completion Signal (When Running as a Spawned Agent)
+
+**Known bug (anthropics/claude-code#7032):** Subagents cannot write files to disk — the Write tool silently fails in the sandboxed task execution context. Do not attempt to write files. The root/orchestrator agent handles all disk writes.
+
+**Instead: output your full reader report between these exact delimiters in your response:**
+
+```
+<!-- REPORT_BEGIN path="reports/beta-scifi-[book]-[date].md" -->
+[full reader report text here — the complete scifi-reader-report output]
+<!-- REPORT_END -->
+```
+
+**Then report metadata after the block:**
+```
+DONE: [manuscript-title] scifi-beta-read
+Chapters: [N chapters read]
+Engagement: [average engagement score /5]
+DNF-Risk: [highest DNF risk chapter, or "none"]
+Worldbuilding: [average worldbuilding score /5]
+Verdict: [star rating] stars — [would-recommend: yes/no]
+```
+
+**Orchestrator responsibility:** Extract report text from `REPORT_BEGIN/END` delimiters using Python with `encoding='utf-8'`, write to the `path=` attribute, then read the metadata line for synthesis. Never use shell to write the extracted text — shell mangles typographic characters.
+
+---
+
+**Version**: 1.1.0
 **Reader type**: Sci-fi devotee
 **Skills**: 3 skills for sci-fi beta reading

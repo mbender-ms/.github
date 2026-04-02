@@ -167,6 +167,83 @@ AI overloads dialogue tags with adverbs and unusual verbs.
 | "she exclaimed joyfully" | "she said" / "she laughed" / action beat |
 | "he opined" / "she interjected" | "he said" / "she said" — no verb-as-opinion-carrier |
 
+### Rule 10: Dismantling the Negation-Pivot
+AI overuses "Not X. Y." and "Not X — Y." as a dramatic reveal device. The construction is legitimate in small doses (1–2 per chapter max); it becomes a tell through repetition.
+
+**Rewrite strategies** (rotate among them — never use the same fix twice in a chapter):
+
+| 🔴 Pattern | ✅ Rewrite Strategy |
+|-----------|----------|
+| "Not a question. A command." | **Direct statement**: "A command." (Cut the negation entirely — if the positive is strong enough, the negation is redundant.) |
+| "Not anger. Something worse." | **Show instead**: "His voice was flat. No heat in it. That was worse." (Replace the abstract label with behavioral detail.) |
+| "Not quite fear — something closer to recognition." | **Integrate into sentence**: "She recognized it before she was afraid of it." (Fold the pivot into a single flowing sentence.) |
+| "Not anymore." (standalone) | **Leave if earned** — simple negations of a single concept are often legitimate. Only flag the "Not X. [Better X]." construction. |
+
+**Decision rule**: If the "Not" clause adds no information that the positive clause doesn't already contain, cut the negation. "Not a question. A command." — the word "command" already implies it's not a question.
+
+### Rule 11: Pruning Paired Adjectives
+AI generates `[adj] and [adj]` pairs as default descriptions. Most are redundant (near-synonyms) or generic (unearned atmosphere).
+
+**Three rewrite strategies** (choose based on context):
+
+| Strategy | When to Use | Example |
+|----------|-------------|---------|
+| **CUT one** | One adjective does all the work | "vast and patient silence" → "patient silence" |
+| **VARY the pair** | Both concepts matter, but the pairing is generic | "low and steady voice" → "voice held low, like he was talking to a spooked animal" |
+| **REPLACE entirely** | The whole phrase is atmospheric filler | "hot and electric tension" → "she could feel the static when his arm brushed hers" |
+
+**Known AI pairs to fix on sight** (these specific pairings recur across AI fiction):
+- "vast and patient" → pick one, or replace with a concrete image
+- "low and [anything]" for male characters → describe the voice/action specifically
+- "[anything] and electric" → replace with a physical sensation
+- "warm and [anything]" → replace with specific sensory detail
+- "raw and [open/unguarded]" → show the vulnerability through action
+
+**Earned exception**: Paired adjectives in dialogue are usually fine — people actually talk this way. Flag only in narrative/descriptive prose.
+
+### Rule 12: Remediating Staccato Fragments
+AI uses short sentence fragments (1–3 words) as atmospheric punctuation. The fix depends on the sub-type:
+
+| Sub-Type | Fix |
+|----------|-----|
+| **Near-synonym pairs** ("Steady. Unwavering.") | **Cut one.** Keep whichever word is more specific. "Steady. Unwavering." → "Steady." |
+| **Decorative past-participle escalation** ("Managed. Contained. Watched.") | **Integrate into a sentence.** "He managed it the way he managed everything — contained, watchful." Or cut entirely if the preceding sentence already conveys the meaning. |
+| **Speech-tag + adjective pair** ("he said. Flat. Clipped.") | **Fold into the dialogue beat.** "'I need the report,' he said, and there was nothing in it — no warmth, no ask." Or: "'I need the report.' No inflection." |
+| **Abstract noun pair + explanatory sentence** ("Recognition. Confirmation. The cold clarity of knowing…") | **Cut the fragments, keep the sentence.** "The cold clarity of knowing hit her." The fragments were AI scaffolding for the real sentence that followed. |
+
+**Earned exceptions** — do NOT fix staccato fragments when they:
+- Do concrete/technical work: "Reactor three. Offline." (plot information in fragment form)
+- Serve character voice: "Fine. Fine. I'll do it." (speech pattern)
+- Create structural irony or deliberate callback
+- Appear once in a chapter — fragments are a legitimate prose tool in moderation
+
+### Rule 13: Frequency Word Reduction
+When `ai-pattern-scan` flags a word for exceeding the frequency threshold (e.g., "warm" appearing 183 times in 27 chapters), apply a two-pass reduction:
+
+**Pass 1 — CUT** (target: reduce by 30–40%)
+Remove instances where the word is:
+- Redundant (the warmth is already implied by context)
+- Generic filler ("warm smile," "warm feeling," "warm tone" — these describe nothing)
+- Stacked with another flagged pattern ("a warm wave of relief washed over her" — two tells in one)
+
+**Pass 2 — VARY** (target: replace 20–30% of remaining instances)
+Replace with specific alternatives that match the actual meaning:
+- "warm voice" → "his voice dropped," "the edge left his voice," "he sounded like he meant it"
+- "warm smile" → "she smiled — a real one, not the diplomatic version"
+- "warmth in his eyes" → "his expression softened" or a specific physical detail
+- "warm hand" → describe the actual sensation — "dry palm," "calloused fingers," "gentle grip"
+
+**Goal**: Reduce total instances by 50–60%, leaving the word only where it does specific sensory work (actual physical warmth, not metaphorical "good feeling" warmth).
+
+### Rule 14: Pattern Fatigue Awareness
+Even a legitimate construction becomes an AI tell when repeated across a manuscript. After applying all other rules, check:
+
+- Does any single rewrite *strategy* repeat more than 3 times per chapter? If so, vary the approach.
+- Does any replacement phrase appear more than twice in the manuscript? If so, vary it.
+- Have you created a new pattern while fixing an old one? Check all replacements against each other.
+
+The goal is not just to remove AI patterns — it's to prevent the *remediation itself* from creating new patterns.
+
 ---
 
 ## Rewrite Output: Before/After Diff Report
@@ -284,3 +361,7 @@ The rewritten file replaces the original (backup recommended before running). Th
 - ❌ Adding new AI phrases while removing old ones ("delve" → "embark on an exploration of")
 - ❌ Rewriting dialogue that was intentionally clunky for character voice
 - ❌ Removing intentional repetition used for rhythm or emphasis
+- ❌ Using the same rewrite strategy for every instance of a pattern — rotate approaches to avoid creating new patterns
+- ❌ Fixing staccato fragments by converting all of them to full sentences — that creates monotonous prose; mix strategies (cut some, integrate some, leave earned ones)
+- ❌ Replacing every paired adjective with a long descriptive phrase — sometimes cutting one adjective is enough
+- ❌ Ignoring the triage classification from `ai-pattern-scan` — if a flag is marked EARNED, leave it alone

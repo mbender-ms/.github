@@ -58,7 +58,11 @@ ctx_search(queries=[
   "found himself she couldn't help breath caught",
   "wave of emotion washed over something shifted",
   "it's important to note furthermore moreover additionally",
-  "in the realm of cutting-edge groundbreaking transformative"
+  "in the realm of cutting-edge groundbreaking transformative",
+  "Not a question Not anger Not quite Not exactly Not a command",
+  "vast and patient low and steady raw and unguarded warm and",
+  "warm warmth steady sharp careful quietly",
+  "Controlled Measured Contained Professional Steady Unwavering"
 ], source="manuscript")
 ```
 
@@ -89,6 +93,9 @@ These words/phrases appear in AI-generated prose at rates far exceeding natural 
 | myriad | Used as an adjective: "myriad possibilities" instead of "many" |
 
 #### Fiction-Specific Tells (🔴)
+
+**Phrase-Level Tells**
+
 | Pattern | Example |
 |---------|---------|
 | "found himself [verb]-ing" | "He found himself staring at the console for the third time." |
@@ -104,6 +111,41 @@ These words/phrases appear in AI-generated prose at rates far exceeding natural 
 | "she couldn't bring herself to…" | "She couldn't bring herself to look away." |
 | "blood ran cold" | Stakes-raising cliché |
 | "heart raced / hammered / pounded in his/her chest" | All three variants equally flagged |
+
+**Structural Tells — Syntactic Patterns (🔴)**
+
+These are not vocabulary tells — they are *construction* tells. The AI defaults to these syntactic shapes regardless of word choice.
+
+| Pattern | Example | Why It Signals AI |
+|---------|---------|-------------------|
+| **"Not X, it's Y" negation-pivot** | "Not a question. A command." / "Not anger. Something worse." / "Not X — Y." | AI overuses the negation-pivot as a dramatic reveal device. One per chapter is fine; 5+ per chapter is a clear tell. Scan for "Not [noun/adj]. [Noun/adj]." and "Not [noun] — [noun]." constructions. |
+| **Paired adjective default** | "vast and patient," "hot and sudden," "raw and unguarded," "low and steady" | AI generates paired adjectives joined by "and" as its default description mode. Scan for `[adjective] and [adjective]` patterns in descriptive passages (not dialogue). Flag when 4+ appear per chapter. |
+| **Staccato fragment pairs/triplets** | "Controlled. Measured." / "Recognition. Confirmation. The cold clarity of…" / "Professional. Contained." | AI generates short sentence fragments (1–3 words, usually adjectives, past participles, or abstract nouns) as atmospheric punctuation. Flag when 3+ instances appear per chapter. |
+
+**Staccato Fragment Sub-Patterns (🔴)**
+
+The staccato fragment tell has four distinct sub-types. Each is a separate signal:
+
+| Sub-Pattern | Example | Why It's a Tell |
+|-------------|---------|-----------------|
+| **Decorative past-participle escalation** | "Managed. Contained. Watched." | Synonymous past-participles stacked for drama without adding information. Each word means roughly the same thing. |
+| **Speech-tag + adjective pair** | "he said. Flat. Clipped." | Staccato adjectives after dialogue attribution — the AI equivalent of adverb-stacking, just formatted as fragments. |
+| **Abstract noun pair + explanatory sentence** | "Recognition. Confirmation. The cold clarity of knowing…" | Fragments that require the following sentence to give them meaning. If you need the explanation, you don't need the fragments. |
+| **Near-synonym pairs** | "Steady. Unwavering." / "Professional. Controlled." | Two fragment words that mean the same thing. Pure redundancy formatted as emphasis. |
+
+**Most overused fragment words** (flag when any of these appear in fragment patterns 3+ times across a manuscript):
+- "controlled," "steady," "measured," "careful," "quiet," "sharp," "contained," "professional"
+
+**Paired Adjective Repeat Offenders** (flag as 🔴 on sight — these specific pairs recur across AI-generated fiction):
+
+| AI-Generated Pair | Typical Context |
+|--------------------|----------------|
+| "vast and patient" | Space/void/silence descriptions |
+| "low and steady" / "low and careful" / "low and firm" | Male character voices/actions |
+| "X and electric" (hot and electric, sharp and electric) | Tension/attraction scenes |
+| "warm and X" (warm and steady, warm and rough) | Comfort/intimacy descriptions |
+| "raw and unguarded" / "raw and open" | Vulnerability moments |
+| "quiet and deliberate" / "quiet and measured" | Character movement/speech |
 
 #### Non-Fiction Structural Tells (🔴)
 | Pattern | Example |
@@ -129,6 +171,17 @@ Individually inconclusive, but clusters of these are a pattern. Flag each instan
 - elevate ("elevate the narrative," "elevate her performance")
 - foster ("foster innovation," "foster a sense of belonging")
 - leverage ("leverage her experience," not financial leverage)
+
+#### Fiction Frequency Words (🟡)
+These are ordinary English words that become AI tells through *volume*. One or two per chapter is fine. Flag when they exceed the threshold across a manuscript.
+
+| Word | Threshold | Why It Signals AI |
+|------|-----------|-------------------|
+| warm / warmth | > 5 per chapter or > 100 per manuscript | AI's default positive descriptor for comfort, safety, attraction, and approval. Used for voices, touches, expressions, rooms, feelings — anything the AI wants to code as "good." |
+| steady | > 4 per chapter or > 60 per manuscript | AI's default descriptor for male characters, reliable things, and calm states |
+| sharp | > 4 per chapter or > 60 per manuscript | AI's go-to intensity descriptor — sharp pain, sharp gaze, sharp intake of breath |
+| careful / carefully | > 4 per chapter or > 60 per manuscript | AI's default adverb for any action performed with attention |
+| quiet / quietly | > 5 per chapter or > 80 per manuscript | AI's default modifier for emotional moments, voice descriptions, and transitions |
 
 #### Non-Fiction Phrases
 - "As mentioned above/previously…"
@@ -183,7 +236,33 @@ These require whole-document analysis, not line-level search:
 
 ---
 
-## Scan Output: AI Pattern Report
+### Triage Framework: Earned vs. AI Cliché
+
+Not every instance of a flagged pattern requires a fix. Use this framework to classify each flag:
+
+| Classification | Criteria | Action |
+|----------------|----------|--------|
+| **EARNED** | The pattern does concrete narrative work: anchors a specific sensory detail, serves character voice, creates structural irony, executes a deliberate callback, or performs technical/plot-critical function. | Leave it. Note as "earned" in report. |
+| **BORDERLINE** | Generic usage, but context partially redeems it — the surrounding prose gives it enough weight, or it's the least-bad option. | Flag for human review. Include suggested alternative. |
+| **AI CLICHÉ** | Decorative, redundant, or repeated to the point of pattern fatigue. Adds atmosphere but not information. Could be cut or replaced without losing meaning. | Fix. Apply rewrite rule. |
+
+**Pattern fatigue rule**: Even an individually acceptable pattern becomes an AI tell when repeated 5+ times in a manuscript. If the same construction appears in 5+ chapters, it's a pattern regardless of whether each individual instance is "earned." Flag all instances and recommend reducing to 2–3 total.
+
+**Scanning with triage**: When producing the AI Pattern Report, classify every flag as EARNED / BORDERLINE / AI CLICHÉ in the "Recommended Action" column. The triage classification drives what `ai-prose-rewrite` does with each flag.
+
+---
+
+### Frequency Analysis (Fiction)
+
+Beyond vocabulary and phrase tells, AI leaves fingerprints in *word frequency*. Run these counts across the full manuscript:
+
+1. **Single-word frequency**: Count occurrences of every Tier 2 Fiction Frequency Word. Flag any that exceed the threshold.
+2. **Paired adjective frequency**: Count all `[adj] and [adj]` constructions in descriptive (non-dialogue) text. More than 3 per chapter or 50+ per manuscript = flag.
+3. **Fragment frequency**: Count all 1–3 word sentence fragments in non-dialogue text. More than 3 per chapter or 40+ per manuscript = flag.
+4. **Negation-pivot frequency**: Count all "Not X. Y." / "Not X — Y." constructions. More than 2 per chapter or 30+ per manuscript = flag.
+5. **Cross-chapter repetition**: Any specific phrase or construction appearing in 5+ chapters is a pattern — even if each instance looks fine in isolation.
+
+Include the frequency analysis as a section in the AI Pattern Report.
 
 ```markdown
 # AI Pattern Report
@@ -199,13 +278,22 @@ These require whole-document analysis, not line-level search:
 | Category | Flags | Severity |
 |----------|-------|----------|
 | 🔴 High-signal vocabulary | [count] | Critical |
-| 🔴 Fiction/non-fiction tells | [count] | Critical |
+| 🔴 Fiction/non-fiction phrase tells | [count] | Critical |
+| 🔴 Structural tells (negation-pivot, paired adj, staccato) | [count] | Critical |
 | 🟡 Medium-signal vocabulary | [count] | Important |
+| 🟡 Fiction frequency words (warm, steady, etc.) | [count] | Important |
 | 🟡 Pattern clusters | [count] | Important |
 | 🟠 Context-dependent | [count] | Review |
 | Punctuation tics | [count] | [severity] |
 | Structural patterns | [count] | [severity] |
 | **Total flags** | [count] | |
+
+### Triage Summary (Fiction)
+| Classification | Count |
+|----------------|-------|
+| EARNED (leave) | [count] |
+| BORDERLINE (human review) | [count] |
+| AI CLICHÉ (fix) | [count] |
 
 ---
 
@@ -313,3 +401,7 @@ Run before:
 - ❌ Rewriting inside this skill — scan only; remediation belongs to `ai-prose-rewrite`
 - ❌ Applying fiction tells to non-fiction or vice versa — mode matters
 - ❌ Confusing "sounds like AI" with "is bad writing" — some AI patterns overlap with genuine clichés; flag both, distinguish in the report
+- ❌ Flagging every paired adjective — only flag when frequency exceeds threshold (4+ per chapter) or the pair is a known AI repeat offender
+- ❌ Flagging every sentence fragment — fragments are legitimate prose tools; only flag when they match the staccato sub-patterns (near-synonyms, abstract noun pairs, past-participle escalation)
+- ❌ Ignoring cross-chapter repetition — a pattern that appears once per chapter for 15 chapters is a tell even if each instance looks fine alone
+- ❌ Skipping triage classification — every flag must be classified as EARNED / BORDERLINE / AI CLICHÉ to guide remediation
