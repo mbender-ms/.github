@@ -21,12 +21,16 @@ tools:
 
 Fact-check a set of Microsoft documentation articles **in parallel**. Each article is an independent work item with its own output file. Optimized for Copilot CLI `/fleet` mode and VS Code parallel subagents.
 
-> **Runtime**: `/fleet fact-check these articles using @fleet-batch-verify`
-> Each article runs as a separate subagent track. Reports merge at the end.
+> **Runtime**:
+> - Copilot CLI: `/fleet` dispatch (preferred)
+> - Copilot Chat: `runSubagent` dispatch (equivalent output)
+> - Fallback: sequential processing if parallel tools are unavailable
 
 ## Setup
 
 Load [_shared/source-hierarchy.md](../_shared/source-hierarchy.md) for the source authority reference. Higher tier always wins.
+Load [assets/_runtime-adapter.md](./_runtime-adapter.md) for runtime dispatch rules and output guarantees.
+Load [assets/_subagent-contract.md](./_subagent-contract.md) for subagent I/O schema and call-budget defaults.
 
 ## Step 0 — Scope and decompose
 
@@ -40,7 +44,7 @@ Discover files:
 - If glob: expand the pattern
 - If file list: validate each path exists
 
-**Decomposition rule for /fleet**: Map every article to one concrete output artifact. The orchestrator should see a structure like:
+**Decomposition rule**: Map every article to one concrete output artifact. The orchestrator should see a structure like:
 
 ```
 Track 1: articles/networking/load-balancer-health-probes.md → factcheck_load-balancer-health-probes_YYYYMMDD.md
@@ -48,11 +52,16 @@ Track 2: articles/compute/create-vm-portal.md → factcheck_create-vm-portal_YYY
 Track 3: articles/identity/configure-mfa.md → factcheck_configure-mfa_YYYYMMDD.md
 ```
 
-Each track is independent — no shared state, no dependencies between tracks.
+Each unit is independent — no shared state, no dependencies between tracks.
+
+Dispatch according to runtime:
+- CLI fleet mode: one `/fleet` track per article
+- Chat mode: one `runSubagent` call per article
+- Fallback mode: process articles sequentially but keep report naming identical
 
 ## Step 1 — Per-article verification (runs in parallel)
 
-Each subagent receives ONE article and executes these steps:
+Each parallel unit receives ONE article and executes these steps using the shared subagent contract:
 
 ### 1a. Read and extract claims
 
@@ -170,4 +179,20 @@ Articles:
 3. articles/identity/configure-mfa.md → factcheck_configure-mfa_YYYYMMDD.md
 
 After all tracks complete, consolidate into factcheck_batch_YYYYMMDD.md with cross-article patterns.
+```
+
+## Chat prompt template
+
+When running from Copilot Chat, use this structure:
+
+```
+Use @fleet-batch-verify to fact-check the following articles.
+Dispatch one runSubagent unit per article and produce matching per-article reports.
+
+Articles:
+1. articles/networking/load-balancer-health-probes.md → factcheck_load-balancer-health-probes_YYYYMMDD.md
+2. articles/compute/create-vm-portal.md → factcheck_create-vm-portal_YYYYMMDD.md
+3. articles/identity/configure-mfa.md → factcheck_configure-mfa_YYYYMMDD.md
+
+After all units complete, consolidate into factcheck_batch_YYYYMMDD.md with cross-article patterns.
 ```

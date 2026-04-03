@@ -28,6 +28,8 @@ This workflow trades speed for depth. Every claim gets verified. Runtime may be 
 ## Setup
 
 Load [_shared/source-hierarchy.md](../_shared/source-hierarchy.md) for the complete tiered source authority reference.
+Load [assets/_runtime-adapter.md](./_runtime-adapter.md) for fan-out dispatch behavior by runtime.
+Load [assets/_subagent-contract.md](./_subagent-contract.md) for shared subagent schema, instruction template, and merge rules.
 
 When scoping to a product area, consult [sources/routing-index.md](../../sources/routing-index.md) to identify the matching category YAML for Tier 2 repo lookups.
 
@@ -93,26 +95,14 @@ Spawn one `runSubagent` per service-area group. Each subagent receives:
 
 ### Subagent instructions
 
-Each subagent runs independently with its own context window:
+Each subagent runs independently with its own context window and must follow the standard template from [assets/_subagent-contract.md](./_subagent-contract.md).
 
-```
-You are a fact-checking subagent for [SERVICE_AREA] claims.
-
-Verify each claim below against official Microsoft documentation.
-Use microsoft_docs_search first, then microsoft_docs_fetch only for
-the top 2-3 most relevant pages. Use maxTokenBudget=2000 on fetch calls.
-
-For each claim, return:
-- claim_id
-- status: ✅ accurate | ⚠️ partial | ❌ inaccurate | 🕐 outdated | ❓ unverifiable | 🔗 broken
-- evidence: What the official source says (paraphrased, max 2 sentences)
-- source_url: The learn.microsoft.com URL
-- source_tier: 1-4
-- fix: Suggested correction if status is not ✅ (empty otherwise)
-
-Claims to verify:
-[PASTE CLAIM SUBSET HERE]
-```
+Required parameters for each subagent call:
+- `service_area`: claim group name
+- `claims`: claim subset for that group
+- `search_strategy`: `batched`
+- `max_fetch_calls`: `3`
+- `token_budget`: `2000`
 
 ### Subagent search strategy
 

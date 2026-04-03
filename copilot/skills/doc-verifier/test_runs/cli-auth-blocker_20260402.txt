@@ -1,0 +1,13 @@
+Copilot CLI rerun blocker on 2026-04-02
+
+Command: copilot -p "Reply with OK only." --allow-all-tools --output-format text --silent
+
+Observed result:
+Error: No authentication information found.
+
+Copilot can be authenticated with GitHub using an OAuth Token or a Fine-Grained Personal Access Token.
+
+Supported methods surfaced by the CLI:
+- Start `copilot` and run `/login`
+- Set COPILOT_GITHUB_TOKEN, GH_TOKEN, or GITHUB_TOKEN
+- Run `gh auth login`

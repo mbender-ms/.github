@@ -202,7 +202,7 @@ Basic Load Balancer is the recommended SKU for production workloads.
 | Consolidated report | Includes per-file summary table with all 3 articles |
 | Runtime | Completes faster than 3x the single-article time (parallelism working) |
 
-### T3.3 — VS Code agent mode fallback
+### T3.3 — VS Code agent mode (runSubagent)
 
 **Fixture**: F1 + F2
 
@@ -217,9 +217,28 @@ Use @fleet-batch-verify to fact-check these 2 articles:
 
 | Check | Expected |
 |-------|----------|
-| Graceful handling | Workflow runs (may be sequential if VS Code doesn't support /fleet natively) |
+| runSubagent dispatch | Agent uses `runSubagent` units for article-level work items when parallel tools are available |
 | Same output format | Per-article + consolidated reports still generated |
 | No errors from /fleet syntax | Agent adapts to the runtime environment |
+
+---
+
+## Runtime compatibility matrix (W11-W14)
+
+Use this matrix to validate cross-runtime parity quickly before full protocol runs.
+
+| Workflow | Copilot CLI (`/fleet`) | Copilot Chat (`runSubagent`) | Expected artifacts |
+|----------|-------------------------|------------------------------|-------------------|
+| W11 Fleet Batch | ✅ Preferred dispatch | ✅ Equivalent dispatch | Per-article `factcheck_*.md` + `factcheck_batch_YYYYMMDD.md` |
+| W12 Fan-Out Verify | ✅ Supported | ✅ Preferred for interactive deep checks | Single detailed `factcheck_[article]_YYYYMMDD.md` |
+| W13 Claim Manifest | ✅ Supported | ✅ Supported | `claims_[article]_YYYYMMDD.md` |
+| W14 Incremental Verify | ✅ Supported | ✅ Supported | Incremental report + `.factcheck_cache/[article].json` |
+
+Quick parity checks:
+1. Same status taxonomy appears in reports (✅⚠️❌🕐❓🔗).
+2. Same source citation fields appear in findings.
+3. Report filenames are deterministic and non-colliding.
+4. Batch workflows always produce consolidated output.
 
 ---
 

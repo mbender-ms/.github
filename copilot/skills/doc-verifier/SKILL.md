@@ -29,8 +29,8 @@ Verify technical accuracy of Microsoft documentation across **any product area**
 | 8 | **PR Review** | Fact-check all changed files in a PR | `factcheck_PR*.md` report | `pr-review.prompt.md` |
 | 9 | **Research** | Investigate a topic with citations, no edits | Research report | `microsoft-researcher.prompt.md` |
 | 10 | **CIA Analysis** | Customer incident patterns for a service area | Incident analysis report | `microsoft-fact-checker-cia.agent.md` |
-| 11 | **Fleet Batch** | Verify 2-10 articles in parallel via /fleet | Per-article reports + consolidated | `fleet-batch-verify.prompt.md` |
-| 12 | **Fan-Out Verify** | Deep single-article check with parallel subagents per service area | Edits + detailed report | `fan-out-verify.prompt.md` |
+| 11 | **Fleet Batch** | Verify 2-10 articles in parallel (CLI `/fleet` or Chat `runSubagent`) | Per-article reports + consolidated | `fleet-batch-verify.prompt.md` |
+| 12 | **Fan-Out Verify** | Deep single-article check with parallel subagents per service area (CLI or Chat) | Edits + detailed report | `fan-out-verify.prompt.md` |
 | 13 | **Claim Manifest** | Pre-stage: extract and catalog claims without verification | Claim inventory file | `claim-manifest.prompt.md` |
 | 14 | **Incremental Verify** | Cache-based incremental checking; skip unchanged claims | Edits + incremental report | `incremental-verify.prompt.md` |
 
@@ -46,7 +46,7 @@ Verify technical accuracy of Microsoft documentation across **any product area**
 - **"Fact-check PR #12345"** → Workflow 8
 - **"Research topic X with sources"** → Workflow 9
 - **"Analyze customer incidents for Service Y"** → Workflow 10
-- **"Fact-check these 5 articles"** → Workflow 11 (Fleet Batch) via `/fleet`
+- **"Fact-check these 5 articles"** → Workflow 11 (Fleet Batch) via `/fleet` or Chat `runSubagent`
 - **"Deep verify every claim in this article"** → Workflow 12 (Fan-Out Verify)
 - **"How many claims does this article have?"** → Workflow 13 (Claim Manifest)
 - **"Pre-search claims before verification"** → Run `batch-presearch.sh` first, then Workflow 11 or 12
@@ -132,6 +132,8 @@ See [references/workflows.md](references/workflows.md) for detailed per-workflow
 | `assets/fan-out-verify.prompt.md` | 12 — Fan-Out Verify |
 | `assets/claim-manifest.prompt.md` | 13 — Claim Manifest |
 | `assets/incremental-verify.prompt.md` | 14 — Incremental Verify |
+| `assets/_runtime-adapter.md` | Shared runtime dispatch rules |
+| `assets/_subagent-contract.md` | Shared subagent I/O contract |
 | `scripts/batch-presearch.sh` | Pre-processing helper |
 
 ## Workflow comparison (parallel)
@@ -144,7 +146,7 @@ See [references/workflows.md](references/workflows.md) for detailed per-workflow
 | MCP calls | Yes (per track) | Yes (per subagent, capped) | None | Only for changed/stale claims |
 | INCLUDE resolution | ✅ | ✅ | ✅ | ✅ |
 | Token management | maxTokenBudget=2000 | maxTokenBudget=2000, max 3 fetches/subagent | N/A | Inherited from wrapped workflow |
-| Best runtime | Copilot CLI /fleet | VS Code agent mode or Copilot CLI | Any | Any |
+| Best runtime | Copilot CLI /fleet (preferred), Chat runSubagent equivalent | VS Code agent mode or Copilot CLI | Any | Any |
 
 ## Pre-processing with batch-presearch.sh
 

@@ -1,0 +1,68 @@
+{
+  "article": "copilot/skills/doc-verifier/fixtures/articles/load-balancer/manage-probes-how-to.md",
+  "article_hash": "simulated-20260402",
+  "last_full_check": "2026-04-02",
+  "staleness_days": 30,
+  "claims": [
+    {
+      "claim_id": "C001",
+      "fingerprint": "e4ee771f81da3a267cf070616319c76f8304eb27ef673ca3115e82493e45d9ae",
+      "status": "accurate",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C002",
+      "fingerprint": "cda86efed300e4c33180adf981aaf43b923f0ae094be92de9a1304a596d61788",
+      "status": "accurate",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C003",
+      "fingerprint": "88069a9ae8f8ebeca0287ada180426e549e1241e65156bf5d91328c1173d39ad",
+      "status": "outdated",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C004",
+      "fingerprint": "1dfc3b923096cbfd4acc2098e53aa52db7bddc78dc508fb5736ed8a5871056be",
+      "status": "accurate",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C005",
+      "fingerprint": "5cc2bf911c541b7a07d2be38c1394423ca5d3ef236469a0775e1faf13471e57b",
+      "status": "accurate",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C006",
+      "fingerprint": "d61e53bcb40a726a28a50e2c09716b88be2f660ead5d7282ae92585b52f3a3b8",
+      "status": "accurate",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C007",
+      "fingerprint": "a4c9adcf650abe3fa8f33ef1cfade4be3bb3a34b7ecbd27312e311e07702069e",
+      "status": "inaccurate",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C008",
+      "fingerprint": "1f5f99c647b31b93ef398ad45f93ecd6846a61678e9724ec216327c5b004ae0a",
+      "status": "partial",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C009",
+      "fingerprint": "ad7cdddbe13380994dd6f9b837e6b253a5dcd1893ac839611890b9f642494a18",
+      "status": "accurate",
+      "verified_date": "2026-04-02"
+    },
+    {
+      "claim_id": "C010",
+      "fingerprint": "659a8c96c2a960fbe2a40a8092a8c506af40e4e7a36e10f1fab6372be6fc6bff",
+      "status": "accurate",
+      "verified_date": "2026-04-02"
+    }
+  ]
+}

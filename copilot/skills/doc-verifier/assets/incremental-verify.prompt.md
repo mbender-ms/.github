@@ -22,6 +22,11 @@ Fact-check a Microsoft documentation article **incrementally** by comparing curr
 
 This workflow wraps any verification workflow (W2, W3, W11, W12) with a caching layer. For articles checked regularly (monthly freshness reviews), this cuts verification work by 60-80%.
 
+## Setup
+
+Load [assets/_runtime-adapter.md](./_runtime-adapter.md) to decide whether reduced verification runs in fleet mode, runSubagent mode, or sequential fallback.
+Load [assets/_subagent-contract.md](./_subagent-contract.md) when dispatching reduced claim sets to parallel subagents.
+
 ## How it works
 
 Each claim gets a **fingerprint** — a hash of (service + type + normalized text). When you re-run verification:
@@ -84,8 +89,15 @@ For each claim, compute a fingerprint:
 
 Use `runInTerminal` with a one-liner:
 ```bash
-echo -n "azure load balancer|feature|health probes support http, https, and tcp protocols" | sha256sum | cut -d' ' -f1
+python -c "import hashlib; s='azure load balancer|feature|health probes support http, https, and tcp protocols'; print(hashlib.sha256(s.encode('utf-8')).hexdigest())"
 ```
+
+Portable fallback if Python is unavailable:
+```bash
+node -e "const crypto=require('crypto'); const s='azure load balancer|feature|health probes support http, https, and tcp protocols'; console.log(crypto.createHash('sha256').update(s,'utf8').digest('hex'));"
+```
+
+Use `sha256sum` only as an optional third fallback in environments where it is available.
 
 ## Step 2 — Compare against cache
 
