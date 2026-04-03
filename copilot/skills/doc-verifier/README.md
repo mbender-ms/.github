@@ -108,6 +108,34 @@ Open **GitHub Copilot Chat** in agent mode and describe what you want verified. 
 
 ---
 
+## Threshold Matrix (Workflow and Tier Routing)
+
+Use these thresholds to right-size verification depth while preserving accuracy.
+
+| Decision axis | Threshold | Route | Tier |
+|---|---|---|---|
+| Single article claim volume | 1-15 claims and low ambiguity | #2 Single Article | Tier 2 |
+| Single article claim volume | 16-40 claims or mixed ambiguity | Tier 2 evidence gathering, Tier 1 final adjudication for contested claims | Tier 2 then Tier 1 |
+| Single article claim volume | More than 40 claims, cross-service scope, or safety-critical content | #12 Fan-Out Verify | Tier 1-heavy |
+| Batch size | 2-10 articles | #11 Fleet Batch (one track per article) | Tier 2 orchestration, Tier 1 on contested claims |
+| Batch size | More than 10 articles | #13 Claim Manifest first, then chunked #11 runs | Tier 2 or Tier 3 first, escalate selectively |
+| Re-check cycle | Less than 20% content changed | #14 Incremental Verify | Tier 2 default |
+| Re-check cycle | 20% or more content changed | Full rerun with #2, #11, or #12 | Mixed |
+| PR scope | 1-5 documentation files, mostly editorial or metadata changes | #8 PR Review standard pass | Tier 2 or Tier 3 |
+| PR scope | More than 5 files or major technical changes | #8 PR Review plus deep pass for high-risk files | Tier 1 on flagged files |
+
+### Escalation Triggers (Accuracy-First)
+
+Escalate a claim or file to Tier 1 when any trigger matches:
+
+- Tier conflict: Tier 1 and Tier 2 sources disagree.
+- Unverifiable rate: more than 10% of claims in one article are unverifiable.
+- Safety impact: claims affect RBAC, authentication, encryption, or production availability.
+- Confidence drop: reviewer confidence is below high after Tier 2 analysis.
+- Policy or retirement risk: deprecation or retirement timelines are present.
+
+---
+
 ## Parallel verification workflows
 
 These workflows extend the base verifier for scale and repeat checks:

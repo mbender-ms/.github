@@ -19,6 +19,29 @@ Use this decision order:
 
 Do not fail a workflow only because `/fleet` is unavailable.
 
+## Threshold-Based Dispatch
+
+Apply these thresholds before selecting a dispatch pattern.
+
+| Decision axis | Threshold | Dispatch choice |
+|---|---|---|
+| Articles in scope | 1 | Pattern B for deep verification, or sequential single-article flow |
+| Articles in scope | 2-10 | Pattern A (article-level parallelism) |
+| Articles in scope | More than 10 | Pre-stage with claim manifests, then run Pattern A in chunks |
+| Claims in one article | 1-40 claims | Single-article flow, fan-out optional |
+| Claims in one article | More than 40 claims | Pattern B (service-area fan-out) |
+| Nested need | Multiple deep-check articles with high claim counts | Pattern C (hybrid), unless runtime cannot support nested parallelism |
+| Re-check run | Less than 20% changed content | Incremental path, then selective pattern choice |
+
+## Escalation Triggers
+
+Escalate from Tier 2 or Tier 3 processing to Tier 1 claim adjudication when:
+
+- Tier 1 and Tier 2 sources conflict.
+- More than 10% of claims are currently unverifiable.
+- Claim impact includes security, compliance, or production safety.
+- Confidence after structured pass is not high.
+
 ## Dispatch patterns
 
 ### Pattern A: Article-level parallelism
