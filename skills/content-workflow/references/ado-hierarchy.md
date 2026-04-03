@@ -8,7 +8,7 @@ Use this table to determine the correct parent Epic or Feature when creating wor
 |---|---|---|---|---|
 | content-maintenance | 489791 | 494391 | Meet KPI targets for content quality | none |
 | new-feature | 486403 | 498873 | Help customers learn new technology | hybrid-connectivity:498901, load-balancing:498894, foundation:498899, network-security:498896, non-pillar:506322 |
-| pm-content | 486403 | 494380 | Engage product PMs on new features | network-security:498902, load-balancing:498904, hybrid-connectivity:498903, foundation:498905, non-pillar:506309 |
+| pm-enablement (legacy alias: pm-content) | 486403 | 494380 | Engage product PMs on new features | network-security:498902, load-balancing:498904, hybrid-connectivity:498903, foundation:498905, non-pillar:506309 |
 | css-support | 486401 | 493879 | Documentation for troubleshooting | hybrid-connectivity:506199, load-balancing:506199, foundation:506199, network-security:506199, non-pillar:506199 |
 | partnership | 494424 | 506220 | Partnership collaboration | none |
 | content-gap | 489791 | 499268 | Content maintenance - Address content gaps | none |

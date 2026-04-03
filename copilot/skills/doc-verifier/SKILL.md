@@ -52,6 +52,32 @@ Verify technical accuracy of Microsoft documentation across **any product area**
 - **"Pre-search claims before verification"** → Run `batch-presearch.sh` first, then Workflow 11 or 12
 - **"Re-check, skip unchanged claims"** → Workflow 14 (Incremental Verify)
 
+### Threshold Matrix (Workflow and Tier Routing)
+
+Use this matrix to select depth and workflow consistently.
+
+| Decision axis | Threshold | Route | Tier |
+|---|---|---|---|
+| Single article claim volume | 1-15 claims and low ambiguity | #2 Single Article | Tier 2 |
+| Single article claim volume | 16-40 claims or mixed ambiguity | Tier 2 extraction and evidence gathering, Tier 1 final verdicts | Tier 2 then Tier 1 |
+| Single article claim volume | More than 40 claims, cross-service content, or safety-critical scope | #12 Fan-Out Verify | Tier 1-heavy |
+| Batch size | 2-10 articles | #11 Fleet Batch (one track per article) | Tier 2 orchestration, Tier 1 for contested claims |
+| Batch size | More than 10 articles | #13 Claim Manifest, then chunked #11 runs | Tier 2 or Tier 3 first, escalate selectively |
+| Re-check cycle | Less than 20% changed content | #14 Incremental Verify | Tier 2 default |
+| Re-check cycle | 20% or more changed content | Full rerun with #2, #11, or #12 by scope | Mixed |
+| PR changed files | 1-5 files, mostly editorial or metadata changes | #8 PR Review standard pass | Tier 2 or Tier 3 |
+| PR changed files | More than 5 files or major technical changes | #8 plus deep pass on high-risk files | Tier 1 on flagged files |
+
+### Escalation Triggers (Accuracy-First)
+
+Escalate a claim or file to Tier 1 when any trigger matches:
+
+- Tier conflict: Tier 1 and Tier 2 sources disagree.
+- Unverifiable rate: more than 10% of claims in an article are unverifiable.
+- Safety impact: claims affect RBAC, authentication, encryption, or production availability.
+- Confidence drop: reviewer confidence is below high after Tier 2 analysis.
+- Policy or retirement risk: deprecation or retirement timelines are present.
+
 ## Step 0 — Scope (all workflows)
 
 Before verifying, determine the product area. Ask if not obvious:

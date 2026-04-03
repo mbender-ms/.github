@@ -221,6 +221,36 @@ Use @fleet-batch-verify to fact-check these 2 articles:
 | Same output format | Per-article + consolidated reports still generated |
 | No errors from /fleet syntax | Agent adapts to the runtime environment |
 
+### T3.4 — PR triage threshold enforcement (W8)
+
+**Goal**: Verify that `pr-review.prompt.md` executes Step 1.5 triage, selects the correct tier route, and escalates only when triggers are present.
+
+**Fixture**:
+- PR A: 2 changed docs, editorial/metadata only (low risk)
+- PR B: 7 changed docs with at least one security or retirement claim (high risk)
+
+**Procedure**:
+1. Run W8 on PR A: `Use @pr-review to fact-check PR #<low-risk-pr>`
+2. Confirm triage output includes file count, estimated claim density band, and risk classification.
+3. Run W8 on PR B: `Use @pr-review to fact-check PR #<high-risk-pr>`
+4. Confirm triage output includes high-risk flags and escalated routing for flagged files.
+5. In both runs, inspect report notes for escalation triggers and final tier decisions.
+
+**Pass criteria**:
+
+| Check | Expected |
+|-------|----------|
+| Step 1.5 evidence | Output explicitly shows triage checklist fields were evaluated |
+| Low-risk routing (PR A) | Uses Tier 2 or Tier 3 first, no blanket Tier 1 across all files |
+| High-risk routing (PR B) | Applies Tier 1 adjudication to flagged files or contested claims |
+| Trigger fidelity | Escalations are tied to listed triggers (source conflict, unverifiable rate, safety impact, confidence drop, policy/retirement risk) |
+| Over-escalation control | No escalation to Tier 1 for purely editorial findings without trigger |
+| Report traceability | Final report includes the triage decision rationale |
+
+**Manual verification**:
+- For one escalated claim in PR B, open cited sources and confirm a genuine trigger existed.
+- For one non-escalated editorial claim in PR A, confirm no trigger condition was present.
+
 ---
 
 ## Runtime compatibility matrix (W11-W14)

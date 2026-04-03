@@ -30,11 +30,18 @@ Every work item must have the following fields populated:
 | **Area** | All | Correct area path for your team (for queries and boards) |
 | **Iteration** | All | Correct iteration/sprint (for queries and sprint boards) |
 | **Description** | All | Customer problem, solution, success criteria, and measurement plan |
-| **Tags** | All | Classify the work using ACC required tags (see below) |
+| **Tags** | All | Classify the work using the required tags (see below) |
+| **Priority** | All | Default `2` unless explicitly overridden |
+| **Start Date** | All | Current date unless explicitly provided |
+| **Target Date** | All | End of current month unless explicitly provided |
+| **Modality** | All | `Documentation` |
+| **Proposal Type** | All | New, Update, Review, Remove, Retire, or Migrate |
 | **Story Points** | User Stories | Level of effort estimate |
 | **Tee Shirt Size** | Features | Estimated level of effort (S/M/L/XL) |
 | **Parent** | All | The epic or feature this work item belongs to |
 | **Development** | User Stories | Link to PR; comment `AZ#<work_item_id>` on GitHub to auto-close |
+
+Before closure, ensure Description includes the completed summary metrics table in the **Work Completion Summary** section.
 
 ## Feature vs User Story
 
@@ -124,7 +131,7 @@ Work items progress through these states. Keep the state current and add Discuss
 - Link to related items in collaborator backlogs (e.g., `produces for: <item in PM backlog>`).
 - Use `AZ#<id>` in GitHub comments to auto-close ADO items when GitHub issues close.
 
-## ACC Required Tags
+## Required Tags
 
 Use these exact tags for consistency across Azure Core Content. Pay attention to hyphenation and case.
 
@@ -145,6 +152,8 @@ Use these exact tags for consistency across Azure Core Content. Pay attention to
 | `Training` | Training content updates |
 
 Check with your manager for additional service-specific tags.
+
+Use `AAC` as the canonical Architecture Center tag. If legacy work items use `ACC`, normalize to `AAC` during updates.
 
 ## Story Points
 
@@ -210,7 +219,7 @@ Review and update {service} documentation following Microsoft Writing Style Guid
 - **PM Contact**: {pmContact} ← only if provided
 - **Tags**: {workflowType}; {service}; cda
 - **Modality**: Documentation
-- **Proposal Type**: {Update|New}
+- **Proposal Type**: {New|Update|Review|Remove|Retire|Migrate}
 - **Article**: [Article title](https://learn.microsoft.com/en-us/azure/...)
 - **PR**: [#PR_NUMBER](https://github.com/MicrosoftDocs/<repo>/pull/PR_NUMBER) *(if applicable)*
 - **Related work items**: AB#XXXXX *(if applicable)*
@@ -248,7 +257,7 @@ Review and update {service} documentation following Microsoft Writing Style Guid
 ## Workflow
 
 ### Creating a new work item
-1. Ask the user for the **service name** and **workflow type** (content-maintenance, new-feature, PM-enablement, css-support, content-gap, mvp-feedback, AAC, curation, CSAT, acc-horizontal-*, Training, Process).
+1. Ask the user for the **service name** and **workflow type** (`content-maintenance`, `new-feature`, `pm-enablement` [legacy alias: `pm-content`], `css-support`, `partnership`, `content-gap`, `mvp-feedback`, `architecture-center`, `curation`).
 2. Ask: **Feature or User Story?** — Features span multiple sprints; User Stories fit in one sprint.
 3. Collect answers for all four required description fields. Coach the user on quality if answers are vague.
 4. Ask: **"Is there an associated GitHub PR?"**
@@ -256,8 +265,10 @@ Review and update {service} documentation following Microsoft Writing Style Guid
 6. Set **Due Date** to end of current month if not specified.
 7. Set **Story Points** (User Stories) or **Tee Shirt Size** (Features).
 8. Ensure **Parent** is assigned (link to Epic or Feature).
-9. Generate the work item using the description and acceptance criteria templates above.
-10. Present the completed work item for user review before creating it in ADO.
+9. Set **Modality** = Documentation, **Proposal Type** based on action, and **Priority** = 2 unless explicitly overridden.
+10. Generate the work item using the description and acceptance criteria templates above.
+11. Confirm all required properties are present before creating in ADO.
+12. Present the completed work item for user review before creating it in ADO.
 
 ### Validating an existing work item
 1. Retrieve the work item from ADO.
@@ -278,20 +289,20 @@ Before closing or resolving a work item, add a **Summary of work completed** sec
 
 | Metric | Count |
 |--------|-------|
-| Total PRs | |
-| PRs reviewed | |
-| Articles created | |
-| Articles updated | |
-| PRs merged | |
-| PRs closed (not merged) | |
-| Total files changed | |
-| Total line changes | |
+| Community PRs reviewed | |
+| Community PRs merged | |
+| Community PRs closed (not merged) | |
+| Community PRs open | |
+| Total files changed (merged PRs) | |
+| Total additions (merged PRs) | |
+| Total deletions (merged PRs) | |
 ```
 
 - Fill in every row; use `0` when a metric does not apply.
 - Use `~` prefix for approximate counts (e.g., `~466`).
 - Derive counts from the linked GitHub PRs whenever possible.
 - Add this section after all work is complete and before transitioning the work item to **Closed** or **Resolved**.
+- Add PR details in Description when available (PR number, title, status, file/line deltas, and author).
 
 ## Quality Standards
 

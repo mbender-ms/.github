@@ -195,8 +195,8 @@ For detailed example: See the content-workflow skill for save-again workflow
 - AB# goes in PR body, creates automatic ADO Γåö GitHub link
 
 **Work Item Structure (Markdown format):**
-- Description: ## Problem/Impact, ## Solution, ## Impact
-- Acceptance Criteria: ### Success Criteria, ### Verification
+- Description: ## Customer problem to solve, ## How you'll solve the problem, ## What does success look like?, ## How will you measure success?, ## Problem / Impact, ## Solution, ## Resources
+- Acceptance Criteria: ### Success criteria, ### Documentation updates, ### Verification tasks
 - Fields include `"format": "Markdown"` for proper ADO rendering
 - **Comments require `"format": "markdown"` parameter** in ADO tool calls
 

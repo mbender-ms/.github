@@ -25,9 +25,9 @@ Create and validate Azure DevOps work items that comply with Azure Core Content 
 | 1 | **Create Work Item** | New content task (freshness, new article, rewrite, etc.) | ADO work item with templates applied |
 | 2 | **Validate Work Item** | Check existing work item for completeness | Gap analysis + improvement suggestions |
 
-## Required fields
+## Required properties
 
-Every work item must have these fields populated:
+Every work item must have these properties populated at create-time:
 
 | Field | Work item type | Description |
 |-------|---------------|-------------|
@@ -37,10 +37,17 @@ Every work item must have these fields populated:
 | **Iteration** | All | Correct iteration/sprint (for queries and sprint boards) |
 | **Description** | All | Customer problem, solution, success criteria, measurement plan |
 | **Tags** | All | Classify the work (see Tags section below) |
+| **Priority** | All | Default `2` unless explicitly overridden |
+| **Start Date** | All | Current date unless explicitly provided |
+| **Target Date** | All | End of current month unless explicitly provided |
+| **Modality** | All | `Documentation` |
+| **Proposal Type** | All | New, Update, Review, Remove, Retire, or Migrate |
 | **Story Points** | User Stories | Level of effort estimate |
 | **Tee Shirt Size** | Features | Estimated level of effort (S/M/L/XL) |
 | **Parent** | All | Epic or Feature this work item belongs to |
 | **Development** | User Stories | Link to PR; use `AZ#<id>` in GitHub to auto-link |
+
+Before closure, ensure `Description` contains a completed **Summary of work completed** metrics section.
 
 ## Required description sections
 
@@ -50,6 +57,12 @@ Every work item description must include:
 2. **How you'll solve the problem** — specific files and approach
 3. **What does success look like?** — customer outcome
 4. **How will you measure success?** — concrete metrics
+
+Include these additional sections in the same Description:
+
+5. **Problem / Impact** — why unresolved work causes customer-facing risk or backlog
+6. **Solution** — execution approach and scope
+7. **Resources** — parent link, dates, modality, proposal type, tags, and PR links when available
 
 ## Feature vs User Story
 
@@ -98,7 +111,7 @@ Example: `Load Balancer | Maintenance | Github Issues & PR Review`
 
 Always include: service tag (e.g., `azure-load-balancer`), area tag (e.g., `Networking`), workflow type (e.g., `content-maintenance`), and `cda`.
 
-### ACC team required tags
+### Required tags
 
 | Tag | Description |
 |-----|-------------|
@@ -118,6 +131,8 @@ Always include: service tag (e.g., `azure-load-balancer`), area tag (e.g., `Netw
 
 Check with your manager for additional service-specific tags.
 
+Use `AAC` as the canonical Architecture Center tag. If legacy work items use `ACC`, normalize to `AAC` during updates.
+
 ## Sprint planning
 
 - Prioritize and commit to the highest-priority backlog items based on team velocity and capacity.
@@ -126,7 +141,7 @@ Check with your manager for additional service-specific tags.
 
 ## Work completion summary
 
-Every ADO work item must include a **Summary of work completed** section before closing. This section provides a metrics table that quantifies the work delivered. Add this section to the work item description when the work is done.
+Every ADO work item must include a **Summary of work completed** section before closing. Add this section to the Description when the work is complete.
 
 ### Required metrics table
 
@@ -135,19 +150,19 @@ Every ADO work item must include a **Summary of work completed** section before 
 
 | Metric | Count |
 |--------|-------|
-| Total PRs | |
-| PRs reviewed | |
-| Articles created | |
-| Articles updated | |
-| PRs merged | |
-| PRs closed (not merged) | |
-| Total files changed | |
-| Total line changes | |
+| Community PRs reviewed | |
+| Community PRs merged | |
+| Community PRs closed (not merged) | |
+| Community PRs open | |
+| Total files changed (merged PRs) | |
+| Total additions (merged PRs) | |
+| Total deletions (merged PRs) | |
 ```
 
 - Fill in every row; use `0` when a metric does not apply.
 - Use `~` prefix for approximate counts (e.g., `~466`).
 - Derive counts from the linked GitHub PRs whenever possible.
+- Include PR details in Description when available (PR number, title, status, file/line deltas, and author).
 
 ## Prompt asset
 

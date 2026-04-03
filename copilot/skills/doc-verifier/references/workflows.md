@@ -4,6 +4,34 @@ Detailed procedures, outputs, and comparison for all ten doc-verifier workflows.
 
 ---
 
+## One-Page Threshold Routing Card
+
+Use this quick card before selecting a workflow or tier.
+
+| Decision axis | Threshold | Workflow route | Tier route |
+|---|---|---|---|
+| Single article claim volume | 1-15 claims and low ambiguity | W2 Single Article | Tier 2 |
+| Single article claim volume | 16-40 claims or mixed ambiguity | W2 or W6 for contested subset | Tier 2 gather, Tier 1 adjudicate |
+| Single article claim volume | More than 40 claims, cross-service scope, or safety-critical content | W12 Fan-Out Verify | Tier 1-heavy |
+| Batch size | 2-10 articles | W11 Fleet Batch | Tier 2 orchestration, Tier 1 for contested claims |
+| Batch size | More than 10 articles | W13 Claim Manifest, then chunked W11 | Tier 2 or Tier 3 first, selective Tier 1 |
+| Re-check cycle | Less than 20% changed content | W14 Incremental Verify | Tier 2 default |
+| Re-check cycle | 20% or more changed content | Full rerun with W2, W11, or W12 | Mixed |
+| PR scope | 1-5 doc files, mostly editorial or metadata changes | W8 PR Review standard pass | Tier 2 or Tier 3 |
+| PR scope | More than 5 files or major technical updates | W8 plus deep pass on flagged files | Tier 1 on flagged files |
+
+### Escalation Triggers
+
+Escalate a claim or file to Tier 1 when any trigger matches:
+
+- Tier conflict: Tier 1 and Tier 2 sources disagree.
+- Unverifiable rate: more than 10% of claims in one file are unverifiable.
+- Safety impact: claims affect RBAC, auth, encryption, compliance, or production availability.
+- Confidence drop: reviewer confidence remains below high after Tier 2 analysis.
+- Policy or retirement risk: deprecation, retirement, or SKU support boundary claims are present.
+
+---
+
 ## Workflow 1: Quick In-Place Fact-Check
 
 **Prompt**: `fact-check-and-edit.prompt.md` | **Mode**: Agent
