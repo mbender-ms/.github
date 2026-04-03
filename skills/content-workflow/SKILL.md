@@ -76,14 +76,27 @@ Calculate all fields from the conversation context and reference data.
 
 **Parent work item ID**: Look up from [references/ado-hierarchy.md](references/ado-hierarchy.md) using the `workflow_type` and the service's category (from the service categories table in service-mappings).
 
-**Required fields:**
+**Required properties (create-time):**
 
 | Field | Value |
 |---|---|
+| `System.Title` | Sentence-case title derived from the user's requested outcome |
+| `System.State` | `"New"` |
+| `System.AreaPath` | Service-specific AreaPath from `references/service-mappings.md` |
+| `System.IterationPath` | Calculated current iteration from `references/iteration-calculator.md` |
+| `System.Description` | Markdown template below |
+| `Microsoft.VSTS.Common.AcceptanceCriteria` | Markdown template below |
+| `System.Tags` | Approved tags + service name + `"cda"` (semicolon-separated) |
+| `System.Parent` | Parent from `references/ado-hierarchy.md` (linked in Step 3) |
+| `Microsoft.VSTS.Common.Priority` | `2` unless user provides a different priority |
 | `Custom.Modality` | `"Documentation"` |
 | `Microsoft.VSTS.Scheduling.StartDate` | Current date in ISO 8601 format |
+| `Microsoft.VSTS.Scheduling.TargetDate` | End of current month unless user provides target date |
 | `Custom.ProposalType` | Based on the user's action (see mapping below) |
-| `System.Tags` | From the approved list + service name + `"cda"` (semicolon-separated) |
+
+For `User Story` items, also set `Microsoft.VSTS.Scheduling.StoryPoints`.
+
+For `Feature` items, also set `Custom.TeeShirtSize`.
 
 **ProposalType mapping:**
 
@@ -96,39 +109,69 @@ Calculate all fields from the conversation context and reference data.
 | Deprecating documentation | `"Retire"` |
 | Migrating documentation | `"Migrate"` |
 
-**Valid workflow types:** `content-maintenance`, `new-feature`, `pm-enablement`, `css-support`, `content-gap`, `mvp-feedback`, `architecture-center`, `curation`
+**Valid workflow types:** `content-maintenance`, `new-feature`, `pm-enablement` (legacy alias: `pm-content`), `css-support`, `partnership`, `content-gap`, `mvp-feedback`, `architecture-center`, `curation`
 
-**Approved tags (ONLY use these):** `content-maintenance`, `mvp-feedback`, `ACC`, `new-feature`, `PM-enablement`, `css-support`, `acc-horizontal-security`, `acc-horizontal-reliability`, `acc-horizontal-supportability`, `curation`, `CSAT`, `Linux`, `content-gap`, `Process`, `Training`. Always add the service name as a tag. Always add `"cda"` as a tag.
+**Approved tags (ONLY use these):** `content-maintenance`, `mvp-feedback`, `AAC`, `new-feature`, `PM-enablement`, `css-support`, `acc-horizontal-security`, `acc-horizontal-reliability`, `acc-horizontal-supportability`, `curation`, `CSAT`, `Linux`, `content-gap`, `Process`, `Training`. Always add the service name as a tag. Always add `"cda"` as a tag.
+
+Use `AAC` as the canonical Architecture Center tag. If legacy content uses `ACC`, normalize to `AAC` on update.
 
 **Description format** (use `"format": "Markdown"`):
 
 ```markdown
+## Customer problem to solve
+[Customer pain point stated from the customer's perspective]
+
+## How you'll solve the problem
+[Specific triage, content updates, PR processing, and source-of-truth references]
+
+## What does success look like?
+[Customer outcome after completion]
+
+## How will you measure success?
+[Concrete SLA and quality metrics]
+
 ## Problem / Impact
-[Customer-facing problem description]
+[Why unaddressed work creates customer-facing risk or backlog]
 
 ## Solution
-[How you're solving it]
+[Regular review and processing plan for issues/PRs and documentation updates]
 
 ## Resources
 - Parent Feature: #[parent work item ID]
 - PM Contact: [name] ([email])
 - Start Date: [YYYY-MM-DD]
 - Target Date: [YYYY-MM-DD]
+- Tags: [workflow-tag]; [service-tag]; cda
 - Modality: Documentation
 - Proposal Type: [value]
+- PR: [#PR_NUMBER](https://github.com/MicrosoftDocs/<repo>/pull/PR_NUMBER) (if applicable)
 ```
 
 **AcceptanceCriteria format** (use `"format": "Markdown"`):
 
 ```markdown
 ### Success criteria
-- [Measurable outcomes]
+- [ ] All four required sections (problem, solution, success, measurement) populated
+- [ ] Customer problem stated from the customer's perspective
+- [ ] GitHub issues triaged and responded to
+- [ ] PRs reviewed and merged or closed
+- [ ] Response within SLA targets
+- [ ] Follows Microsoft Writing Style Guide
+- [ ] Headings use sentence casing
+- [ ] GitHub PR linked (or noted as pending)
 
 ### Documentation updates
-- [Specific files/sections to update]
+- [ ] Review relevant GitHub issues
+- [ ] Review relevant GitHub PRs
+- [ ] Update metadata on any edited articles
 
-### Verification
-- [How to verify completion]
+### Verification tasks
+- [ ] All issues triaged and responded to
+- [ ] Valid PRs reviewed and merged
+- [ ] Stale items closed with comments
+- [ ] Response time within SLA targets
+- [ ] Summary documented
+- [ ] Changes validated in staging
 ```
 
 > [!IMPORTANT]
@@ -139,8 +182,10 @@ Calculate all fields from the conversation context and reference data.
 Call `@ado` `mcp_ado_wit_create_work_item` with:
 
 - `project`: `"Content"`
-- `workItemType`: `"User Story"`
+- `workItemType`: `"User Story"` (or `"Feature"` when explicitly requested)
 - `fields`: All calculated fields from Step 1
+
+Before creating, confirm the payload includes: `Title`, `State`, `AreaPath`, `IterationPath`, `Description`, `AcceptanceCriteria`, `Tags`, `Modality`, `ProposalType`, `StartDate`, `TargetDate`, `Priority`, `Parent`, and type-specific effort field (`StoryPoints` or `TeeShirtSize`).
 
 ### Step 3 ΓÇö Link to parent work item
 
@@ -179,7 +224,7 @@ See [references/formatting-guide.md](references/formatting-guide.md) for detaile
    | `new-feature` | Extract from conversation (e.g., "Add FastPath support" ΓåÆ `fastpath-support`) |
    | `css-support` | `css-fix` |
    | `content-gap` | `content-gap` |
-   | `pm-enablement` | `pm-content` |
+   | `pm-enablement` | `pm-enablement` |
 
 4. **Generate commit messages ΓÇö ONE COMMIT PER FILE:**
 
@@ -343,10 +388,31 @@ Use this workflow when the user has already created a branch and PR but wants to
    Call `@ado` `mcp_ado_wit_update_work_item` with:
    - `State`: `"Closed"`
    - `Custom.PublishedDate`: The calculated publish date in ISO 8601 format
+   - `System.Description`: Includes a completed `## Summary of work completed` section with required metrics
 
 5. **Add the completion comment:**
 
    Call `@ado` `mcp_ado_wit_add_work_item_comment` with `format: "markdown"`.
+
+### Required closure summary metrics
+
+Before transitioning to `Closed`, add this section in Description:
+
+```markdown
+## Summary of work completed
+
+| Metric | Count |
+|--------|-------|
+| Community PRs reviewed | |
+| Community PRs merged | |
+| Community PRs closed (not merged) | |
+| Community PRs open | |
+| Total files changed (merged PRs) | |
+| Total additions (merged PRs) | |
+| Total deletions (merged PRs) | |
+```
+
+Fill every row. Use `0` when not applicable.
 
 ## Core rules
 
