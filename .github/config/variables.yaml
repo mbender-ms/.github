@@ -1,0 +1,18 @@
+# ============================================================
+# Connect Agent — Personalized Variables
+# ============================================================
+# Update these values each Connect period before running the agent.
+# All paths, dates, and URLs referenced by the prompt are defined here.
+# ============================================================
+
+# --- Connect Period ---
+connectPeriodStart: "10-01-2025"
+connectPeriodEnd: "3-31-2026"
+
+# --- Personal Documents ---
+personalNotesPath: "C:\\Directory\\fileName.docx"
+exampleDocumentPath: "C:\\Directory\\fileName.docx"
+
+# --- Azure DevOps Queries ---
+adoUserStoriesQuery: "YourQueryLink"
+adoMentionsQuery: "YourQueryLink"

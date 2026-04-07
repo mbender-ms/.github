@@ -2,6 +2,23 @@
 
 Personal GitHub profile repo containing Copilot skills for Azure documentation workflows.
 
+## Imported Agent Baseline (April 2026)
+
+This repo now includes an imported baseline for Connect and Q&A agent workflows from `normesta/AI`.
+
+- Source paths:
+	- `Connect-Agent/`
+	- `Questions-and-answers-agents/`
+- Imported into:
+	- `.github/copilot-instructions.md`
+	- `.github/prompts/generate-connect.prompt.md`
+	- `.github/instructions/`
+	- `.github/references/impact-categories.md`
+	- `.github/config/variables.yaml`
+	- `.github/work-in-progress/qa-agent-ideas/`
+
+Treat this imported baseline as a starting point for personal refinement.
+
 Recent updates add parallel verification workflows to doc-verifier, including fleet batch verification, fan-out verification, claim manifests, incremental verification, pre-search scripting, and test protocols.
 
 ## Skills
