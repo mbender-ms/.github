@@ -1,0 +1,171 @@
+---
+layout: FAQ
+title: Frequently asked questions - Azure Load Balancer | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-faqs
+summary: ''
+breadcrumb_path: /azure/bread/toc.json
+feedback_help_link_url: https://learn.microsoft.com/answers/tags/230/azure-load-balancer/
+feedback_help_link_type: get-help-at-qna
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+feedback_system: Standard
+permissioned-type: public
+recommendations: true
+recommendation_types:
+- Training
+- Certification
+uhfHeaderId: azure
+ms.suite: office
+adobe-target: true
+author: mbender-ms
+manager: kumud
+ms.collection: networking
+ms.reviewer: mbender-ms
+description: Answers to frequently asked questions about the Azure Load Balancer.
+services: load-balancer
+ms.service: azure-load-balancer
+ms.topic: faq
+ms.date: 2026-02-23T00:00:00.0000000Z
+ms.author: mbender
+ms.custom: engagement-fy23
+locale: en-us
+document_id: 26f2ee4c-633b-8579-47e1-1543db5acaeb
+document_version_independent_id: 0baa18b9-14ca-1703-ba64-f036ec39b639
+updated_at: 2026-02-23T23:22:00.0000000Z
+original_content_git_url: https://github.com/MicrosoftDocs/azure-docs-pr/blob/live/articles/load-balancer/load-balancer-faqs.yml
+gitcommit: https://github.com/MicrosoftDocs/azure-docs-pr/blob/984c39bf2786a6a775d6fdbfa2665e21c8cae847/articles/load-balancer/load-balancer-faqs.yml
+git_commit_id: 984c39bf2786a6a775d6fdbfa2665e21c8cae847
+site_name: Docs
+depot_name: Azure.azure-documents
+page_type: faq
+toc_rel: toc.json
+asset_id: load-balancer/load-balancer-faqs
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: articles/load-balancer/load-balancer-faqs.yml
+cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f98c9a19-e481-4f15-8047-76b641e6ed57
+spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f5685781-a4fd-40f1-8126-59abde4643bf
+platformId: 34f6e76a-97ce-78fa-1b16-8941fd512893
+---
+
+# Frequently asked questions - Azure Load Balancer | Microsoft Learn
+
+## What types of Azure Load Balancer exist?
+
+Internal load balancers, which load balance traffic within a virtual network.
+
+External load balancers, which load balance external traffic to an internet connected endpoint. For more information, see [Azure Load Balancer Types](load-balancer-overview).
+
+For both types, Azure offers a Standard SKU and a Gateway SKU that have different functional, performance, security, and health tracking capabilities. For more information about the different load balancer SKUs, see [SKU Comparison](skus).
+
+Important
+
+Basic Load Balancer was retired on September 30, 2025. If you're still using Basic Load Balancer, upgrade to Standard Load Balancer as soon as possible. For upgrade guidance, see [Upgrade from Basic to Standard](upgrade-basic-standard).
+
+## How can I upgrade from a basic to a standard load balancer?
+
+Important
+
+Basic Load Balancer was retired on September 30, 2025. Upgrade to Standard Load Balancer as soon as possible.
+
+For more information about an automated script and guidance on upgrading a load balancer SKU, see [upgrade from Basic to Standard](upgrade-basic-standard).
+
+## What are the different load-balancing options in Azure?
+
+For the available load-balancing services and recommended uses for each, see the [load balancer technology guide](/en-us/azure/architecture/guide/technology-choices/load-balancing-overview).
+
+## Where can I find the load balancer ARM templates?
+
+See the [list of Azure Load Balancer quickstart templates](/en-us/azure/templates/microsoft.network/loadbalancers#quickstart-templates) for ARM templates of common deployments.
+
+## How are inbound NAT rules different from load-balancing rules?
+
+Inbound NAT rules are used to specify a backend resource to route traffic to. For example, configuring a specific load balancer port to send RDP traffic to a specific VM. Load-balancing rules are used to specify a pool of backend resources to route traffic to, balancing the load across each instance. For example, a load balancer rule can route TCP packets on port 80 of the load balancer across a pool of web servers.
+
+## What is IP 168.63.129.16?
+
+The virtual IP address for the host tagged as the Azure infrastructure load balancer where the Azure health probes originate. Traffic must be allowed from this IP address to successfully respond to health probes when backend instances are configured. This rule doesn't interact with access to your load balancer frontend. If you're not using the Azure Load Balancer, you can override this rule. You can learn more about service tags [here](../virtual-network/service-tags-overview#available-service-tags).
+
+## Can I use global virtual network peering with a basic load balancer?
+
+No. Basic Load Balancer doesn't support global virtual network peering. Basic Load Balancer was retired on September 30, 2025. Upgrade to Standard Load Balancer, which supports global virtual network peering. See the [upgrade from Basic to Standard](upgrade-basic-standard) article for information about the upgrade.
+
+## How can I discover the public IP that an Azure VM uses?
+
+There are many ways to determine the public source IP address of an outbound connection. OpenDNS provides a service that can show you the public IP address of your VM. By using the nslookup command, you can send a DNS query for the name myip.opendns.com to the OpenDNS resolver. The service returns the source IP address that was used to send the query. When you run the following query from your VM, the response is the public IP used for that VM:
+
+`nslookup myip.opendns.com resolver1.opendns.com`
+
+## Can I add a VM from the same availability set to different backend pools of a load balancer?
+
+Adding a VM from the same availability set to different backend pools isn't possible if the load balancer is NIC based. However, with IP-based load balancer, this constraint is lifted.
+
+## Can I ping from a backend VM behind a load balancer to a public IP?
+
+No, Azure Load Balancer does not support ICMP pings for outbound connectivity. If you want to ping outbound from a backend VM behind a load balancer, associate an Instance-level Public IP to the backend VM and send pings from that IP.
+
+## What is the maximum data throughput that can be achieved via an Azure Load Balancer?
+
+Azure Load Balancer is a pass-through network load balancer. Throughput limitations are determined by the type of virtual machine in the backend pool. To learn about other network throughput related information, see [Virtual Machine network throughput](../virtual-network/virtual-machine-network-throughput).
+
+## How do connections to Azure Storage in the same region work?
+
+Azure's internal network infrastructure keeps traffic between Azure services in the same region stays within the Azure network, by default. This means when Load Balancer and Azure Storage account are in the same region, the traffic between them doesn't traverse the internet by remaining on the internal Azure network backbone. However, the exact behavior can depend on the specific configuration of your Azure services, including network security group rules, routing, and any other network controls you have in place.
+
+## How do connections to Azure Storage in different regions work?
+
+For connectivity to storage in other regions, outbound connectivity is required. The source IP address in the storage diagnostic logs is an internal provider address, and not the public IP address of your VM when connecting to storage from a VM in the same region. To restrict access to your storage account to VMs in one or more virtual network subnets in the same region, use [Virtual Network service endpoints](../virtual-network/virtual-network-service-endpoints-overview). Don't use your public IP address when configuring your storage account firewall. When service endpoints are configured, you see your virtual network private IP address in your storage diagnostic logs and not the internal provider address.
+
+## Does Azure Load Balancer support TLS/SSL termination?
+
+No, Azure Load Balancer doesn't currently support termination as it's a pass through network load balancer. [Application Gateway](../application-gateway/ssl-overview) could be a potential solution if your application requires termination.
+
+## How do I configure my load balancer with an Azure Firewall?
+
+Follow these [instructions](../firewall/integrate-lb) to configure your load balancer with an Azure Firewall.
+
+## Can I use my custom IP address prefix (BYOIP) with Azure Load Balancer?
+
+Yes, this scenario is supported. You need to create a public IP prefix and public IP address from your custom IP address prefix before using it with your load balancer. To learn more, visit [Manage a custom IP address prefix](../virtual-network/ip-services/manage-custom-ip-address-prefix).
+
+## How do I configure my load balancer with an Azure SQL Server Always On availability group?
+
+Follow these [Portal](/en-us/azure/azure-sql/virtual-machines/windows/availability-group-load-balancer-portal-configure) or [PowerShell](/en-us/azure/azure-sql/virtual-machines/windows/availability-group-listener-powershell-configure) instructions to configure your load balancer with an Azure SQL Server Always On availability group.
+
+## Can I access the frontend of my internal load balancer from the participating backend pool VM?
+
+No, Azure Load Balancer doesn't support this scenario. To learn more, visit our [troubleshoot page](load-balancer-troubleshoot-backend-traffic#cause-4-access-of-the-internal-load-balancer-frontend-from-the-participating-load-balancer-backend-pool-vm).
+
+## What are best practices with respect to outbound connectivity?
+
+Standard Load Balancer and standard public IP introduce abilities and different behaviors to outbound connectivity. If you want outbound connectivity with Standard SKUs, you must explicitly define it either with standard public IP addresses or a standard public load balancer. Standard internal load balancer must have outbound connectivity defined. It's recommended you always use outbound rules on a standard public load balancer. When an internal standard load balancer is used, you must take steps to create outbound connectivity for the VMs in the backend pool if outbound connectivity is desired. In the context of outbound connectivity, a single standalone VM, all the VMs in an Availability Set, all the instances in a Virtual Machine Scale Set behave as a group. If a single VM in an Availability Set is associated with a Standard SKU, all VM instances within this Availability Set now behave by the same rules as if they're associated with Standard SKU even if an individual instance isn't directly associated with it. This behavior is also observed in a standalone VM with multiple network interface cards attached to a load balancer. If one NIC is added as a standalone, it has the same behavior. Review this entire document to understand the overall concepts, review [Standard Load Balancer](load-balancer-overview) for differences between SKUs, and review [outbound rules](load-balancer-outbound-connections#outboundrules). Using outbound rules allows you fine grained control over all aspects of outbound connectivity.
+
+Important
+
+[Default outbound access](../virtual-network/ip-services/default-outbound-access) is being retired. After March 31, 2026, new virtual networks will default to using private subnets. You must define an explicit outbound connectivity method (NAT gateway, load balancer outbound rules, or instance-level public IP) for VMs to reach the internet.
+
+## Is it expected for one frontend IP to be used when I have multiple frontend IP addresses or a prefix on my outbound rules?
+
+Azure Load Balancer will use IPs as needed based on available ports. It will only use the next frontend IP once the connections cannot be made from the one IP.
+
+## How can I view the traffic from my configured health probe(s)?
+
+To view the traffic sent to each backend instance from the health probe you can use IP stack statistics with a tool such as netstat. The health probe traffic originates from 168.63.129.16.
+
+## If I enable DDoS Protection for my load balancer frontend, what does that mean for the resources in the backend pool?
+
+When enabled on the frontend IP for a load balancer, DDoS Protection applies protection for all backend pool resources that are accessible through that public IP. For more information, see [Azure DDoS Protection Reference](../ddos-protection/ddos-protection-reference-architectures).
+
+## Why are certain ports restricted for HTTP health probes?
+
+The following ports are restricted for HTTP health probes: 19, 21, 25, 70, 110, 119, 143, 220, 993. These ports are blocked for security reasons by WinHTTP, meaning that Load Balancer health probes are unable to use these ports. For more information, see [What's New in WinHTTP 5.1](/en-us/windows/win32/winhttp/what-s-new-in-winhttp-5-1#changes-to-default-settings).
+
+## Can I ping my load balancer?
+
+Yes, you can ping the frontend of your Standard Public Load Balancer. For more information, see [how to ping the frontend of your load balancer.](load-balancer-test-frontend-reachability)
+
+## Can I include On-premises IPs in the backend pool of Azure Load Balancer?
+
+No, Azure Load Balancer does not support the direct addition of On-premises IPs to its backend pool. The load balancer employs a platform-specific IP address (168.63.129.16) for health probes, limited to communication within Azure's virtual network. Consequently, it cannot probe resources located on-premises.

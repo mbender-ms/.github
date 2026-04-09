@@ -1,0 +1,14 @@
+[
+  {
+    "id": "F-1",
+    "text": "Azure Load Balancer supports inbound and outbound scenarios",
+    "service": "azure-networking",
+    "expected_source_tier": 1
+  },
+  {
+    "id": "F-2",
+    "text": "The article must include health probe guidance",
+    "service": "azure-networking",
+    "expected_source_tier": 1
+  }
+]
