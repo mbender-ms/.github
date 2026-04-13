@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Specificity Engineering Framework</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0D1117;
+    color: #E6EDF3;
+    min-height: 100vh;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .container { max-width: 1080px; margin: 0 auto; }
+
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    color: #7D8590;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #E6EDF3;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    color: #7D8590;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.75rem; }
+  .tab {
+    padding: 0.45rem 1rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #7D8590;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .tab.active {
+    border-color: #30363D;
+    background: #161B22;
+    color: #E6EDF3;
+    font-weight: 500;
+  }
+
+  /* Tab panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── LAYERS TAB ── */
+  .layers-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .col-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    color: #7D8590;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .direction-hint {
+    font-size: 0.7rem;
+    color: #7D8590;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .layer-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #21262D;
+    background: #161B22;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left-width: 1px;
+  }
+  .layer-card:hover { border-color: #3D444D; }
+  .layer-card.active {
+    border-left-width: 3px;
+  }
+
+  .layer-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #21262D;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .layer-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #C9D1D9;
+    transition: color 0.15s;
+  }
+  .layer-subtitle { font-size: 0.72rem; color: #7D8590; }
+
+  .connector {
+    text-align: center;
+    color: #3D444D;
+    font-size: 0.85rem;
+    margin: 0.15rem 0;
+    line-height: 1;
+  }
+
+  /* Progress */
+  .progress-box {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    background: #161B22;
+    border-radius: 8px;
+    border: 1px solid #21262D;
+  }
+  .progress-label {
+    font-size: 0.65rem; color: #7D8590;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.6rem;
+  }
+  .progress-track { display: flex; gap: 0.35rem; }
+  .progress-seg {
+    flex: 1; height: 5px; border-radius: 3px;
+    background: #21262D;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .progress-status {
+    font-size: 0.8rem; color: #E6EDF3;
+    margin-top: 0.65rem; font-weight: 500;
+  }
+
+  /* Detail panel */
+  .detail-eyebrow {
+    font-size: 0.65rem; letter-spacing: 0.14em;
+    color: #7D8590; text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .info-card {
+    padding: 1.1rem;
+    background: #161B22;
+    border-radius: 8px;
+    border: 1px solid #21262D;
+    margin-bottom: 0.75rem;
+  }
+  .info-card-label {
+    font-size: 0.65rem; color: #7D8590;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .info-card-body {
+    color: #C9D1D9; font-size: 0.875rem; line-height: 1.65;
+  }
+  .adds-card {
+    border-left-width: 3px;
+  }
+  .adds-card .info-card-body {
+    color: #E6EDF3; font-weight: 500;
+  }
+
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .ba-card {
+    padding: 1rem;
+    background: #161B22;
+    border-radius: 8px;
+  }
+  .ba-card.before { border: 1px solid rgba(248,81,73,0.3); }
+  .ba-card.after  { border: 1px solid rgba(52,211,153,0.25); }
+
+  .ba-label {
+    font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 0.65rem;
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+  .ba-card.before .ba-label { color: #F85149; }
+  .ba-card.after  .ba-label { color: #3FB950; }
+
+  .ba-code {
+    font-size: 0.74rem; color: #8B949E;
+    white-space: pre-wrap;
+    font-family: 'IBM Plex Mono', 'Fira Code', 'Cascadia Code', monospace;
+    line-height: 1.65;
+  }
+  .ba-card.after .ba-code { color: #C9D1D9; }
+
+  /* Nav buttons */
+  .nav { display: flex; justify-content: space-between; }
+  .btn {
+    padding: 0.5rem 1.1rem;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-prev {
+    background: #21262D;
+    color: #C9D1D9;
+    border: 1px solid #30363D;
+  }
+  .btn-prev:disabled { opacity: 0.4; cursor: default; }
+  .btn-next {
+    border: none;
+    font-weight: 600;
+    color: #0D1117;
+  }
+  .btn-next:disabled { opacity: 0.4; cursor: default; }
+
+  /* ── PRINCIPLES TAB ── */
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .principle-card {
+    padding: 1.1rem;
+    background: #161B22;
+    border-radius: 8px;
+    border: 1px solid #21262D;
+    border-left-width: 3px;
+    display: flex; gap: 0.75rem; align-items: flex-start;
+  }
+
+  .principle-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    font-weight: 700; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #0D1117;
+  }
+
+  .principle-text {
+    font-size: 0.875rem; color: #C9D1D9;
+    line-height: 1.5; font-weight: 500;
+    padding-top: 0.15rem;
+  }
+
+  .mapping-box {
+    margin-top: 2rem;
+    padding: 1.25rem;
+    background: #161B22;
+    border-radius: 8px;
+    border: 1px solid #21262D;
+  }
+  .mapping-label {
+    font-size: 0.65rem; color: #7D8590;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+  .mapping-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+  .mapping-col { text-align: center; }
+  .mapping-name {
+    font-size: 0.75rem; font-weight: 600;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .mapping-principles { font-size: 0.72rem; color: #7D8590; line-height: 1.6; }
+
+  /* Footer */
+  .footer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #21262D;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-text { font-size: 0.75rem; color: #7D8590; }
+
+  @media (max-width: 700px) {
+    .layers-grid { grid-template-columns: 1fr; }
+    .ba-grid { grid-template-columns: 1fr; }
+    .mapping-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="eyebrow">Specificity Engineering Framework</div>
+  <h1>From Prompt to Production</h1>
+  <p class="subtitle">Four disciplines that compound. Each layer builds on the last. Click a layer to explore what it adds.</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('layers')">Architecture + Before/After</button>
+    <button class="tab" onclick="switchTab('principles')">7 Principles</button>
+  </div>
+
+  <!-- LAYERS PANEL -->
+  <div id="panel-layers" class="panel active">
+    <div class="layers-grid">
+
+      <!-- Left: stack -->
+      <div>
+        <div class="col-label">Layered Architecture</div>
+        <div class="direction-hint">▲ more powerful</div>
+
+        <div class="layer-card" id="card-3" onclick="setActive(3)">
+          <div class="layer-icon" id="icon-3">⬡</div>
+          <div>
+            <div class="layer-name" id="name-3">4. Specificity Engineering</div>
+            <div class="layer-subtitle">The complete spec</div>
+          </div>
+        </div>
+        <div class="connector">│</div>
+        <div class="layer-card" id="card-2" onclick="setActive(2)">
+          <div class="layer-icon" id="icon-2">🎯</div>
+          <div>
+            <div class="layer-name" id="name-2">3. Intent Engineering</div>
+            <div class="layer-subtitle">The why behind the what</div>
+          </div>
+        </div>
+        <div class="connector">│</div>
+        <div class="layer-card" id="card-1" onclick="setActive(1)">
+          <div class="layer-icon" id="icon-1">⚙</div>
+          <div>
+            <div class="layer-name" id="name-1">2. Context Engineering</div>
+            <div class="layer-subtitle">Everything in the window</div>
+          </div>
+        </div>
+        <div class="connector">│</div>
+        <div class="layer-card" id="card-0" onclick="setActive(0)">
+          <div class="layer-icon" id="icon-0">✍</div>
+          <div>
+            <div class="layer-name" id="name-0">1. Prompt Craft</div>
+            <div class="layer-subtitle">The foundation</div>
+          </div>
+        </div>
+        <div class="direction-hint" style="margin-top:0.5rem">▼ start here</div>
+
+        <div class="progress-box">
+          <div class="progress-label">Progress</div>
+          <div class="progress-track">
+            <div class="progress-seg" id="seg-0" onclick="setActive(0)"></div>
+            <div class="progress-seg" id="seg-1" onclick="setActive(1)"></div>
+            <div class="progress-seg" id="seg-2" onclick="setActive(2)"></div>
+            <div class="progress-seg" id="seg-3" onclick="setActive(3)"></div>
+          </div>
+          <div class="progress-status" id="progress-status">Foundation — keep building ↑</div>
+        </div>
+      </div>
+
+      <!-- Right: detail -->
+      <div>
+        <div class="detail-eyebrow" id="detail-eyebrow">Layer 1 — Prompt Craft</div>
+
+        <div class="info-card">
+          <div class="info-card-label">What it is</div>
+          <div class="info-card-body" id="detail-what"></div>
+        </div>
+
+        <div class="info-card adds-card" id="adds-card">
+          <div class="info-card-label">What it adds</div>
+          <div class="info-card-body" id="detail-adds"></div>
+        </div>
+
+        <div class="ba-grid">
+          <div class="ba-card before">
+            <div class="ba-label"><span>✕</span> <span id="before-label"></span></div>
+            <pre class="ba-code" id="before-content"></pre>
+          </div>
+          <div class="ba-card after">
+            <div class="ba-label"><span>✓</span> <span id="after-label"></span></div>
+            <pre class="ba-code" id="after-content"></pre>
+          </div>
+        </div>
+
+        <div class="nav">
+          <button class="btn btn-prev" id="btn-prev" onclick="navigate(-1)" disabled>← Previous</button>
+          <button class="btn btn-next" id="btn-next" onclick="navigate(1)">Next layer →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRINCIPLES PANEL -->
+  <div id="panel-principles" class="panel">
+    <div class="col-label">The 7 Principles of Specificity Engineering</div>
+    <div class="principles-grid">
+      <div class="principle-card" style="border-left-color:#38BDF8">
+        <div class="principle-num" style="background:#38BDF8">1</div>
+        <div class="principle-text">Define outcome + definition of done</div>
+      </div>
+      <div class="principle-card" style="border-left-color:#A78BFA">
+        <div class="principle-num" style="background:#A78BFA">2</div>
+        <div class="principle-text">Operate at the right altitude</div>
+      </div>
+      <div class="principle-card" style="border-left-color:#FBBF24">
+        <div class="principle-num" style="background:#FBBF24">3</div>
+        <div class="principle-text">Minimal viable context only</div>
+      </div>
+      <div class="principle-card" style="border-left-color:#34D399">
+        <div class="principle-num" style="background:#34D399">4</div>
+        <div class="principle-text">Encode intent, not just instructions</div>
+      </div>
+      <div class="principle-card" style="border-left-color:#FB7185">
+        <div class="principle-num" style="background:#FB7185">5</div>
+        <div class="principle-text">Curate tools aggressively</div>
+      </div>
+      <div class="principle-card" style="border-left-color:#F97316">
+        <div class="principle-num" style="background:#F97316">6</div>
+        <div class="principle-text">Negative examples are essential</div>
+      </div>
+      <div class="principle-card" style="border-left-color:#818CF8">
+        <div class="principle-num" style="background:#818CF8">7</div>
+        <div class="principle-text">The human test</div>
+      </div>
+    </div>
+
+    <div class="mapping-box">
+      <div class="mapping-label">How the layers map to the principles</div>
+      <div class="mapping-grid">
+        <div class="mapping-col">
+          <div class="mapping-name" style="color:#38BDF8; border-bottom:1px solid rgba(56,189,248,0.35)">Prompt Craft</div>
+          <div class="mapping-principles">Principles 2, 7</div>
+        </div>
+        <div class="mapping-col">
+          <div class="mapping-name" style="color:#A78BFA; border-bottom:1px solid rgba(167,139,250,0.35)">Context Eng.</div>
+          <div class="mapping-principles">Principles 3, 5</div>
+        </div>
+        <div class="mapping-col">
+          <div class="mapping-name" style="color:#FBBF24; border-bottom:1px solid rgba(251,191,36,0.35)">Intent Eng.</div>
+          <div class="mapping-principles">Principle 4</div>
+        </div>
+        <div class="mapping-col">
+          <div class="mapping-name" style="color:#34D399; border-bottom:1px solid rgba(52,211,153,0.35)">Specificity Eng.</div>
+          <div class="mapping-principles">Principles 1, 6,<br>+ all refined</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">Based on Anthropic context engineering + Nate B. Jones intent engineering frameworks</div>
+    <div class="footer-text">specificity-engineer skill · v1.0</div>
+  </div>
+
+</div>
+
+<script>
+const LAYERS = [
+  {
+    accent: "#38BDF8",
+    accentBg: "rgba(56,189,248,0.08)",
+    accentBorder: "rgba(56,189,248,0.35)",
+    what: "The words you write. A clear task description, the expected output format, and basic constraints. This is where most people start — and stop.",
+    adds: "Clarity of task and output. The agent knows what to produce and what shape to produce it in.",
+    beforeLabel: "Before — Vague request",
+    beforeContent: `"Can you help me fact-check this article?"`,
+    afterLabel: "After — Prompt-crafted",
+    afterContent: `"Fact-check this Azure documentation article.\nFor each technical claim, return:\n  • The claim text\n  • Status: accurate / inaccurate / outdated\n  • Recommended fix (if status is not accurate)"`,
+    progress: "Foundation — keep building ↑"
+  },
+  {
+    accent: "#A78BFA",
+    accentBg: "rgba(167,139,250,0.08)",
+    accentBorder: "rgba(167,139,250,0.35)",
+    what: "Everything else the agent sees: role definition, tools available, memory, retrieved content, source hierarchy. The full operating environment, not just the instruction.",
+    adds: "The agent knows WHO it is, WHAT it can use, and WHAT to prioritize — before it reads a single word of the task.",
+    beforeLabel: "Before — No context",
+    beforeContent: `Agent receives only the user message.\n\nNo role. No tools. No source hierarchy.\nIt has to guess what "authoritative" means\nand improvise when sources conflict.`,
+    afterLabel: "After — Context-engineered",
+    afterContent: `Role: "You are a technical documentation\n  verifier for Microsoft Azure content."\n\nTools: microsoft_docs_search,\n  microsoft_docs_fetch, grep_search\n\nSource hierarchy:\n  Tier 1: learn.microsoft.com (governs)\n  Tier 2: techcommunity.microsoft.com\n\nInjected: [article content to verify]`,
+    progress: "Layer 2 of 4 — good start ↑"
+  },
+  {
+    accent: "#FBBF24",
+    accentBg: "rgba(251,191,36,0.08)",
+    accentBorder: "rgba(251,191,36,0.35)",
+    what: "The governing principles that let the agent reason about situations the instructions don't explicitly cover. Intent answers the question: what should this agent optimize for?",
+    adds: "The agent can handle edge cases and novel situations by applying the principle — not by improvising.",
+    beforeLabel: "Before — Instructions only",
+    beforeContent: `"Search learn.microsoft.com. If the claim\nmatches, mark ✅. If it contradicts, mark ❌."\n\n→ What if Tier 2 contradicts Tier 1?\n→ What if no source is found?\n→ Should it delete unverifiable claims?\n\nNo principle to apply. Agent improvises.`,
+    afterLabel: "After — Intent-engineered",
+    afterContent: `"The goal is to protect documentation\naccuracy. Flag rather than remove —\na flagged claim can be resolved by a\nhuman author; a silently deleted claim\ncannot.\n\nWhen sources conflict, Tier 1 governs.\nWhen no source is found, mark\nUnverifiable — do not correct, delete."`,
+    progress: "Layer 3 of 4 — almost there ↑"
+  },
+  {
+    accent: "#34D399",
+    accentBg: "rgba(52,211,153,0.08)",
+    accentBorder: "rgba(52,211,153,0.35)",
+    what: "The full specification: definition of done, decision boundaries, negative examples, tool failure handling, and evaluation criteria. This is the gap between 'it sometimes works' and 'it reliably works.'",
+    adds: "Reliability. The agent stops at the right time, fails gracefully, and doesn't improvise in the unspecified space.",
+    beforeLabel: "Before — Missing the spec",
+    beforeContent: `Good prompt + context + intent. But:\n\n✗ When does the agent stop?\n✗ What if microsoft_docs_fetch fails?\n✗ What should it NEVER do?\n✗ How do you score output quality?\n\nThe agent improvises at every edge case.`,
+    afterLabel: "After — Fully specified",
+    afterContent: `Done when: every claim classified.\n>20% Unverifiable → pause + report.\n\nNegative examples:\n  ✗ Never mark Inaccurate from a snippet\n  ✗ Never remove Unverifiable claims\n\nTool failure: fall back to snippets,\n  note reduced confidence in report.\n\nEval: every correction must cite a URL.`,
+    progress: "✓ Full specification achieved"
+  }
+];
+
+const EYEBROWS = [
+  "Layer 1 — Prompt Craft",
+  "Layer 2 — Context Engineering",
+  "Layer 3 — Intent Engineering",
+  "Layer 4 — Specificity Engineering"
+];
+
+let active = 0;
+
+function setActive(n) {
+  active = n;
+  render();
+}
+
+function navigate(dir) {
+  active = Math.max(0, Math.min(3, active + dir));
+  render();
+}
+
+function render() {
+  const l = LAYERS[active];
+
+  // Card styles
+  for (let i = 0; i < 4; i++) {
+    const card = document.getElementById('card-' + i);
+    const icon = document.getElementById('icon-' + i);
+    const name = document.getElementById('name-' + i);
+    const li = LAYERS[i];
+    if (i === active) {
+      card.style.borderColor = li.accentBorder;
+      card.style.background = li.accentBg;
+      card.style.borderLeftColor = li.accent;
+      card.style.borderLeftWidth = '3px';
+      icon.style.background = li.accent;
+      name.style.color = li.accent;
+    } else {
+      card.style.borderColor = '#21262D';
+      card.style.background = '#161B22';
+      card.style.borderLeftColor = '#21262D';
+      card.style.borderLeftWidth = '1px';
+      icon.style.background = '#21262D';
+      name.style.color = '#C9D1D9';
+    }
+  }
+
+  // Progress
+  for (let i = 0; i < 4; i++) {
+    const seg = document.getElementById('seg-' + i);
+    seg.style.background = i <= active ? LAYERS[i].accent : '#21262D';
+  }
+  document.getElementById('progress-status').textContent = l.progress;
+
+  // Detail
+  document.getElementById('detail-eyebrow').textContent = EYEBROWS[active];
+  document.getElementById('detail-what').textContent = l.what;
+  document.getElementById('detail-adds').textContent = l.adds;
+  document.getElementById('adds-card').style.borderLeftColor = l.accent;
+
+  document.getElementById('before-label').textContent = l.beforeLabel;
+  document.getElementById('before-content').textContent = l.beforeContent;
+  document.getElementById('after-label').textContent = l.afterLabel;
+  document.getElementById('after-content').textContent = l.afterContent;
+
+  // Buttons
+  const prev = document.getElementById('btn-prev');
+  const next = document.getElementById('btn-next');
+  prev.disabled = active === 0;
+  next.disabled = active === 3;
+  next.style.background = active === 3 ? '#21262D' : l.accent;
+  next.style.color = active === 3 ? '#3D444D' : '#0D1117';
+  next.style.opacity = active === 3 ? '0.4' : '1';
+  next.textContent = active === 3 ? 'Complete ✓' : 'Next layer →';
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0) === (id === 'layers'));
+  });
+  document.getElementById('panel-layers').classList.toggle('active', id === 'layers');
+  document.getElementById('panel-principles').classList.toggle('active', id === 'principles');
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
