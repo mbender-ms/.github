@@ -11,7 +11,7 @@ These instructions are loaded into **every** Copilot conversation automatically.
 5. **Sentence casing** for all H2+ headings in documentation articles.
 6. **Lazy-load** — don't pre-read reference files, source YAMLs, or repo catalogs unless the task requires them.
 7. **Efficiency over verbosity** — use direct commands and tools, but never sacrifice research depth or clarity.
-8. **Git workflow** — For branch/commit/push/PR tasks, use the `git-workflow` prompt. Prefer `gh` CLI for PR creation.
+8. **Git workflow** — For branch/commit/push/PR tasks, use the `git-workflow` prompt. For release-branch checkout tasks such as `release branch <name>`, `create release branch <name>`, `create rb <name>`, or repo-qualified forms like `create release branch <name> <repo>`, use the `release-branch` prompt. Default the repo to `azure-docs-pr` when omitted, and accept repo aliases such as `docs-pr`, `rest-apis`, `github`, and `ai`. Prefer `gh` CLI for PR creation.
 9. **Microsoft Style Guide** — Use contractions, active voice, Oxford comma, imperative verbs in procedures. "select" not "click".
 10. **When uncertain** — State what you'd do, why you're unsure, and ask for confirmation. Never silently guess on publish-facing content.
 
@@ -26,6 +26,7 @@ These instructions are loaded into **every** Copilot conversation automatically.
 | SEO / editorial review | `documentor-workflow` skill | "SEO", "metadata", "editorial", "engagement" |
 | Research / exploration | `Explore` agent | "explore", "research", "investigate" |
 | Git operations | `git-workflow` prompt | "commit", "push", "branch", "PR" |
+| Release branch checkout | `release-branch` prompt | "release branch", "create release branch", "create rb", optional trailing repo name or alias |
 | PR description | `pr-description-template` prompt | "PR description", "PR body" |
 
 ## Skill Loading

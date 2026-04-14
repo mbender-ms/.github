@@ -51,6 +51,7 @@ copilot/skills/<skill-name>/
 | Prompt | Description |
 |--------|-------------|
 | **git-workflow** | Stage, commit, push, branch, and create PRs — one commit per file, `gh` CLI for PRs |
+| **release-branch** | Check out a remote release branch locally in `azure-docs-pr` by default, or in another repo when provided by full name or alias, then optionally create a working branch for edits |
 | **pr-description-template** | Generate PR title and description following Azure Core Content standards |
 
 Prompts live in `prompts/` and are deployed to VS Code via `sync-prompts.ps1`.
@@ -66,6 +67,14 @@ cd C:\github\.github && git pull origin main && .\sync-prompts.ps1
 ---
 
 ## Changelog
+
+### April 2026 — Release branch prompt
+
+**New prompt:**
+- **release-branch.prompt.md** — Release branch checkout workflow: target `azure-docs-pr` by default or another repo when specified, including aliases such as `docs-pr`, `rest-apis`, `github`, and `ai`, then verify local state, resolve the authoritative remote, fetch a named release branch, reuse or create the local tracking branch, and optionally create a working branch for edits.
+
+**Routing update:**
+- **copilot-instructions.md** — Added natural-language routing for `release branch <name>`, `create release branch <name>`, `create rb <name>`, and repo-qualified variants such as `create release branch <name> <repo>` to the `release-branch` prompt, with `azure-docs-pr` as the default repo and support for repo aliases.
 
 ### April 2026 — Doc-verifier parallel workflows
 
