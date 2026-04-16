@@ -56,8 +56,9 @@ The agent will:
 1. Ask for the service name and workflow type
 2. Collect answers for the 4 required sections (customer problem, solution, success, metrics)
 3. Ask about an associated GitHub PR
-4. Set default dates (start = today, due = end of month)
-5. Generate the work item for your review
+4. Set required defaults (state = New, priority = 2, start = today, target = end of month, modality = Documentation)
+5. Set proposal type and effort fields (Story Points or Tee Shirt Size)
+6. Generate the work item for your review
 
 ### Validate an existing work item
 
@@ -66,8 +67,9 @@ The agent will:
 The agent will:
 1. Retrieve the work item from ADO
 2. Check all 4 required sections are present and well-written
-3. Verify dates and GitHub PR links
-4. Report gaps and suggest improvements
+3. Verify required properties (state, area, iteration, tags, parent, modality, proposal type, dates, and effort fields)
+4. Verify GitHub PR links and closure summary requirements
+5. Report gaps and suggest improvements
 
 ### Repo URL lookup
 
@@ -84,6 +86,32 @@ Every work item must include:
 3. **What does success look like?** — customer outcome, not a checklist item
 4. **How will you measure success?** — concrete metrics (CSS ticket reduction, feedback improvement)
 
+Also include:
+
+5. **Problem / Impact** — customer-facing risk or backlog impact
+6. **Solution** — execution approach
+7. **Resources** — parent, dates, tags, modality, proposal type, and PR references
+
+## Required closure summary metrics
+
+Before closing an item, add this section to Description:
+
+```markdown
+## Summary of work completed
+
+| Metric | Count |
+|--------|-------|
+| Community PRs reviewed | |
+| Community PRs merged | |
+| Community PRs closed (not merged) | |
+| Community PRs open | |
+| Total files changed (merged PRs) | |
+| Total additions (merged PRs) | |
+| Total deletions (merged PRs) | |
+```
+
+Fill every row and use `0` when a metric does not apply.
+
 ---
 
 ## Quality standards
@@ -94,3 +122,4 @@ Every work item must include:
 - Measurable outcomes in success metrics
 - Markdown format for all ADO fields (`format: "markdown"`)
 - `cda` tag always included for tracking
+- `AAC` is the canonical Architecture Center tag (`ACC` is legacy and should be normalized)

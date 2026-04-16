@@ -1,5 +1,9 @@
 {
   "servers": {
+    "microsoft-learn-mcp-server": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    },
     "mcp-pdf": {
       "command": "npx",
       "args": ["-y", "mcp-pdf"]

@@ -37,7 +37,7 @@ Before processing a request inline, check whether a sibling skill or sub-agent s
 | Task pattern | Delegate to | How |
 |---|---|---|
 | Write/scaffold a new article | `doc-writer` skill | Invoke skill directly |
-| Fact-check or verify accuracy | `doc-verifier` skill or `microsoft-fact-checker` agent | Use agent for deep checks; skill for quick fixes |
+| Fact-check or verify accuracy | `doc-verifier` skill or `microsoft-fact-checker` agent | Use `doc-verifier` threshold matrix first; escalate only contested or high-risk claims to deep agent |
 | Create/validate ADO work items | `ado-work-items` skill | Invoke skill directly |
 | SEO, metadata, editorial review | `documentor-workflow` skill | Invoke skill directly |
 | Codebase exploration or research | `Explore` agent | Spawn sub-agent with thoroughness level |
@@ -46,6 +46,16 @@ Before processing a request inline, check whether a sibling skill or sub-agent s
 | Complex multi-step workflows | Spawn sub-agents in parallel | See [Sub-agent patterns](#sub-agent-patterns) below |
 
 **Rule**: If a task maps to a row above, delegate it — don't re-implement the logic inline.
+
+### Model routing defaults
+
+Use this default model routing when a task spans drafting, verification, and cleanup:
+
+- Tier 1 (Reasoning): final factual adjudication, source conflicts, architecture or risk judgment.
+- Tier 2 (Execution): draft or rewrite from clear briefs, structured PR review, evidence gathering.
+- Tier 3 (Cleanup): proofreading, formatting, metadata consistency, and mechanical transforms.
+
+For fact-checking and verification depth, follow the thresholds in [doc-verifier/SKILL.md](../doc-verifier/SKILL.md).
 
 ### Sub-agent patterns
 

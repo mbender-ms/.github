@@ -2,6 +2,8 @@
 
 Personal GitHub profile repo containing Copilot skills for Azure documentation workflows.
 
+Recent updates add parallel verification workflows to doc-verifier, including fleet batch verification, fan-out verification, claim manifests, incremental verification, pre-search scripting, and test protocols.
+
 ## Skills
 
 All skills live in `copilot/skills/` and are automatically available in VS Code via GitHub Copilot.
@@ -11,7 +13,7 @@ All skills live in `copilot/skills/` and are automatically available in VS Code 
 | **ado-work-items** | 3 | 45 KB | Create and validate ADO work items per Azure Core Content Standards |
 | **article-integrity** | 3 | 20 KB | Audit article integrity for contradictions, naming issues, typos, and link text mismatches |
 | **azure-quickstart-templates** | 2 | 32 KB | Review, validate, or create Azure Quickstart Templates |
-| **doc-verifier** | 18 | 180 KB | Verify technical accuracy of Microsoft documentation (10 workflows, 3 agent variants) |
+| **doc-verifier** | 24 | 166 KB | Verify technical accuracy of Microsoft documentation (14 workflows, 3 agent variants, parallel verification support) |
 | **doc-writer** | 5 | 65 KB | Scaffold and write Azure documentation articles (how-to, concept, quickstart, tutorial, overview) |
 | **documentor-workflow** | 7 | 72 KB | Editorial quality workflows — SEO, metadata, engagement, markdown auto-fix, link validation |
 | **freshness-pass** | 4 | 68 KB | Full content freshness workflow — fact-check + editorial + SEO + style in 3 phases |
@@ -39,6 +41,8 @@ copilot/skills/<skill-name>/
 ├── SKILL.md          # Skill definition (read by Copilot)
 ├── README.md         # Usage documentation
 ├── assets/           # Prompt files for specific workflows
+├── scripts/          # Optional helper scripts
+├── TEST-PROTOCOLS.md # Optional workflow validation procedures
 └── references/       # On-demand reference material
 ```
 
@@ -47,6 +51,7 @@ copilot/skills/<skill-name>/
 | Prompt | Description |
 |--------|-------------|
 | **git-workflow** | Stage, commit, push, branch, and create PRs — one commit per file, `gh` CLI for PRs |
+| **release-branch** | Check out a remote release branch locally in `azure-docs-pr` by default, or in another repo when provided by full name or alias, then optionally create a working branch for edits |
 | **pr-description-template** | Generate PR title and description following Azure Core Content standards |
 
 Prompts live in `prompts/` and are deployed to VS Code via `sync-prompts.ps1`.
@@ -62,6 +67,26 @@ cd C:\github\.github && git pull origin main && .\sync-prompts.ps1
 ---
 
 ## Changelog
+
+### April 2026 — Release branch prompt
+
+**New prompt:**
+- **release-branch.prompt.md** — Release branch checkout workflow: target `azure-docs-pr` by default or another repo when specified, including aliases such as `docs-pr`, `rest-apis`, `github`, and `ai`, then verify local state, resolve the authoritative remote, fetch a named release branch, reuse or create the local tracking branch, and optionally create a working branch for edits.
+
+**Routing update:**
+- **copilot-instructions.md** — Added natural-language routing for `release branch <name>`, `create release branch <name>`, `create rb <name>`, and repo-qualified variants such as `create release branch <name> <repo>` to the `release-branch` prompt, with `azure-docs-pr` as the default repo and support for repo aliases.
+
+### April 2026 — Doc-verifier parallel workflows
+
+**Doc-verifier additions:**
+- Added 4 new workflows: Fleet Batch (W11), Fan-Out Verify (W12), Claim Manifest (W13), and Incremental Verify (W14).
+- Added new prompt assets: `fleet-batch-verify.prompt.md`, `fan-out-verify.prompt.md`, `claim-manifest.prompt.md`, `incremental-verify.prompt.md`.
+- Added script support with `scripts/batch-presearch.sh` for pre-search cache generation.
+- Added `TEST-PROTOCOLS.md` with structured validation procedures for W11-W14 and end-to-end pipeline tests.
+
+**Documentation updates:**
+- Updated `copilot/skills/doc-verifier/SKILL.md` to include workflow routing, prompt asset mapping, and parallel workflow controls.
+- Updated `copilot/skills/doc-verifier/README.md` to document all W11-W14 behavior, dependencies, and troubleshooting.
 
 ### March 2026 — Agent efficiency improvements
 
@@ -79,7 +104,7 @@ cd C:\github\.github && git pull origin main && .\sync-prompts.ps1
 - **pr-description-template.prompt.md** — PR title and description generator following Azure Core Content standards. Structured format: Summary → Changes → Impact → Testing → Related work items.
 
 **Skill enhancements:**
-- **doc-verifier** — Consolidated from previous `fact-checker` and `microsoft-doc-verifier` skills. Expanded to 10 workflows (Quick In-Place, Single Article, Full Report, Internal + Public, Freshness Review, Deep Agent, Batch Report, PR Review, Research, CIA Analysis). Three agent variants: full (~95 tools), slim (25 tools, default), CIA (31 tools with ADO access).
+- **doc-verifier** — Consolidated from previous `fact-checker` and `microsoft-doc-verifier` skills. Expanded to 14 workflows (Quick In-Place, Single Article, Full Report, Internal + Public, Freshness Review, Deep Agent, Batch Report, PR Review, Research, CIA Analysis, Fleet Batch, Fan-Out Verify, Claim Manifest, Incremental Verify). Three agent variants: full (~95 tools), slim (25 tools, default), CIA (31 tools with ADO access).
 - **doc-writer** — Reference files updated with consolidation notices pointing to `_shared/` canonical versions for formatting-rules and writing-style.
 - **documentor-workflow** — Reference files updated with consolidation notices pointing to `_shared/` canonical versions for formatting-rules, seo-and-metadata, and writing-style. Added sensitive-identifiers reference with approved GUID replacement values.
 
@@ -105,9 +130,9 @@ This section reconstructs the iterative Copilot Chat sessions that built each to
 **Goal:** "Create a skill that fact-checks Microsoft documentation against official sources."
 - Started with single-article verification against learn.microsoft.com
 - Added source authority hierarchy (Tier 1–4 public, Tier 5–7 internal)
-- Expanded to 10 distinct workflows covering different verification scopes
+- Expanded to 14 distinct workflows covering different verification scopes, including parallel and incremental modes
 - Created 3 agent variants (full/slim/CIA) for different tool environments
-- Built 10 prompt assets for workflow-specific automation
+- Built 14 prompt assets for workflow-specific automation plus pre-search helper script and test protocols
 - Consolidated earlier `fact-checker` and `microsoft-doc-verifier` experiments into unified `doc-verifier`
 
 ### Thread 2 — Documentation writing skill

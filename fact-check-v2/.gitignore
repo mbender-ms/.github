@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+fact_check_v2.egg-info/
+out/
+.pytest_cache/

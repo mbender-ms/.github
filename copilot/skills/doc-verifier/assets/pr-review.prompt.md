@@ -38,6 +38,24 @@ Ask the user (skip if already clear):
 4. Read the content of each changed file (from patches or file read)
 5. Report the file count and ask for confirmation
 
+## Step 1.5 — Quick triage checklist (apply threshold matrix)
+
+Before deep verification, run this triage and record decisions in the report:
+
+1. Count documentation files in scope.
+2. Estimate claim volume per file (low: 1-15, medium: 16-40, high: more than 40).
+3. Mark risk level for each file:
+  - High risk: security, compliance, identity, encryption, RBAC, production safety, retirement timelines.
+  - Standard risk: feature descriptions, configuration guidance, and examples without safety-critical impact.
+4. Choose route by threshold:
+  - 1-5 files and mostly low-risk content: Tier 2 or Tier 3 first, escalate contested claims only.
+  - More than 5 files, major technical changes, or high-risk content: include Tier 1 review for flagged files.
+  - High claim density (more than 40 in a file) or cross-service coupling: run a deep pass for that file.
+5. Apply escalation triggers at claim level:
+  - Tier 1 and Tier 2 source conflict.
+  - More than 10% unverifiable claims in a file.
+  - Reviewer confidence remains below high after structured pass.
+
 ## Step 2 — Catalog and group files
 
 For each file:
@@ -58,6 +76,7 @@ Process files grouped by service area:
 4. Cross-reference all technical claims against fetched sources
 5. Audit remediation and reference links
 6. Check preview/GA/deprecated status for all mentioned features
+7. For contested or high-risk claims, perform Tier 1 adjudication before assigning final status
 
 ## Step 4 — Classify findings
 
