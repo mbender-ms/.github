@@ -8,6 +8,8 @@ Recent updates add parallel verification workflows to doc-verifier, including fl
 
 All skills live in `copilot/skills/` and are automatically available in VS Code via GitHub Copilot.
 
+The repo previously contained a second top-level `skills/` tree. That tree is not part of the active workspace runtime and has been archived under `.archive/skills-root-20260413/` to prevent drift.
+
 | Skill | Files | Size | Description |
 |-------|-------|------|-------------|
 | **ado-work-items** | 3 | 45 KB | Create and validate ADO work items per Azure Core Content Standards |
@@ -37,6 +39,10 @@ Skills are invoked in VS Code Copilot Chat:
 ## Structure
 
 ```
+agents/
+instructions/
+prompts/
+references/
 copilot/skills/<skill-name>/
 ├── SKILL.md          # Skill definition (read by Copilot)
 ├── README.md         # Usage documentation
@@ -45,6 +51,16 @@ copilot/skills/<skill-name>/
 ├── TEST-PROTOCOLS.md # Optional workflow validation procedures
 └── references/       # On-demand reference material
 ```
+
+Canonical runtime layout:
+
+- `copilot/skills/` — active skill definitions
+- `prompts/` — standalone prompts synced to VS Code
+- `agents/` — shared agent definitions
+- `instructions/` — workspace instruction files
+- `references/` — shared reference material
+
+See `BUILD-REBUILD-GUIDE.md` for the consolidation and rebuild plan.
 
 ## Prompts
 
