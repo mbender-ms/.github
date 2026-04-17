@@ -151,10 +151,12 @@ Display the generated title and body, then **wait for user confirmation**.
 
 #### 6c. Create the PR
 
+**PR target**: Always open PRs from a `mbender-ms/azure-docs-pr` fork branch **into** `MicrosoftDocs/azure-docs-pr:main` unless the user specifies otherwise.
+
 **Primary method — `gh` CLI:**
 
 ```bash
-gh pr create --title "<title>" --body "<body>" --base main
+gh pr create --repo MicrosoftDocs/azure-docs-pr --base main --head mbender-ms:<branch-name> --title "<title>" --body "<body>"
 ```
 
 **Fallback — VS Code PR extension:** If `gh` is unavailable, instruct the user to use the VS Code GitHub Pull Request extension to create the PR manually, and provide the title/body for copy-paste.
