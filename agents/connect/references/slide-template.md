@@ -1,5 +1,8 @@
 # Connect Slide Template
 
+> [!NOTE]
+> **Template version:** 1.1 | **Last verified:** April 2026 | Verify this file reflects the current slide deck structure before running the agent. Update section headings and columns if the template has changed.
+
 > [!IMPORTANT]
 > This template mirrors the sections of the Microsoft Impact Summary PowerPoint slide deck. Verify this file reflects the **current** slide deck structure before running the agent. Update section headings and columns if the template has changed.
 

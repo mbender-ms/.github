@@ -26,6 +26,43 @@ All skills live in `copilot/skills/` and are automatically available in VS Code 
 | **_shared/** | 5 | 95 KB | Canonical shared references — formatting rules, SEO & metadata, writing style, source hierarchy |
 | **sources/** | 27 | 120 KB | Microsoft GitHub repo catalog — 3,000+ repos across 4 orgs with classification taxonomy |
 
+## Agents
+
+Agent files live in `agents/` and are automatically available in VS Code via GitHub Copilot Agent mode.
+
+| Agent | Description |
+|-------|-------------|
+| **CIA-Analysis** | Generate Customer Incidents Analysis (CIA) reports for Azure service areas, identifying recurring incident patterns, high-impact issue categories, and documentation gaps |
+| **connect-writer** | Generate two Connect artifacts (slides draft and connect form) for any Microsoft Connect review period; reads all personal config from `connect/config/variables.yaml` |
+| **content-developer** | Automate Azure documentation workflows — work item management, git operations, branch naming, commit messages, PR creation with AB# linking, and work item closure |
+| **microsoft-fact-checker** | Verify technical accuracy of Microsoft documentation against authoritative sources with evidence-based recommendations and complete citations |
+| **product-manager** | Streamline Product Manager workflows — create Feature work items from SupportabilityCheckList requirements, track feature documentation, and manage PM-content collaboration |
+| **technical-advisor** | Automate CSS Technical Advisor workflows — create Content Bug work items from PACE escalations and manage cross-organization work item linking |
+
+### connect-writer supporting files
+
+The `connect-writer` agent uses a structured supporting directory:
+
+```
+agents/connect/
+├── README.md                           # Setup and usage guide
+├── config/
+│   └── variables.yaml                  # Personal config (dates, paths, ADO queries)
+├── instructions/
+│   ├── data-gathering.instructions.md
+│   ├── organization-rules.instructions.md
+│   └── writing-guidelines.instructions.md
+└── references/
+    ├── connect-template.md
+    ├── impact-categories.md
+    ├── slide-template.md
+    └── smart-goal-examples.md
+```
+
+Update `config/variables.yaml` before each Connect period. See `agents/connect/README.md` for full setup and annual maintenance instructions.
+
+---
+
 ## Usage
 
 Skills are invoked in VS Code Copilot Chat:
@@ -67,6 +104,17 @@ cd C:\github\.github && git pull origin main && .\sync-prompts.ps1
 ---
 
 ## Changelog
+
+### April 2026 — Connect Impact Agent
+
+**New agent:**
+- **connect-writer.agent.md** — Generalized Connect Impact Agent that generates two artifacts (slides draft and connect form) for any Microsoft Connect review period. Replaces the period-specific `connect-spring-impact.agent.md` with a compartmentalized, shareable version that reads all personal config from `agents/connect/config/variables.yaml`.
+
+**New supporting directory (`agents/connect/`):**
+- `config/variables.yaml` — Personal config for Connect period dates, notes path, GitHub username/repo, and ADO query URLs
+- `instructions/` — Three instruction files covering data gathering, organization rules, and writing guidelines
+- `references/` — Four reference files: connect template, impact categories, slide template, and SMART goal examples
+- `README.md` — Full setup, quick-start, and annual maintenance guide
 
 ### April 2026 — Release branch prompt
 

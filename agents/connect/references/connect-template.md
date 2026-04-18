@@ -1,5 +1,8 @@
 # Connect Template
 
+> [!NOTE]
+> **Template version:** 1.1 | **Last verified:** April 2026 | Verify sections match the current Microsoft Connect tool before running the agent. Update this file if Microsoft has changed the form layout.
+
 Description: Impact is what you accomplish - and how you do it matters just as much.
 Use this template to write your impact statement. The first section is for the impact you have had in the past, and the second section is for the impact you plan to have in the future. You can use the descriptions of the three impact categories to help you determine which category your impact belongs to.
 
@@ -21,3 +24,5 @@ Use this template to write your impact statement. The first section is for the i
 #### Goal 1
 
 #### Goal 2
+
+#### Goal 3
