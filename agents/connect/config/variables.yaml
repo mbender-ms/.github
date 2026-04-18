@@ -1,0 +1,42 @@
+# ============================================================
+# Connect Agent — Personalized Variables
+# ============================================================
+# Update these values before running the agent each Connect period.
+# Replace every PLACEHOLDER with your actual value.
+# Do NOT commit personal file paths or ADO URLs to shared repos.
+# ============================================================
+
+# --- Connect Period ---
+# Format: YYYY-MM-DD
+connectPeriodStart: "PLACEHOLDER"   # e.g. "2026-04-01"
+connectPeriodEnd:   "PLACEHOLDER"   # e.g. "2026-09-30"
+
+# --- Personal Documents ---
+# Full path to your personal Connect notes document or folder.
+# Supported formats: .md, .txt, or a folder containing either.
+personalNotesPath: "PLACEHOLDER"    # e.g. "C:\\Users\\you\\Documents\\connect-notes.md"
+
+# Full path to a prior Connect document for style reference.
+# Supported formats: .md, .txt, .pdf, .docx (auto-converted if binary).
+# Set to PLACEHOLDER or leave blank to skip.
+exampleDocumentPath: "PLACEHOLDER"  # e.g. "C:\\Users\\you\\Documents\\Oct2025-connect.pdf"
+
+# --- GitHub ---
+# Your GitHub username (used for PR author and assignee queries).
+githubUsername: "PLACEHOLDER"       # e.g. "your-github-username"
+
+# The GitHub repo to search for merged PRs. Format: owner/repo
+githubRepo: "PLACEHOLDER"           # e.g. "MicrosoftDocs/azure-docs-pr"
+
+# --- Azure DevOps Queries ---
+# Full URL to your ADO saved query for user stories during the Connect period.
+adoUserStoriesQuery: "PLACEHOLDER"  # e.g. "https://dev.azure.com/org/project/_queries/query/xxxxxxxx/"
+
+# Full URL to an ADO saved query for work items that mention you.
+# Set to PLACEHOLDER or leave blank to skip the mentions source.
+adoMentionsQuery: ""
+
+# --- Output ---
+# Where the two artifacts (slides-artifact.md, connect-artifact.md) are saved.
+# Default keeps output inside the package (gitignored). Use an absolute path to redirect elsewhere.
+outputFolder: "agents/connect/output"
