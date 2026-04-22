@@ -1,0 +1,15 @@
+# ============================================================
+# Question Builder — Package Defaults
+# ============================================================
+
+# Default output folder for the single final CSV.
+outputFolder: "agents/question-builder/output"
+
+# Default location for temporary intermediate files.
+artifactsFolder: "agents/question-builder/artifacts"
+
+# Default mode for CSV generation.
+defaultMode: "fresh"
+
+# Default GitHub repository for documentation issue mining.
+defaultGithubRepo: "MicrosoftDocs/azure-docs-pr"

@@ -5,15 +5,16 @@ These instructions are loaded into **every** Copilot conversation automatically.
 ## Core Rules
 
 1. **Delegate before doing** — Route tasks using the table below. Don't re-implement skill logic inline.
-2. **Never commit to main** — always create a feature branch (`mbender-ms/<service>-<description>-<id>`).
-3. **One commit per file** — format: `docs: <imperative verb> <what changed>`. No AB# in commits.
-4. **Ask before pushing** — get approval before `git push`.
-5. **Sentence casing** for all H2+ headings in documentation articles.
-6. **Lazy-load** — don't pre-read reference files, source YAMLs, or repo catalogs unless the task requires them.
-7. **Efficiency over verbosity** — use direct commands and tools, but never sacrifice research depth or clarity.
-8. **Git workflow** — For branch/commit/push/PR tasks, use the `git-workflow` prompt. For release-branch checkout tasks such as `release branch <name>`, `create release branch <name>`, `create rb <name>`, or repo-qualified forms like `create release branch <name> <repo>`, use the `release-branch` prompt. Default the repo to `azure-docs-pr` when omitted, and accept repo aliases such as `docs-pr`, `rest-apis`, `github`, and `ai`. Prefer `gh` CLI for PR creation. **PR default**: all PRs target `MicrosoftDocs/azure-docs-pr:main` from a `mbender-ms/azure-docs-pr` fork branch unless specified otherwise.
-9. **Microsoft Style Guide** — Use contractions, active voice, Oxford comma, imperative verbs in procedures. "select" not "click".
-10. **When uncertain** — State what you'd do, why you're unsure, and ask for confirmation. Never silently guess on publish-facing content.
+2. **Standardize ADO work items** — For any Azure DevOps work item create/update/validate request, load and follow the `ado-work-items` skill and the repo guidance in `.github/instructions/ado-work-items.instructions.md`.
+3. **Never commit to main** — always create a feature branch (`mbender-ms/<service>-<description>-<id>`).
+4. **One commit per file** — format: `docs: <imperative verb> <what changed>`. No AB# in commits.
+5. **Ask before pushing** — get approval before `git push`.
+6. **Sentence casing** for all H2+ headings in documentation articles.
+7. **Lazy-load** — don't pre-read reference files, source YAMLs, or repo catalogs unless the task requires them.
+8. **Efficiency over verbosity** — use direct commands and tools, but never sacrifice research depth or clarity.
+9. **Git workflow** — For branch/commit/push/PR tasks, use the `git-workflow` prompt. For release-branch checkout tasks such as `release branch <name>`, `create release branch <name>`, `create rb <name>`, or repo-qualified forms like `create release branch <name> <repo>`, use the `release-branch` prompt. Default the repo to `azure-docs-pr` when omitted, and accept repo aliases such as `docs-pr`, `rest-apis`, `github`, and `ai`. Prefer `gh` CLI for PR creation. **PR default**: all PRs target `MicrosoftDocs/azure-docs-pr:main` from a `mbender-ms/azure-docs-pr` fork branch unless specified otherwise.
+10. **Microsoft Style Guide** — Use contractions, active voice, Oxford comma, imperative verbs in procedures. "select" not "click".
+11. **When uncertain** — State what you'd do, why you're unsure, and ask for confirmation. Never silently guess on publish-facing content.
 
 ## Task Routing
 

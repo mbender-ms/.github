@@ -33,8 +33,8 @@ Every work item must have these properties populated at create-time:
 |-------|---------------|-------------|
 | **Title** | All | Short description that immediately conveys the work |
 | **State** | All | Current status (New → Committed → Active → Review → Closed / Removed) |
-| **Area** | All | Correct area path for your team (for queries and boards) |
-| **Iteration** | All | Correct iteration/sprint (for queries and sprint boards) |
+| **Area** | All | Resolve from `service-mappings.md` using the service named in the request; see [Defaults](#defaults) |
+| **Iteration** | All | Full path from `iteration-calculator.md` when current date is known; `Content\FY{YY}\` from due date's fiscal year when only a due date is provided; see [Defaults](#defaults) |
 | **Description** | All | Customer problem, solution, success criteria, measurement plan |
 | **Tags** | All | Classify the work (see Tags section below) |
 | **Priority** | All | Default `2` unless explicitly overridden |
@@ -48,6 +48,30 @@ Every work item must have these properties populated at create-time:
 | **Development** | User Stories | Link to PR; use `AZ#<id>` in GitHub to auto-link |
 
 Before closure, ensure `Description` contains a completed **Summary of work completed** metrics section.
+
+## Defaults
+
+### Default AreaPath
+
+When the user names a service, look it up in the `AreaPath` column of [`c:\github\.github\skills\content-workflow\references\service-mappings.md`](../../skills/content-workflow/references/service-mappings.md) and use that value.
+
+- If the service is found: use its exact `AreaPath` value (e.g., `Content\Production\Infrastructure\Azure Networking\Load Balancer`).
+- If the service is not found or ambiguous: fall back to `Content\Production\Infrastructure\Azure Networking\`.
+
+### Default IterationPath
+
+Derive the iteration path using the fiscal year rules from [`iteration-calculator.md`](../../skills/content-workflow/references/iteration-calculator.md) (Microsoft FY runs July 1 – June 30; FY number = year + 1 for Jul–Dec, year for Jan–Jun).
+
+| Situation | Default IterationPath |
+|---|---|
+| Iteration explicitly provided | Use as-is |
+| No iteration, **due date provided** | `Content\FY{YY}\` — derive FY from the **due date** |
+| No iteration, no due date | Full path using current date: `Content\FY{YY}\Q{Q}\{MM} {Mon}` |
+
+**Examples using due-date FY rule:**
+- Due date `2026-05-15` → May 2026 = FY26 → `Content\FY26\`
+- Due date `2025-08-01` → Aug 2025 = FY26 (Jul–Dec adds 1) → `Content\FY26\`
+- Due date `2027-01-10` → Jan 2027 = FY27 → `Content\FY27\`
 
 ## Required description sections
 
