@@ -133,15 +133,15 @@ Only if the user requested PR creation (e.g., "create PR," "open PR," "full work
 
 #### 6a. Generate PR title and body
 
-**PR title format:** `<Service Name> | <Workflow Type> | Short description`
-- Examples: `Load Balancer | Freshness | Update health probe documentation`
-- If no service/type context, use a plain descriptive title
+**MANDATORY**: Load and follow `prompts/pr-description-template.prompt.md` to generate both the PR title and body. This is the authoritative standard — do not use any other template or generate an ad-hoc description.
 
-**PR body**: Load `copilot/skills/my-workflow/references/pr-framework.md` and generate the body following that template. Include:
-- **Article intent** — reader-perspective paragraph
-- **Description of work** — categorized bullet list of changes
-- **Files** — every changed file with path and annotation
-- **`AB#<work-item-id>`** — at the bottom of the body (if work item ID provided)
+Key requirements from that template:
+- **Title format**: `<Service Name> | <Type> | Short description` (Types: Maintenance, Freshness, CAMP)
+- **Body sections** (all required): Summary, Changes (Documentation updates + Files modified), Impact, Testing checklist, Related work items
+- **Work item link format**: `[AB#ID](full ADO URL)` — never bare `#ID`
+- **No AB# in the title**
+
+After generating the title and body, show them to the user and wait for confirmation before proceeding to 6b.
 
 #### 6b. Show draft for confirmation
 

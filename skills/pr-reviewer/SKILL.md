@@ -17,8 +17,8 @@ Review pull requests against the Microsoft Writing Style Guide. This skill analy
 
 The skill accepts PR references in two forms:
 
-- **GitHub PR URL** ΓÇö Parse `owner`, `repo`, and `number` from the URL (e.g., `https://github.com/MicrosoftDocs/azure-docs-pr/pull/12345`)
-- **Explicit parameters** ΓÇö The user provides owner, repo, and PR number directly (e.g., "review PR #12345 in MicrosoftDocs/azure-docs-pr")
+- **GitHub PR URL** - Parse `owner`, `repo`, and `number` from the URL (e.g., `https://github.com/MicrosoftDocs/azure-docs-pr/pull/12345`)
+- **Explicit parameters** - The user provides owner, repo, and PR number directly (e.g., "review PR #12345 in MicrosoftDocs/azure-docs-pr")
 
 Extract the owner, repo, and PR number from whichever format is provided.
 
@@ -44,10 +44,10 @@ Extract the owner, repo, and PR number from whichever format is provided.
 
 Before reporting a match, verify the match is NOT inside any of these protected ranges:
 
-- **Fenced code blocks** ΓÇö Lines between ` ``` ` delimiters (including the language identifier line)
-- **Inline code** ΓÇö Text between single backticks (`` ` ``)
-- **YAML frontmatter** ΓÇö Content between the opening `---` and closing `---` at the top of the file
-- **HTML comments** ΓÇö Content between `<!--` and `-->`
+- **Fenced code blocks** - Lines between ` ``` ` delimiters (including the language identifier line)
+- **Inline code** - Text between single backticks (`` ` ``)
+- **YAML frontmatter** - Content between the opening `---` and closing `---` at the top of the file
+- **HTML comments** - Content between `<!--` and `-->`
 
 Matches inside protected ranges must be silently skipped.
 
@@ -72,13 +72,13 @@ Compile all findings into a structured report (see Output format below).
 
 See [references/style-patterns.md](references/style-patterns.md) for the complete list of 98 patterns across 7 categories:
 
-1. **Contractions** (18 patterns) ΓÇö Expand formal language to contractions for conversational tone
-2. **Passive voice** (29 patterns) ΓÇö Convert passive constructions to active voice
-3. **Word choice** (18 patterns) ΓÇö Replace complex or jargon words with simpler alternatives
-4. **Future tense** (15 patterns) ΓÇö Convert future tense ("will") to present tense
-5. **Sentence structure** (14 patterns) ΓÇö Fix dangling participles, address reader as "you", use imperative mood
-6. **Code formatting** (2 patterns) ΓÇö Correct inline code formatting issues
-7. **Metadata** (2 patterns) ΓÇö Fix heading and section naming conventions
+1. **Contractions** (18 patterns) - Expand formal language to contractions for conversational tone
+2. **Passive voice** (29 patterns) - Convert passive constructions to active voice
+3. **Word choice** (18 patterns) - Replace complex or jargon words with simpler alternatives
+4. **Future tense** (15 patterns) - Convert future tense ("will") to present tense
+5. **Sentence structure** (14 patterns) - Fix dangling participles, address reader as "you", use imperative mood
+6. **Code formatting** (2 patterns) - Correct inline code formatting issues
+7. **Metadata** (2 patterns) - Fix heading and section naming conventions
 
 ## Output format
 
