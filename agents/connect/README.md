@@ -18,7 +18,7 @@ The agent gathers impact data from four sources (personal notes, Microsoft 365 v
 | ADO MCP server | Required — used for work item queries |
 | GitHub MCP server | Required — used for PR search |
 | WorkIQ MCP server | Optional — used for M365 Teams/meeting data; agent skips gracefully if unavailable |
-| `.github` repo cloned locally | This package must be in your VS Code workspace |
+| `.github` repo cloned locally | This package must be in your VS Code workspace. PS...If you are reading this, you probably have it local; just make sure it's in your workspace. |
 
 ---
 

@@ -49,3 +49,19 @@ Stretch items (`[STRETCH]`) represent above-and-beyond contributions outside the
 - Concise. Every sentence should earn its place.
 - Active voice preferred.
 - Avoid jargon unless it is meaningful to the audience (the user's manager and leadership).
+
+---
+
+## Character Limits
+
+Apply these limits when generating or refining Connect output. Use the `writing-refinement` skill (`skills/writing-refinement/SKILL.md`) to enforce them.
+
+| Section | Limit |
+|---|---|
+| "Reflect on the past" narrative | 6,750 characters maximum |
+| Each `#### Goal N` section | 1,150 characters maximum |
+
+When content exceeds a limit:
+1. Measure per-section counts first (see `writing-refinement` skill Step 1 for the PowerShell pattern).
+2. Apply core techniques in order: cut superlatives → collapse parentheticals → break run-ons → remove redundant restatements → trim rationale sentences.
+3. Never cut metrics, deadlines, named people, or SMART goal elements to meet a target.

@@ -7,6 +7,10 @@
     "mcp-pdf": {
       "command": "npx",
       "args": ["-y", "mcp-pdf"]
+    },
+    "workiq": {
+      "command": "npx",
+      "args": ["-y", "@microsoft/workiq", "mcp"]
     }
   }
 }

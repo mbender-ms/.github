@@ -289,6 +289,10 @@ Pattern: "By [month], [achieve X] as measured by [metric], starting from [baseli
 
 #### Goal 3: [uber goal title from smart-goal-examples.md — copy verbatim]
 [2–4 SMART goals — same format]
+
+### How will your actions and behaviors help you reach your goals?
+[900–950 characters. Generated — do not leave blank or prompt the user.
+See "Behavior reflection rules" below for generation guidance.]
 ```
 
 ---
@@ -324,6 +328,18 @@ Pattern: "By [month], [achieve X] as measured by [metric], starting from [baseli
 **Unresolvable items**
 - If an impact item cannot be assigned to any category, mark it `[UNASSIGNED — needs user review]` in both artifacts.
 - If a goal cannot be made SMART without more information, insert `[OPEN QUESTION: {specific gap}]` inline. List all open questions in a numbered block at the very end of `connect-artifact.md`.
+
+**Behavior reflection rules**
+- Always generate the `### How will your actions and behaviors help you reach your goals?` section — never skip it, never leave it blank.
+- Length: 900–950 characters (count carefully before writing).
+- Write in first person. Be specific to the user's actual goals — do not use generic phrases like "I will work hard."
+- Structure the answer across three dimensions, flowing as a single connected paragraph or two short paragraphs:
+  1. **Execution**: What specific actions and disciplines the user will apply to hit Goal 1 deliverables (e.g., phase tracking, proactive stakeholder alignment, anticipating blockers).
+  2. **Innovation and growth**: How the user needs to deepen skills or shift approaches for Goal 2 (e.g., AI fluency, security lens, structured experimentation).
+  3. **Collaboration**: How the user needs to grow as a partner and coordinator for Goal 3 (e.g., from reactive to proactive, setting ownership and cadences, holding commitments accountable).
+- End with a sentence that connects all three behaviors to a compounding outcome.
+- Example (from a prior Connect period — use for calibration, not as a template to copy):
+  > To reach my goals, I need to execute with precision and grow in how I manage complexity across teams and timelines. Completing the TSG migration and shipping the 18-article Design Guide requires rigorous phase tracking and proactive PM alignment—I'll need to anticipate blockers early rather than react to them. To drive innovation, I must deepen my AI fluency by running structured experiments and translating findings into reusable workflows others can adopt. Integrating Zero Trust findings means I need to develop a sharper security lens when reviewing content, not just editing for accuracy. For collaboration, I need to grow from a responsive partner to a proactive coordinator—setting clear ownership, establishing predictable review cadences, and holding cross-team commitments accountable. These behaviors require me to operate with more intentional planning, stronger follow-through on shared deliverables, and a consistent focus on measurable outcomes over activity.
 
 ---
 
