@@ -30,6 +30,7 @@ These instructions are loaded into **every** Copilot conversation automatically.
 | Release branch checkout | `release-branch` prompt | "release branch", "create release branch", "create rb", optional trailing repo name or alias |
 | PR description | `pr-description-template` prompt | "PR description", "PR body" |
 | Convert file to markdown | `artifact-conversion` skill | "convert", "to markdown", ".pdf", ".docx", ".xlsx", ".pptx", "extract text", "image to text" |
+| Create project one-pager | `one-pager` skill | "one-pager", "one pager", "project brief", "project summary", "project document" |
 
 ## Skill Loading
 
