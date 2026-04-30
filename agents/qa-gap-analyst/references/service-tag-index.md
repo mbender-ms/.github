@@ -1,13 +1,13 @@
-# Microsoft Q&A Tag Index — Azure Services
+# Service Tag Index
 
-Reference index of Microsoft Q&A tag slugs and IDs for common Azure services.
+Reference index of service tags for Microsoft Q&A.
 
 > Tag URL format: `https://learn.microsoft.com/en-us/answers/tags/{tag_id}/{tag_slug}`
 
 ## Azure Networking
 
-| Service | Tag Slug | Tag ID |
-|---------|----------|--------|
+| Service | Q&A Tag Slug | Q&A Tag ID |
+|---------|-------------|------------|
 | Application Gateway | `azure-application-gateway` | 148 |
 | Azure Bastion | `azure-bastion` | 290 |
 | Azure DDoS Protection | `azure-ddos-protection` | 334 |
@@ -26,8 +26,8 @@ Reference index of Microsoft Q&A tag slugs and IDs for common Azure services.
 
 ## Azure Compute
 
-| Service | Tag Slug | Tag ID |
-|---------|----------|--------|
+| Service | Q&A Tag Slug | Q&A Tag ID |
+|---------|-------------|------------|
 | Virtual Machines | `azure-virtual-machines` | 63 |
 | Azure Kubernetes Service | `azure-kubernetes-service` | 225 |
 | Azure Functions | `azure-functions` | 80 |
@@ -35,33 +35,32 @@ Reference index of Microsoft Q&A tag slugs and IDs for common Azure services.
 | Container Apps | `azure-container-apps` | 535 |
 | Container Instances | `azure-container-instances` | 232 |
 
-## Azure Storage & Data
+## Azure Storage and Data
 
-| Service | Tag Slug | Tag ID |
-|---------|----------|--------|
+| Service | Q&A Tag Slug | Q&A Tag ID |
+|---------|-------------|------------|
 | Azure Storage | `azure-storage` | 65 |
 | Cosmos DB | `azure-cosmos-db` | 117 |
 | Azure SQL | `azure-sql` | 79 |
 | Azure Database for MySQL | `azure-database-mysql` | 160 |
 | Azure Database for PostgreSQL | `azure-database-postgresql` | 159 |
 
-## Azure Identity & Security
+## Azure Identity and Security
 
-| Service | Tag Slug | Tag ID |
-|---------|----------|--------|
+| Service | Q&A Tag Slug | Q&A Tag ID |
+|---------|-------------|------------|
 | Microsoft Entra ID | `microsoft-entra-id` | 542 |
 | Azure Key Vault | `azure-key-vault` | 118 |
 | Azure Active Directory | `azure-active-directory` | 96 |
 
 ## Azure AI
 
-| Service | Tag Slug | Tag ID |
-|---------|----------|--------|
+| Service | Q&A Tag Slug | Q&A Tag ID |
+|---------|-------------|------------|
 | Azure OpenAI | `azure-openai` | 544 |
 | Azure AI Search | `azure-ai-search` | 545 |
 
 ---
 
-> **Maintaining this index:** Tag IDs are stable but new tags are added regularly.
-> To discover a tag not listed here, browse `https://learn.microsoft.com/en-us/answers/tags/`
-> and extract the ID and slug from the URL.
+> **Finding a tag not listed here:** Browse `https://learn.microsoft.com/en-us/answers/tags/`
+> and extract the ID and slug from the URL. Format: `/answers/tags/{id}/{slug}`

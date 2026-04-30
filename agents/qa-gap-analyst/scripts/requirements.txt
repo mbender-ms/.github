@@ -1,0 +1,14 @@
+# Q&A Gap Analyst — scraper dependencies
+# Install: pip install -r requirements.txt
+
+# HTTP requests with retry support
+requests>=2.31.0
+
+# HTML parsing for Q&A page scraping
+beautifulsoup4>=4.12.0
+
+# Fuzzy string matching for question grouping
+thefuzz>=0.22.0
+
+# C-extension backend for thefuzz — significantly faster grouping on large scrapes
+rapidfuzz>=3.0.0

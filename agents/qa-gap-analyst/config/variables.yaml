@@ -1,0 +1,23 @@
+# ============================================================
+# Q&A Gap Analyst — Package Defaults
+# ============================================================
+
+# Default output folder for final gap CSV and Markdown report.
+outputFolder: "agents/qa-gap-analyst/output"
+
+# Default location for temporary intermediate files (raw scrape, eval CSV).
+artifactsFolder: "agents/qa-gap-analyst/artifacts"
+
+# Minimum score (inclusive) to treat a question as adequately answered.
+# Questions scoring below this threshold are flagged as gap signals.
+gapScoreThreshold: 3.5
+
+# Fuzzy grouping threshold for the Q&A scraper (0-100).
+# Questions with token-sort similarity >= this value are grouped together.
+scraperGroupThreshold: 75
+
+# Minimum Q&A group_count for High confidence (vs Medium).
+highConfidenceMinGroupCount: 3
+
+# Default date format used in output filenames.
+outputDateFormat: "MMDDYYYY"
