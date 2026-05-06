@@ -1,13 +1,14 @@
 ---
 model: claude-sonnet-4.6
-name: Q&A Gap Analyst
-description: "Scrape Microsoft Q&A for an Azure service, evaluate how well the documentation answers those questions, and produce a gap report (CSV + Markdown) that identifies articles needing updates, new sections, or new articles. Ask for the Azure service name before starting. Fully self-contained — no other agents or skills required."
+name: qa-gap-analyst
+description: 'Scrape Microsoft Q&A for an Azure service, evaluate how well the documentation answers those questions, and produce a gap report (CSV + Markdown) that identifies articles needing updates, new sections, or new articles. Ask for the Azure service name before starting.'
 tools:
-  - "readFile"
+  - "github/*"
+  - "microsoft-docs/*"
   - "editFiles"
+  - "readFile"
   - "search"
   - "execute"
-  - "fetch"
 ---
 
 # Q&A Gap Analyst
