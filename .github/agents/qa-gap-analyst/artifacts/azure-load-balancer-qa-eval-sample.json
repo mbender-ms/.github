@@ -1,0 +1,1088 @@
+[
+  {
+    "Question": "How do I resolve: deployment failure while adding VM instance to backend pools?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How do I resolve: Issue with Load Balancer of Front door being deleted and recover?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure Load Balancer: SourceIP Session Persistence Not Working Across Multiple Ports for FTP Passive Mode?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: VM is working, health check is Ok but getting 502 on the URL, there are 4 VMs only 1 is working fine?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Failed to distribute content to CMG from SCCM?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How to recover failed upgrade of basic LBs with shared backend pools?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is the recommended load balancing strategy for Azure Container Apps handling image-based workflows with regional failover?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: i have a connectivity issue with CDN?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Cannot connect to a https backend while a load test is running?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Loadbalancer fails to delete?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Issue Creating Private Endpoint with Azure Application Gateway's Private Link Enabled?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Facing Issues with Mutual TLS Configuration for Specific Routes in Azure Application Gateway?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: 'AzureBasicLoadBalancerUpgrade' module fails with null error?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Increase Application Gateway Load balancer gateway timeout?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Failed to add NIC in Load Balancer due to DifferentSkuLoadBalancersAndPublicIPAddressNotAllowed error?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: NetworkingInternalOperationError on new VM w/Load Balancer?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Error 'VM is another Availability set' when trying to add new standalone VM in the backed pool of external LB which already has a standalone VM?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure load balancer to NVA asymmetric traffic issue?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure Loadbalancer Failover Sessions not handed over?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Change Public IP of Cloud Service Extended support from Dynamic to static Fails?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure Load Balancer Session Handover not working?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure Data Factory - Pipeline always fails at the second connection to On-Premise data source?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: I am setting up an application using kubernetes pod and creating and Internal Loadbalancer service. When I try to access the application using service I am not facing any issue but when I use front door I am facing intermittent 404 issue?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure powershell Error: GenericArguments[0], 'Microsoft.Azure.Management.Compute.Models.VirtualMachine', on 'T MaxInteger[T](System.Collections.Generic.IEnumerable`1[T])' violates the constraint of type 'T'?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Having issue with SSL certificate configuration?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Deployment template validation failed: 'Circular dependency detected'?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: mTLS with Azure Load Balancer not working?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: External Load Balancer - Single Point of Failure?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: error :The frontend, protocol and port combination you entered matches another rule used by this load balancer. The frontend, protocol and port combination of each load balancing rule and inbound NAT rule on a load balancer must be unique?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How to solve LB issue with error code \" SubscriptionNotRegisteredForFeature\" (SLBAllowAdminStateChangeForConnectionDraining)?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure Premium Frontdoor linked to internal Load Balancer in front of Azure VM in private subnets not working?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Idle Timeout of Load Balancing Rules belonging to Standard SKU Load balancer linked to Kubernetes Cluster getting reset to default 4 minutes even after getting updated?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure front door not working with. private link service created by internal load balancer?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Can I disable idle timeouts in Azure's iLB (Internal Load Balancer)?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Issue with Cisco FTDv with Azure Gateway Load Balancer?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure Load Balancer , Time Mismatch issues?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Issues relating to standard internal Load Balancer?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "I have two Internal Standard LB with the same configuration (Dev and Prod) but only one has outbound connectivity and the other is not working. Why is it happening?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: I've upgraded kubernetes from 1.22.6 to 1.25.5, this required me to upgrade the ingress controller to latest version as it was incompatible before hand (1.1.2). As a result my connections to hosted applications failed with a gateway timeout?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure basic_LB connectivity issue?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "how to fail over from primary LB to secondary LB using traffic manager?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How to fix Load balancer and AKS connection issues?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How big is Azure Load Balancer UDP idle timeout?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: failover of VPN gateway to next region using Traffic manager / Azure Global Load Balancer?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Latency Issues with file uploads?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Best option to achieve failover for Internal Applications (not exposed to Internet)?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Session Related issue while using Load Balancer?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: error: http2: client connection lost for azure kubernetes service?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Always On VPN - Issues authenticating to on-prem resources from AAD Join machines?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Create a BastionHost for a Public Load Balancer failed?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: IP issues with Azure Kubernetes Service Load Balancer over UDP?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Failover - Availabilty through one IP Adress at remote destination?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "will configuring load balancer solves the application read time out issue?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Issue with connectivity for Azure SQL VM?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Azure load balancer health probe not working?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Calling azure loadbalanacer rest api gives 403 forbidden error?",
+    "Type": "Troubleshooting",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Application Gateway VS Azure Front Door?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "When should I have multiple backend pools for a load balancer?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Basic load balancer vs Standard load balancer?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Firewall recommended for Azure Static Web Apps?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "App Gateway + Load Balancer - When to use them together ?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Best practice in publishing Remote Desktop access or Terminal server to Internet via Azure ?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Can I use a Basic Load Balancer on an AKS 2 node cluster used for learning to SAVE MONEY in my VS Professional account?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Which load balancer supports the performance based rounting?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Backend pool configuration \u00e2\u0080\u0098by NIC\u00e2\u0080\u0099 vs \u00e2\u0080\u0098IP\u00e2\u0080\u0099\u00e2\u0080\u0094difference?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Is it possible to specify which multi-ports can be put on an Azure load balancer?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Can you recommend me a network model for a webapp using reactjs and springboot?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Recommendation for pool member?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Can i use Azure Load Balancer for below scenario? If yes what is the cost incured? or if not which load balacing solution suits and its cost?",
+    "Type": "Decision-making",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Cross Region Load Balancer?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Load balancers on Availability set?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Data path availabilitymetric missing?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Azure Load Balancer Floating IP option - why do packets at backend guest show as translated?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Load balancing internal traffic cross region?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "are availability sets required for azure LB skus: basic and standard?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How I can use Load Balancer as High availability setup?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Cross-region loadbalancer in Sweden?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Cross-region Load Balancer appears to drop UDP traffic?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Load Balancer availability status shows unknown?",
+    "Type": "Fact-finding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Client to internal load balancer connectivity without public load balancer?",
+    "Type": "Coding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Powershell script for exporting LB configuration?",
+    "Type": "Coding",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I adding a 3rd VM to  Load balancer backend pool?",
+    "Type": "Procedural",
+    "Confidence": "High",
+    "Notes": "Microsoft Q&A group_count=5"
+  },
+  {
+    "Question": "What is I Can't create Azure Load Balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How do I retirement Announcement - Basic Load Balancer will be retired on 30 September 2025?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Upgrade to Standard SKU public IP address?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How do I eRR_CONNECTION_TIMED_OUT after upgrade from a basic public to standard public load balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How do I about Azure load balancer redundancy?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How do I azure Private load balancer to Https web sites?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How do I resolve: Unable to add new VM to LoadBalancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How do I aKS service with load balancer type is generating the IP but not able to access the service?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How do I ingress hostname to use different domain than the .westeurope.cloudapp.azure.com?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I no more internet access on virtual machines?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Cannot create VipAvailability metric over my AKS load balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I load balancer of a unknow subscription using our vnet - cant delete?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I can't access a newly created load balancer in my vnet to delete it?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Cannot delete PublicIP because it is associated to vpngwLoadBalancer managed by Azure?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I standard Load Balancer throttling outbound response throughput to ~25 KB/s for external clients (East US 2)?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How to delete a left over load balancer in Azure?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I virtual machine server published with custom ports is not reachable from internet?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Unable to update the Public IP on NAT rules for an existing LoadBalancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I urgent need to delete the resource group that is generating costs?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I aPIM not able to connect to Load Balancer even though they all are on the Public IP?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I azure LoadBalancer port 443 timing out for YARP service, while 8080 and /health endpoint work fine?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I azure Public load balancer packet forwarding to NVA or performing any kind of Source NAT or D-NAT?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I azure Basic Load Balancer will be retired on 30 September 2025\u00e2\u0080\u0094upgrade to Standard Load Balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I need to upgrade the load balancer from Basic SKU to Standard SKU in azure portal kindly share me the steps to do it?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I azure ADDS Inbound NAT Rule upgrade in Load Balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I basic SKU Load balancers and Public IP address associated with VM?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I upgrading Basic Loadbalancers with VMs with and without PIP?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I redirect incomming traffic on Azure LB and F5 Big IP?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I please upgrade the Azure public IP addresses from Basic SKU to Standard SKU by September 30, 2025?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I at what scope/s Network Contributor Role is needed to add backend vms to a Load Balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How to fix this health probe should send 200 OK result in LB backend health status?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I basic SKU IP Address for classic load balancer migration process?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How to access both VM and blob storage account securely without using Public IPs from the internet?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I impact of Basic Load Balancer and Public IP Retirement?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I azure Public Load Balancer to Private Container Apps via UDP MQTT protocol?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is About AzureLB Deployment?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I aCI not supported by Azure Load Balancer in the backend Pool?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Problem with LB upon upgrade to Standard from Basic?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How to configure and troubleshoot Azure load balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I firewall and Load Balancer using a GWLB (2 NVAs)?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I resolve: Cannot access my services after upgrade from basic to standard load balancer via PowerShell?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Can I add VMs in Standard Availability Set to the backend pool of the Load Balancer in Basic SKU?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I best Load Balancer Option for Container Apps with Autoscaling?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I azure Load Balancer Set traffic priority for VM1?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I upgrade existing LCS / D365 machines to Standard Public IP SKUs?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I replacing public IP with hostname for sites which configured using load balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I request always going to second server in load balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How to put multiple VMs behind a single private IP address on Azure?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I best Minimal Setup to Simulate Load Balancing in Test Environment?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I i have created Cross over region Load balancer?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I updating Basic Public IP, Basic Load Balancer attached to Classic Cloud Service?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I configure Azure to allow inbound traffic to only one port by IP address and the rest to domain name?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I migrated to Standard Load Balancer - No Internet Access?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I i would like to know if there was a maintenance activity on one of my Azure Load Balancers at a certain time?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I public Load balancer Not Passing Traffic To Firewalls For Ports tcp8443 And tcp21?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I traffic Forwarding from one VM to another VM in Azure?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I load Balancer and Public IP Upgrade from Basic to Standard - With Fabric Cluster?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I basic LoadBalancer Upgrade - no outbound rule created?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How do I disable Cipher Suite in Server 2022 but still active?",
+    "Type": "Procedural",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Basic Load Balancer Migration?",
+    "Type": "Conceptual",
+    "Confidence": "High",
+    "Notes": "Microsoft Q&A group_count=4"
+  },
+  {
+    "Question": "What is Load Balancing?",
+    "Type": "Conceptual",
+    "Confidence": "High",
+    "Notes": "Microsoft Q&A group_count=3"
+  },
+  {
+    "Question": "What is Upgrade classic Load balancer to standard?",
+    "Type": "Conceptual",
+    "Confidence": "High",
+    "Notes": "Microsoft Q&A group_count=3"
+  },
+  {
+    "Question": "What is Azure Gateway Load Balancer?",
+    "Type": "Conceptual",
+    "Confidence": "High",
+    "Notes": "Microsoft Q&A group_count=3"
+  },
+  {
+    "Question": "What is Azure Container App without Load Balancer?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is IP Floating?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Internal Load balancer DNS resolution?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Queries on azure load balancer?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "Can we chain internal loadbalancers?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Load balancer traffic redirection?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "How does the Load Balancer work with IPv6?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Load Balancing On Premises VMs into Azure?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Load balancers health probe?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=2"
+  },
+  {
+    "Question": "What is Load Balancer Degraded for 3 days?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Can I use Azure GWLB solution with NVA for the Internet Outbound Traffic?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How can I preserve or use the Azure Internal Load Balancer frontend IP for outbound or return traffic from its backend VMs?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Range of ports to be open?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Load balancer status is Degraded (Unplanned)?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Azure load balancer & F5 load balancer are same ?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Taffic flow through public Load balancer?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Extend Basic Load Balancer by one week?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "will my Azure load balancer on basic sku stop working on 09/30/2025?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Azure Load Balancer not following outbound rules?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Firewall NAT 1:1 for inbound and outbound?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "AKS public LB NSG rule: can we restrict to LB IP? Why do we need a broad manual allow?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Outbound traffic via GWLB?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "can not delete load balancer?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Azure Public LB traffic flow?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Basic SKU load balancer migration backout plan?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "How can I Integrate Azure Firewall with Azure Standard Load Balancer for Enhanced Security and Traffic Visibility?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Why do I see down time required message when I am just validating the Azure Basic LB & not performing the actual Az Basic LB upgrade?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Load balancer degraded health?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Must the Gateway Load Balancer Frontend IP be in its own subnet?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is explanation of this part - load balancer?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "where is a azure loadbalancer's zone?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "where is the zone of public load balancer?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What is Azure LoadBalancer blocks a local vnet connections?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "What happens to Basic Azure Load Balancers after September 2025?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Can a backend pool VM connect to it's load balancer URL?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  },
+  {
+    "Question": "Do i need azure VM for azure load balancer?",
+    "Type": "Conceptual",
+    "Confidence": "Medium",
+    "Notes": "Microsoft Q&A group_count=1"
+  }
+]
