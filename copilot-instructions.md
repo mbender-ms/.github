@@ -34,3 +34,21 @@ These instructions are loaded into **every** Copilot conversation automatically.
 ## Skill Loading
 
 For deeper context (services, repos, conventions, sub-agent patterns), load the `my-workflow` skill (`copilot/skills/my-workflow/SKILL.md`). Don't load it unless the task needs it — these global rules cover most interactions.
+
+## Content verification gate
+
+All documentation drafts, release notes, how-to articles, and procedure guides
+require a content verification pass before delivery.
+
+**Skills:**
+- `skills/content-verification/` — runs the 30-rule AI anti-pattern pass
+- `skills/verification-reporter/` — formats findings as a Markdown PR report
+
+**When to invoke:**
+- After any agent finishes drafting or editing a documentation file
+- When asked to "check for AI patterns," "make this sound more human," or "run a style pass"
+- Before delivering any written artifact longer than 200 words
+
+**When not to invoke:**
+- Code comments, commit messages, log output, UI label strings
+- Content inside code blocks or callout syntax (> [!NOTE], > [!TIP])
