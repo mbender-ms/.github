@@ -1,0 +1,30 @@
+## Known Gotchas
+
+- **Windows `/tmp/`** = `C:\Users\{user}\AppData\Local\Temp`. Use Windows paths in Node.js.
+- **`winpty node.exe`** required on Windows Git Bash (avoids TTY errors)
+- **ADO max 200 items** — always `top=200`, check `hasMore`
+- **One PR → many ADO items** — parse ALL `AB#(\d+)` patterns
+- **Include files ≠ new articles** — `/includes/*.md` = "updated" not "new"
+- **Never use git diffs for per-PR stats** — use GitHub API (`gh pr view`)
+- **Never save files to repo** — check `git status --porcelain`
+- **Conference naming** — calendar year ({Conference1} YYYY = Month YYYY)
+- **GA ≠ new feature** — separate categories in feature lists
+- **User must review** — agent proposes, user corrects. 1-2 rounds expected.
+- **Deduplicate features** — multiple PRs for same feature = 1 entry
+- **Full HTML rebuild each time** — never patch existing HTML (causes duplication)
+- **Dual GitHub search** — `created:` misses PRs merged during period but created before it; always run both `created:` and `merged:` queries
+- **ADO descriptions are primary PR source** — many PRs lack AB# links; extract PR numbers from ADO Description HTML field
+- **Feature enumeration required** — each per-area copy block must list feature names by New/GA/Preview (not just counts)
+- **Totals row mandatory** — every per-area PR table must end with a `.totals-row` showing aggregated metrics
+- **Phase 6 feeds Phase 9** — article counts and visitor data from Phase 6 MUST be stored in `phase6-data.json` so the HTML generator can populate per-area copy blocks; without this file, visitor and article count fields will be missing from the dashboard
+- **Feature names required, not just counts** — per-area copy blocks must say `New features: 2 - Feature A, Feature B` not just `New feature PRs: 2`; derive names from ADO work item titles using Step 3b logic
+- **Hierarchy walk is mandatory** — NEVER skip the Phase 1 Step 6 parent hierarchy walk. Title/keyword regex is NOT a substitute for tracing User Story → Feature → Epic. The Epic determines Feature vs Maintenance classification.
+- **ADO tags are authoritative for conferences** — Conference tags on ADO work items are the source of truth. PR title keywords and merge date proximity are fallbacks ONLY for PRs without linked ADO items.
+- **Phase 2 Step 1 is MANDATORY** — ADO Description extraction discovers 20-30% of PRs that GitHub search cannot find. NEVER skip it. Missing it causes significant PR undercount.
+- **Features excluded from ADO table** — Feature-type work items are organizational containers. Only User Stories, User Feedback, and Tasks appear as rows in the All Work Items table.
+- **PR tables merge related areas** — Sub-areas merge into broader sections in PR tables. ADO table keeps them granular.
+- **PR Reviews is its own section** — PRs authored by others and reviewed/merged by user get their own product area section with `badge-review` styling, separate from Team/Admin.
+- **PR Review detection uses tracking work items, not author field** — Don't use `pr.author !== '{GITHUB_USER}'` to detect reviews. PRs from ADO description extraction don't have reliable author info. Instead, build a `reviewPRSet` from PR Review tracking work items (Phase 5) and classify any PR in that set as Review.
+- **Conference tags live on parent Features, not just User Stories** — Walk up `parent-hierarchy.json` to check parent Feature tags. Most conference tags are on the Feature level. Checking only the direct work item tags misses 60-70% of conference-tagged PRs.
+- **Sub-area categorization matters** — Items with AreaPath or title matching specific sub-areas must be categorized appropriately in the ADO table, not lumped into a generic category.
+- **Release-to-release branch merge PRs must be excluded** — PRs merging one release branch into another are internal branch management, not content work. They contain aggregated commits from multiple authors and massively inflate line counts, file counts, and conference metrics. Always filter these out in Phase 3 Step 3.
