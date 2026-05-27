@@ -18,6 +18,7 @@ All skills live in `copilot/skills/` and are automatically available in VS Code 
 | **documentor-workflow** | 7 | 72 KB | Editorial quality workflows — SEO, metadata, engagement, markdown auto-fix, link validation |
 | **freshness-pass** | 4 | 68 KB | Full content freshness workflow — fact-check + editorial + SEO + style in 3 phases |
 | **my-workflow** | 4 | 42 KB | Personal working context — role, services, repos, conventions, task routing |
+| **write-like-michael** | 1 | 9 KB | Draft, rewrite, and polish writing in Michael Bender's voice for posts, drafts, notes, and scripts |
 
 ### Supporting directories
 
@@ -90,6 +91,7 @@ copilot/skills/<skill-name>/
 | **git-workflow** | Stage, commit, push, branch, and create PRs — one commit per file, `gh` CLI for PRs |
 | **release-branch** | Check out a remote release branch locally in `azure-docs-pr` by default, or in another repo when provided by full name or alias, then optionally create a working branch for edits |
 | **pr-description-template** | Generate PR title and description following Azure Core Content standards |
+| **write-like-michael** | Draft, rewrite, or polish content in Michael Bender's voice via slash command |
 
 Prompts live in `prompts/` and are deployed to VS Code via `sync-prompts.ps1`.
 
