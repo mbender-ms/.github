@@ -1,163 +1,168 @@
----
-model: claude-sonnet-4.6
-name: technical-advisor
-description: 'Automate CSS Technical Advisor workflows ΓÇö create Content Bug work items from PACE escalations, manage cross-organization work item linking between PACE and Content ADO projects, and track documentation fixes for customer support issues.'
-tools:
-  - "ado-content/*"
-  - "ado-supportability/*"
-  - "github/*"
-  - "editFiles"
-  - "readFile"
-  - "search"
-  - "execute"
+# Technical Advisor Agent v6.0.3
+
+**Distribution Model**: End users receive this agent file + MCP server connection. All detailed examples are served dynamically via MCP tool.
+
+**Purpose**: Streamline CSS Technical Advisor workflows for PACE documentation bugs with automated work item creation and linking.
+
 ---
 
-# Technical Advisor Agent
+## First time setup
 
-**Purpose**: Automate CSS (Customer Support Services) workflows for PACE documentation bug fixing in Azure Networking.
+After running the installer:
 
-## Tools
+1. **Open VS Code**
+2. **FIRST: Sign into GitHub Copilot** (bottom right status bar - click and sign in with your GitHub account)
+3. **Restart VS Code** to load the MCP servers
+4. **Open GitHub Copilot Chat** and type `@` to verify you see available agents
+5. **You should see**: @technical-advisor, @ado-content (msft-skilling/Content), @ado-supportability (supportability/AzureNetworking)
+6. **Complete environment setup**:
+   - Authenticate: Run `az login` and `gh auth login` in your terminal
+   - Configure Git: Ask "@technical-advisor help me complete my environment setup"
 
-**context-mode ΓÇö read large PACE escalations or doc articles without flooding context:**
-```
-ctx_execute_file(path="articles/networking/article.md",
-  code='print(file_content)', intent="content gaps, outdated steps, missing info")
-ctx_fetch_and_index(url="https://learn.microsoft.com/azure/...", source="ms-ref")
-ctx_search(queries=["specific claim to verify", "step being questioned"], source="ms-ref")
-```
+**Troubleshooting:** If you don't see @technical-advisor after restart:
+- **Most common issue**: Not signed into GitHub Copilot (check bottom right status bar)
+- Verify MCP config exists: `%APPDATA%\Code\User\mcp.json` should contain technical-advisor server entry
+- Restart VS Code again
+- If still not working, contact your team admin
 
-**ripgrep ΓÇö search docs for the term/step reported in a PACE bug:**
-```bash
-rg "error message or term" articles/ --type md     # find where it appears
-rg -l "deprecated feature" articles/ --type md    # which articles need updating
-```
+---
 
+## Network Requirements
 
+**⚠️ CRITICAL: You must be connected to Microsoft VPN to access MCP tools**
 
-This agent helps CSS Technical Advisors:
-- Create Content Bug work items from PACE escalations
-- Manage cross-org linking between PACE and Content ADO
-- Track documentation fixes for customer support issues
+The MCP servers run on internal infrastructure. If you see errors like "Connection refused" or tools aren't available:
+1. **Connect to Microsoft VPN** (Cisco AnyConnect or GlobalProtect)
+2. **Restart VS Code** after connecting to VPN
+3. Verify connection: Ask "@technical-advisor check agent version"
 
-## Core workflow: PACE Bug creation
+**Working remotely?** VPN is required for all MCP server operations.
 
-### Step 1: Fetch PACE work item
+---
 
-Accept PACE ID in multiple formats:
-- Number: `123456`
-- With hash: `#123456`
-- Full URL: `https://supportability.visualstudio.com/AzureNetworking/_workitems/edit/123456`
+## Tool Activation (Expected Behavior)
 
-Fetch the PACE item using `@ado-supportability`:
-```json
-{
-  "organization": "supportability",
-  "project": "AzureNetworking",
-  "workItemId": 123456
-}
-```
+VS Code now uses **lazy-loading** for MCP tools to improve performance. This is **NORMAL and EXPECTED**.
 
-### Step 2: Extract and map fields
+**What you'll see:**
+- When you first ask @technical-advisor to do something, Copilot may show a message like:
+  - "I need access to work item management tools. Would you like to activate them?"
+  - "I need to activate git workflow tools to help with this."
+- **Click "Yes" or "Activate"** when prompted
+- Tools load on-demand as needed (only takes a few seconds)
 
-From the PACE work item, extract:
-- Title
-- Description/repro steps
-- Product (e.g., "Azure ExpressRoute")
-- Severity
-- Priority
+**Why this happens:**
+- With multiple MCP servers and many tools, loading everything upfront is slow
+- VS Code groups related tools and activates them only when needed
+- Once activated in a session, they stay available
 
-Map PACE Product ΓåÆ Azure Service ΓåÆ ADO AreaPath using service mappings.
+**This is not a bug** - it's VS Code's performance optimization. Just click "Activate" when prompted.
 
-### Step 3: Create Content Bug
+---
 
-Create a **Bug** (not User Story) with `[CSS Networking]` prefix:
+## PACE Bug Workflow
 
-```json
-{
-  "project": "Content",
-  "workItemType": "Bug",
-  "fields": [
-    {"name": "System.Title", "value": "[CSS Networking] {PACE title}"},
-    {"name": "System.AreaPath", "value": "{mapped from PACE product}"},
-    {"name": "System.IterationPath", "value": "{calculated}"},
-    {"name": "System.Tags", "value": "css-support; {service}; cda"},
-    {"name": "Microsoft.VSTS.Common.Priority", "value": "{mapped priority}"},
-    {
-      "name": "System.Description",
-      "value": "## PACE Escalation\n\n**PACE ID:** #{pace_id}\n**PACE URL:** {pace_url}\n**Product:** {product}\n**Severity:** {severity}\n\n## Problem Description\n{description}\n\n## Repro Steps\n{repro_steps}",
-      "format": "Markdown"
-    },
-    {
-      "name": "Microsoft.VSTS.Common.AcceptanceCriteria",
-      "value": "### Success criteria\n- Documentation addresses the customer issue\n- Content is technically accurate\n- Fix prevents future support escalations\n\n### Verification\n- Customer scenario works as documented\n- Links and references are valid",
-      "format": "Markdown"
-    }
-  ]
-}
-```
+**When you receive a PACE work item (accepts multiple formats):**
 
-### Step 4: Link Bug to parent
+1. **Fetch and create Bug**: Provide PACE in any of these formats:
+   - "@technical-advisor create a work item for PACE 137285"
+   - "@technical-advisor create a work item for PACE #137285"
+   - "@technical-advisor create work item for https://supportability.visualstudio.com/AzureNetworking/_workitems/edit/137285"
+   
+   Agent will:
+   - Parse PACE ID from your input (number or URL)
+   - Use @ado-supportability to fetch PACE work item from AzureNetworking org
+   - Extract Title, Product, Description, Priority, Severity from PACE
+   - Format Bug fields and use @ado-content to create Content Bug with [CSS Networking] prefix
 
-All CSS Bugs link to Feature **#506199** (CSS Networking Deliverables):
+3. **Work on documentation fix**: Make changes to docs
 
-```json
-{
-  "project": "Content",
-  "updates": [{"id": "{new_bug_id}", "linkToId": 506199, "type": "parent"}]
-}
-```
+2. **Update progress** (optional): Ask "@technical-advisor update my work item"
+   - Updates BOTH the Content Bug (@ado-content) AND PACE item (@ado-supportability) with progress
+   - Adds comments, updated repro steps with files modified
 
-### Step 5: Triple linking strategy
+3. **Save changes**: Ask "@technical-advisor save my changes"
+   - Creates branch, commits, pushes
 
-After creating the Content Bug, establish three links:
+4. **Create PR**: Ask "@technical-advisor create a PR"
+   - Generates PR with AB# link to Content Bug
 
-1. **Hyperlink in PACE comment** ΓÇö Add a comment to the PACE item with the Content Bug URL
-2. **Artifact link** ΓÇö Create a "Produces for" link between PACE and Content Bug (if cross-org linking is available)
-3. **Comment with link** ΓÇö Add a comment to the Content Bug referencing the PACE item
+5. **Close work item**: Ask "@technical-advisor close the work item"
+   - Adds completion report
+   - Links PACE to Content Bug (triple linking: hyperlink + artifact + comment)
 
-### Step 6: Complete work and close
+---
 
-After documentation is fixed:
-1. Create PR with documentation changes
-2. Calculate publish date (10am/3pm PST weekdays)
-3. Close the Content Bug with completion comment
-4. Update PACE item with resolution details
+## Core Tools
 
-## Severity mapping
+1. **create_pace_bug** - Format Bug fields from PACE work item (TA-only)
+   - **Input**: PACE work item details (agent fetches via @ado-supportability)
+     - pace_id (number) - PACE work item ID (e.g., 137285)
+     - title (string) - PACE title (from fields["System.Title"])
+     - product (string) - PACE Product field (from fields["Custom.Product"], e.g., "Azure ExpressRoute")
+     - description (string, optional) - PACE description (from fields["System.Description"])
+     - severity (string, optional) - PACE severity (from fields["Microsoft.VSTS.Common.Severity"], 0-4 scale mapped to Content format)
+     - repro_steps (string, optional) - PACE repro steps (from fields["Microsoft.VSTS.TCM.ReproSteps"])
+   - **Note**: Priority defaults to 2. Severity mapping: PACE 0-1→"1 - Critical", 2→"2 - High", 3→"3 - Medium", 4→"4 - Low"
+   - **Process**:
+     - Agent uses @ado-supportability to fetch PACE work item
+     - Agent extracts fields and calls this tool
+     - Tool maps Product to service and auto-calculates parent from hierarchy (Feature #506199 Deliverables)
+     - Tool formats Bug fields with parent_work_item_id for automatic parent linking
+     - Agent uses @ado-content to create Bug work item with formatted fields (includes parent linking)
+     - Tool returns link_command for creating artifact link to PACE work item
+   - **Returns**: Formatted Bug fields with parent_work_item_id, PACE URL, mapped service, link_command for PACE artifact linking, next steps
+   - **Parent Linking**: All CSS Bugs auto-link to Feature #506199 (Deliverables)
+   - **PACE Linking**: After Bug creation, use returned link_command to add artifact link (Related) from Bug to PACE work item
+   - **Example**: @technical-advisor create a work item for PACE 137285
 
-| PACE Severity | Content Bug Priority |
-|---|---|
-| 1 - Critical | 1 |
-| 2 - High | 2 |
-| 3 - Medium | 2 |
-| 4 - Low | 3 |
+2. **create_work_item_template** - Generate standard work items
+   - Creates User Stories or Tasks (not Bugs)
+   - Auto-calculates AreaPath, IterationPath, parent linking
+   - Use this for non-PACE workflows
 
-## Service category mappings
+3. **generate_git_workflow_context** - Save changes efficiently
+   - Creates branch: duau/{description}
+   - Commits with conventional message
+   - Batches all git commands: checkout + add + commit + push
 
-| Category | Services |
-|---|---|
-| hybrid-connectivity | ExpressRoute, Virtual WAN, VPN Gateway, Route Server |
-| load-balancing | Application Gateway, Load Balancer, Front Door, Traffic Manager |
-| network-security | Firewall, Firewall Manager, DDoS Protection, WAF, Network Security Perimeter |
-| foundation | Virtual Network, Virtual Network Manager, DNS, NAT Gateway, Private Link, Bastion |
-| non-pillar | Network Watcher, Internet Peering, Peering Service, Extended Zones |
+4. **generate_pr_description** - Create pull requests
+   - Generates PR title and description
+   - Adds AB# link to Content Bug
+   - Links to parent Feature
 
-## ADO hierarchy for CSS workflows
+5. **calculate_work_item_completion** - PACE linking and closure
+   - Reads PACE and Content Bug details
+   - Generates triple linking strategy:
+     - Hyperlink in PACE comment
+     - Artifact link (Produces for)
+     - Comment on PACE with Content Bug link
 
-All CSS workflows use Epic **#493879** (Documentation for troubleshooting) with Feature **#506199** for all service categories.
+---
 
-## Git workflow rules
+## Helper Tools
 
-Same as content-developer:
-- Never commit to main
-- Create feature branch: `{username}/{service}-css-fix-{workItemId}`
-- Sync main before branching
-- ONE COMMIT PER FILE
-- No AB# in commits
-- Create PRs against upstream MicrosoftDocs
+- **complete_environment_setup** - Git config with noreply email
+- **get_workflow_example** - Step-by-step examples
+- **check_agent_version** - Version updates
+- **report_bug** - Report issues to development team
+
+---
 
 ## Integration
 
-- **@ado-content** ΓÇö Create Bugs in Content project
-- **@ado-supportability** ΓÇö Read PACE items from AzureNetworking project
-- **@github** ΓÇö PR management
+This agent works with:
+- **ADO MCP Server** (@ado-content) - Content Bug creation and management (msft-skilling/Content)
+- **ADO MCP Server** (@ado-supportability) - PACE work item reading (supportability/AzureNetworking)
+- **GitHub MCP Server** (@github) - PR management
+- **Content Developer MCP Server** (@technical-advisor) - This server with PACE workflow tools
+
+**CRITICAL**: Always use **@ado-content** to create Bugs in the Content project. Use @ado-supportability only to read PACE work items.
+
+---
+
+**Server**: Content Developer MCP Server (Technical Advisor Mode)
+**Version**: 6.0.3
+**Mode**: HTTP Streaming (MCP SDK 1.24.3)
+**Tools**: 10 tools (5 workflow tools + 5 helper tools) for PACE documentation workflows
+**Update agent file**: `curl http://{server-hostname}:8000/agent > %APPDATA%\Code\User\prompts\technical-advisor.agent.md`

@@ -6,7 +6,7 @@
     },
     "azure-docs": {
       "type": "http",
-      "url": "https://func-aznetkb-livpl0qo.azurewebsites.net/api/mcp"
+      "url": "https://mcp-endpoint-bratgyf9bbf0gdh7.z02.azurefd.net/api/mcp"
     },
     "mcp-pdf": {
       "command": "npx",
