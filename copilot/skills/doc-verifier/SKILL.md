@@ -47,10 +47,22 @@ Verify technical accuracy of Microsoft documentation across **any product area**
 - **"Research topic X with sources"** → Workflow 9
 - **"Analyze customer incidents for Service Y"** → Workflow 10
 - **"Fact-check these 5 articles"** → Workflow 11 (Fleet Batch) via `/fleet` or Chat `runSubagent`
+- **"Fact-check the top/most-viewed articles for `<service>`"** → run `/pageviews-query` first, then feed its JSON handoff into Workflow 11 (Fleet Batch), highest-traffic first (see **Page views entry point** below)
 - **"Deep verify every claim in this article"** → Workflow 12 (Fan-Out Verify)
 - **"How many claims does this article have?"** → Workflow 13 (Claim Manifest)
 - **"Pre-search claims before verification"** → Run `batch-presearch.sh` first, then Workflow 11 or 12
 - **"Re-check, skip unchanged claims"** → Workflow 14 (Incremental Verify)
+
+### Page views entry point (traffic-prioritized fact-checking)
+
+When the request is to fact-check by **traffic** rather than by a specific file — e.g. "fact-check the top 10 articles for `azure-load-balancer` in April 2026", "verify the most-viewed App Service docs", or "check the highest-traffic articles for `<service>`" — use the `pageviews-query` skill as the producer, then fact-check its output:
+
+1. **Get the ranked set** — run `/pageviews-query <service> <month> [count]` (count defaults to 10). It validates the `MSService` value, queries the Content Engagement Power BI model, and emits a JSON handoff block.
+2. **Consume the JSON contract** — read the fenced ` ```json ` block. Use `articles[].localPath` as the file to verify (fall back to `liveUrl` when `localPath` is `null`), and keep the array order — `rank`/`pageViews` is your priority order.
+3. **Route to a verification workflow** — feed the resolved paths into **Workflow 11 (Fleet Batch)** for 2-10 articles, or **Workflow 13 (Claim Manifest) → chunked #11** for more. Verify highest-traffic articles first so the most-read content is corrected soonest.
+4. **Skip null paths** — if `localPath` is `null` (unresolved/hub page), don't guess; note it as not-verified in the report and continue.
+
+This keeps the two skills decoupled: `pageviews-query` owns traffic ranking, doc-verifier owns accuracy. The JSON block is the only contract between them.
 
 ### Threshold Matrix (Workflow and Tier Routing)
 
@@ -127,15 +139,32 @@ Always prefer the highest available tier. See [_shared/source-hierarchy.md](../_
 | ❓ | Unverifiable | Flag — do not remove |
 | 🔗 | Broken link | Fix or flag |
 
+## High-risk claim classes (verify deepest here)
+
+Defects concentrate in a few claim types. Treat these as **high-risk** and spend fetch budget on them first; for these, a search snippet is never sufficient to mark a claim accurate — confirm against a fetched Tier-1/2 page.
+
+| Class | Examples | Why high-risk |
+|-------|---------|---------------|
+| Numeric limit / quota | "4 to 120 minutes", "max 1000 rules" | Silently drift; often conflict across articles |
+| Config default | "default interval is 15 seconds" | Changes with releases |
+| Lifecycle / status | Basic SKU "(retired)", "(preview)" → GA | Time-sensitive; high reader impact |
+| Version / prereq | "requires CLI 2.50+" | Breaks copy-paste workflows |
+| Pricing / tier / SKU | tier names, SKU availability | Customer-facing accuracy |
+| Defined term / acronym | "User Datagram Protocol (UDP)" | Easy to mis-expand, erodes trust |
+
+All other claims (prose capability statements, links, code/CLI syntax) are **low-risk** and may be verified search-first, fetching only on an apparent discrepancy. See [_subagent-contract.md](assets/_subagent-contract.md) for the accurate-verdict gate and per-class fetch budget.
+
 ## Quality checklist
 
 - [ ] Every claim verified against at least one fetched source
 - [ ] Highest-tier source used per claim
+- [ ] High-risk claims (limits, defaults, lifecycle, versions, pricing, terms) confirmed by fetch, not snippet
 - [ ] URLs from allowed Microsoft domains only
-- [ ] `ms.date` updated if edits made
+- [ ] `ms.date` bumped only when at least one claim was fetch-verified — never on a search-only or "looks fine" pass
 - [ ] Code examples validated
 - [ ] Deprecation/retirement status checked
 - [ ] Unverifiable claims flagged, not removed
+- [ ] Cross-article conflicts reconciled by `topic_key` (batch/fleet runs)
 - [ ] Internal findings isolated (if applicable)
 
 See [references/workflows.md](references/workflows.md) for detailed per-workflow procedures.

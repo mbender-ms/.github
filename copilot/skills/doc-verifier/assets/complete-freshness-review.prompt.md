@@ -52,7 +52,7 @@ Classify each claim: ✅ Accurate, ⚠️ Partially Accurate, ❌ Inaccurate, �
 For any inaccurate, outdated, or incomplete content:
 - Make corrections directly in the current file
 - Preserve the article's existing tone, style, and formatting
-- Update `ms.date` to today's date (MM/DD/YYYY)
+- Bump `ms.date` to today's date (MM/DD/YYYY) **only when at least one claim was fetch-verified against a Tier-1/2 source**. A review that confirmed nothing by fetch does not justify a date bump — leave the date and record the file as reviewed-not-reverified.
 - Fix broken links, update version numbers, correct deprecated references
 - Do NOT add HTML comments or reference markers
 

@@ -59,6 +59,16 @@ Dispatch according to runtime:
 - Chat mode: one `runSubagent` call per article
 - Fallback mode: process articles sequentially but keep report naming identical
 
+## Step 0b — Build the shared claim ledger (cross-article correlation)
+
+Before fanning out, build a **batch-wide topic-key index** so the same fact stated in different articles can be reconciled afterward. This is what catches cross-article inconsistencies (e.g., one article says the outbound idle timeout is 100 minutes while another says 120) — isolated tracks cannot see each other, so the correlation must be established here.
+
+1. Run the claim-manifest extraction (see [claim-manifest.prompt.md](./claim-manifest.prompt.md)) across **all** articles in the batch, not one at a time.
+2. Coin a `topic_key` for every high-risk claim (`config`, `limit`, `pricing`, `status`, `prereq`, and any `feature` claim stating a number, version, date, or lifecycle state). Reuse the identical `topic_key` string whenever the same fact appears in more than one file. Maintain one shared index for the whole batch.
+3. Record which `topic_key`s appear in **two or more** files — these are the reconciliation candidates. Carry the full claim objects (including `topic_key`) into each track's input per the [subagent contract](./_subagent-contract.md).
+
+Do not skip this step for multi-file batches; without a shared `topic_key` index, Step 2 reconciliation has nothing to group on.
+
 ## Step 1 — Per-article verification (runs in parallel)
 
 Each parallel unit receives ONE article and executes these steps using the shared subagent contract:
@@ -135,7 +145,8 @@ Create `factcheck_[articlename]_YYYYMMDD.md` containing:
 
 If the user wants corrections:
 - Edit the article directly
-- Update `ms.date` in frontmatter
+- **Bump `ms.date` only when at least one claim in the file was fetch-verified** (`verification_method: fetch` or `code-sample`). A search-only or "looked accurate" pass does NOT justify a date bump — bumping the date on unverified content manufactures false confidence. If nothing was fetch-verified, leave `ms.date` unchanged and note the file as reviewed-not-reverified.
+- In the per-article report, list which fetch-verified claims back the date bump.
 - Do NOT remove unverifiable claims
 
 ## Step 2 — Consolidate (after all tracks complete)
@@ -143,7 +154,19 @@ If the user wants corrections:
 Once all parallel tracks finish, the orchestrator:
 
 1. Read all per-article reports
-2. Generate `factcheck_batch_YYYYMMDD.md` with:
+2. **Reconcile shared claims across tracks** — apply the cross-track reconciliation rules in [_subagent-contract.md](./_subagent-contract.md). Group every returned result by `topic_key`, drop `—` and singletons, and compare `verified_value` within each multi-file group:
+   - Values agree and at least one is fetch-verified → consistent; propagate the authoritative value to any track that marked the claim `unverifiable`.
+   - Values disagree → **conflict**: the highest-tier source wins, and every file asserting a different value is `inaccurate`/`outdated` even if its own track scored it ✅.
+   - No value in the group is fetch-verified → mark the group `unverifiable` and flag for a deep pass.
+3. Generate `factcheck_batch_YYYYMMDD.md` with:
+   - **Cross-article reconciliation table (first)** — every conflicted `topic_key`, the value each file asserts, the authoritative value, and the source:
+
+```markdown
+| topic_key | Conflicting values (file → value) | Authoritative value | Source | Files to fix |
+|-----------|-----------------------------------|---------------------|--------|--------------|
+| loadbalancer-outbound-idle-timeout-max | tcp-reset.md → 100 min; outbound-rules.md → 120 min | 4–120 min | [Outbound rules](URL) — Tier 1 | tcp-reset.md, tcp-idle-timeout.md |
+```
+
    - **Executive summary** — total files, total claims, overall health score
    - **Cross-article patterns** — repeated issues across files (e.g., same deprecated API referenced in 3 articles)
    - **Per-file summary table**:
@@ -153,14 +176,16 @@ Once all parallel tracks finish, the orchestrator:
 |------|--------|----|-----|----|----|----|----|
 ```
 
-3. Flag any cross-article inconsistencies (article A says X, article B says Y about the same feature)
+4. Flag any cross-article inconsistencies (article A says X, article B says Y about the same feature)
 
 ## Quality checklist
 
 See [_shared/quality-checklist.md](../_shared/quality-checklist.md). Additionally:
 - [ ] Every article processed (none skipped)
+- [ ] Shared `topic_key` index built across the whole batch before fan-out
 - [ ] Each per-article report saved
 - [ ] Consolidated report generated
+- [ ] Cross-track reconciliation run; conflicted `topic_key`s listed first
 - [ ] Cross-article patterns identified
 - [ ] Corrections applied only if user requested
 
