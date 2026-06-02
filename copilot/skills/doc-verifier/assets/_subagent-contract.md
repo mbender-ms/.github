@@ -5,6 +5,7 @@ Shared input and output contract for parallel verification subagents.
 ## Input schema
 
 Each subagent receives:
+
 - `service_area`: string
 - `claims`: array of claim objects
 - `search_strategy`: `batched` or `per-claim` (default `batched`)
@@ -16,10 +17,8 @@ Each subagent receives:
 
 Depth is driven by claim class, not a global quick/thorough toggle. Spend the fetch budget where defects concentrate.
 
-| Risk | Claim types | Required depth |
-|------|-------------|----------------|
-| **High** | `limit`, `config`, `pricing`, `status`, `prereq`, and any `feature` stating a number, version, date, or lifecycle state | **Mandatory authoritative fetch.** Search alone can never yield `accurate`. Must capture `verified_value` from a fetched Tier-1/2 page. |
-| **Low** | prose `feature`, `cli`, `code`, `link` | Search-only is acceptable; fetch only on an apparent discrepancy. |
+- **High risk** — `limit`, `config`, `pricing`, `status`, `prereq`, and any `feature` stating a number, version, date, or lifecycle state. Require a mandatory authoritative fetch; search alone can never yield `accurate`. Must capture `verified_value` from a fetched Tier-1/2 page.
+- **Low risk** — prose `feature`, `cli`, `code`, `link`. Search-only is acceptable; fetch only on an apparent discrepancy.
 
 High-risk claims carry a non-`—` `topic_key` and feed cross-track reconciliation.
 
