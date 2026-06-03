@@ -28,10 +28,10 @@ Research the user's question using official Microsoft documentation, internal Mi
 The user can specify how research results should be delivered. Detect the preferred output from the user's prompt:
 
 - **`output:chat`** (default) — Present findings directly in chat. Do not create files.
-- **`output:file`** — Write findings to a markdown file named `research_[topic]_YYYYMMDD.md` in the workspace root and provide a brief summary in chat.
+- **`output:file`** or **`--report <path>`** — Write findings to a markdown file and provide a brief summary in chat. With `--report <path>`, use that exact path; otherwise default the filename to `research_[topic]_YYYYMMDD.md` in the workspace root.
 - **`output:both`** — Present full findings in chat AND write to a markdown file.
 
-If the user does not specify, **ask once** at the start: _"Would you like the research output in chat, saved to a file, or both?"_ If the user's message clearly implies a preference (e.g., "write a report", "save findings"), use that without asking.
+If the user requests a saved report (`output:file`, `output:both`, or `--report`) but gives **no path**, ask once for the path before completing — do not guess a location. If the user does not request a report at all, present findings in chat only. If the user's message clearly implies a preference (e.g., "write a report", "save findings"), use that without asking, but still confirm the path if none was given.
 
 ## Authority Hierarchy
 

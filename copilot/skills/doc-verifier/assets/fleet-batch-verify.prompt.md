@@ -32,12 +32,22 @@ Load [_shared/source-hierarchy.md](../_shared/source-hierarchy.md) for the sourc
 Load [assets/_runtime-adapter.md](./_runtime-adapter.md) for runtime dispatch rules and output guarantees.
 Load [assets/_subagent-contract.md](./_subagent-contract.md) for subagent I/O schema and call-budget defaults.
 
+## Report output (`--report`)
+
+By default this workflow is **chat-only** — it presents per-article findings and the consolidated cross-article reconciliation in chat without writing files. Write markdown report files only when the user asks for one:
+
+- If the user passes `--report <dir>`, write per-article reports and the consolidated batch report under that directory.
+- If the user requests reports but gives **no path**, ask for the directory before completing — do not guess a default location.
+- If neither is present, hold all report structures in memory and present them in chat only.
+
+The cross-article reconciliation in Step 2 always runs regardless of report output — it operates on the in-memory track results, not on written files.
+
 ## Step 0 — Scope and decompose
 
 Ask the user (skip if already clear):
 1. **File scope** — Which articles? (folder path, glob, or explicit list)
 2. **Depth** — Quick (search-only) or thorough (search + fetch + code samples)?
-3. **Output** — Reports only, corrections + reports, or corrections only?
+3. **Output** — Corrections, reports, or both? Reports are written only when requested via `--report <dir>` (see **Report output**); otherwise findings are chat-only.
 
 Discover files:
 - If folder: list all `.md` files recursively
@@ -103,9 +113,9 @@ For each claim:
 - **❓ Unverifiable** — No authoritative source found — flag, do not remove
 - **🔗 Broken link** — URL doesn't resolve or anchor is missing
 
-### 1d. Generate per-article report
+### 1d. Produce the per-article finding set
 
-Create `factcheck_[articlename]_YYYYMMDD.md` containing:
+Assemble each article's findings using the structure below. Write it to `<report-dir>/factcheck_[articlename]_YYYYMMDD.md` only when `--report` was requested (see **Report output**); otherwise keep it in memory for the consolidated chat presentation.
 
 ```markdown
 # Fact-Check Report: [Article Title]
@@ -158,7 +168,7 @@ Once all parallel tracks finish, the orchestrator:
    - Values agree and at least one is fetch-verified → consistent; propagate the authoritative value to any track that marked the claim `unverifiable`.
    - Values disagree → **conflict**: the highest-tier source wins, and every file asserting a different value is `inaccurate`/`outdated` even if its own track scored it ✅.
    - No value in the group is fetch-verified → mark the group `unverifiable` and flag for a deep pass.
-3. Generate `factcheck_batch_YYYYMMDD.md` with:
+3. Generate the consolidated finding set. Write it to `<report-dir>/factcheck_batch_YYYYMMDD.md` only when `--report` was requested; otherwise present it in chat. It contains:
    - **Cross-article reconciliation table (first)** — every conflicted `topic_key`, the value each file asserts, the authoritative value, and the source:
 
 ```markdown
@@ -183,8 +193,8 @@ Once all parallel tracks finish, the orchestrator:
 See [_shared/quality-checklist.md](../_shared/quality-checklist.md). Additionally:
 - [ ] Every article processed (none skipped)
 - [ ] Shared `topic_key` index built across the whole batch before fan-out
-- [ ] Each per-article report saved
-- [ ] Consolidated report generated
+- [ ] Each per-article finding set produced (written to file only if `--report` requested)
+- [ ] Consolidated finding set produced (written to file only if `--report` requested)
 - [ ] Cross-track reconciliation run; conflicted `topic_key`s listed first
 - [ ] Cross-article patterns identified
 - [ ] Corrections applied only if user requested

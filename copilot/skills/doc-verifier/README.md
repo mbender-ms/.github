@@ -2,7 +2,7 @@
 
 A VS Code Copilot skill that fact-checks Microsoft documentation against official sources across **all product areas** — Azure, Microsoft 365, Microsoft Security, Power Platform, Dynamics 365, Windows, Developer Tools, and more.
 
-14 workflows covering in-place fixes, standalone reports, PR reviews, batch verification, research, freshness analysis, internal source verification, customer incident analysis, and parallel verification patterns.
+Four workflows: single-article check, PR review, research, and fleet batch (parallel multi-article). A tiered source hierarchy prioritizes learn.microsoft.com. Reports are opt-in via the `--report` flag — every workflow is chat-only by default.
 
 ---
 
@@ -20,9 +20,9 @@ A VS Code Copilot skill that fact-checks Microsoft documentation against officia
 
 | Requirement | Needed for |
 |-------------|------------|
-| **GitHub MCP Server** | PR Review workflow (#8) |
-| **GitHub CLI** (`gh`) | PR Review workflow (#8) |
-| **Copilot CLI** with `/fleet` | Fleet Batch workflow (#11) |
+| **GitHub MCP Server** | PR Review workflow |
+| **GitHub CLI** (`gh`) | PR Review workflow |
+| **Copilot CLI** with `/fleet` | Fleet Batch workflow |
 | **@microsoft/learn-cli** (`npm i -g @microsoft/learn-cli`) | `batch-presearch.sh` helper |
 
 ---
@@ -49,30 +49,21 @@ Restart VS Code. The skill is discovered automatically on startup.
 doc-verifier/
 ├── SKILL.md                                    # Skill definition (Copilot reads this)
 ├── README.md                                   # This file
-├── TEST-PROTOCOLS.md                           # Validation procedures for W11-W14
 ├── assets/
-│   ├── fact-check-and-edit.prompt.md           # W1: Quick In-Place
-│   ├── single-article-check.prompt.md          # W2: Single Article
-│   ├── complete-fact-check.prompt.md           # W3: Full Report
-│   ├── complete-fact-checker-internal.prompt.md # W4: Internal + Public
-│   ├── complete-freshness-review.prompt.md     # W5: Freshness Review
-│   ├── microsoft-fact-checker.agent.md         # Full agent (all tools)
-│   ├── microsoft-fact-checker-slim.agent.md    # W6: Deep Agent (25 tools)
-│   ├── batch-report.prompt.md                  # W7: Batch Report
-│   ├── pr-review.prompt.md                     # W8: PR Review
-│   ├── microsoft-researcher.prompt.md          # W9: Research
-│   ├── CIA-Analysis.prompt.md                  # W10: CIA Analysis
-│   ├── fleet-batch-verify.prompt.md            # W11: Fleet Batch
-│   ├── fan-out-verify.prompt.md                # W12: Fan-Out Verify
-│   ├── claim-manifest.prompt.md                # W13: Claim Manifest
-│   ├── incremental-verify.prompt.md            # W14: Incremental Verify
-│   └── microsoft-fact-checker-cia.agent.md     # W10: CIA Agent (31 tools)
+│   ├── single-article-check.prompt.md           # Single Article workflow
+│   ├── pr-review.prompt.md                      # PR Review workflow
+│   ├── microsoft-researcher.prompt.md           # Research workflow
+│   ├── fleet-batch-verify.prompt.md             # Fleet Batch workflow
+│   ├── claim-manifest.prompt.md                 # Supporting: claim extraction for Fleet Batch
+│   ├── _runtime-adapter.md                      # Shared runtime dispatch rules
+│   └── _subagent-contract.md                    # Shared subagent I/O contract
 ├── scripts/
-│   └── batch-presearch.sh                      # Pre-search helper for large batches
+│   └── batch-presearch.sh                       # Pre-search helper for large batches
+├── TEST-PROTOCOLS.md                           # Validation procedures for the 4 workflows
 └── references/
-    ├── source-hierarchy.md                     # Local pointer → _shared/source-hierarchy.md
-    ├── source-guide.md                         # Educational guide to sources
-    └── workflows.md                            # Detailed per-workflow procedures
+    ├── source-hierarchy.md                      # Local pointer → _shared/source-hierarchy.md
+    ├── source-guide.md                          # Educational guide to sources
+    └── workflows.md                             # Detailed per-workflow procedures
 ```
 
 ### Cross-skill dependencies
@@ -92,19 +83,12 @@ Open **GitHub Copilot Chat** in agent mode and describe what you want verified. 
 
 | You say... | Workflow |
 |-----------|----------|
-| "Fact-check this article" | #1 Quick In-Place or #2 Single Article |
-| "Audit this article and give me a report" | #3 Full Report |
-| "Check against internal docs too" | #4 Internal + Public |
-| "Is this article still current?" | #5 Freshness Review |
-| "Deep verification of every claim" | #6 Deep Agent |
-| "Fact-check these files" / "this folder" | #7 Batch Report |
-| "Fact-check PR #12345" | #8 PR Review |
-| "Research Azure Front Door caching" | #9 Research |
-| "Analyze customer incidents for App Service" | #10 CIA Analysis |
-| "Fact-check these 5 articles" | #11 Fleet Batch |
-| "Deep verify every claim in this article" | #12 Fan-Out Verify |
-| "How many claims does this article have?" | #13 Claim Manifest |
-| "Re-check and skip unchanged claims" | #14 Incremental Verify |
+| "Fact-check this article" | Single Article |
+| "Fact-check PR #12345" | PR Review |
+| "Research Azure Front Door caching" | Research |
+| "Fact-check these 5 articles" / "this folder" | Fleet Batch |
+| "Fact-check the top articles for `<service>`" | `pageviews-query` → Fleet Batch |
+| "...and save the findings to a report" | add `--report <path>` to any workflow |
 
 ---
 
@@ -114,15 +98,12 @@ Use these thresholds to right-size verification depth while preserving accuracy.
 
 | Decision axis | Threshold | Route | Tier |
 |---|---|---|---|
-| Single article claim volume | 1-15 claims and low ambiguity | #2 Single Article | Tier 2 |
-| Single article claim volume | 16-40 claims or mixed ambiguity | Tier 2 evidence gathering, Tier 1 final adjudication for contested claims | Tier 2 then Tier 1 |
-| Single article claim volume | More than 40 claims, cross-service scope, or safety-critical content | #12 Fan-Out Verify | Tier 1-heavy |
-| Batch size | 2-10 articles | #11 Fleet Batch (one track per article) | Tier 2 orchestration, Tier 1 on contested claims |
-| Batch size | More than 10 articles | #13 Claim Manifest first, then chunked #11 runs | Tier 2 or Tier 3 first, escalate selectively |
-| Re-check cycle | Less than 20% content changed | #14 Incremental Verify | Tier 2 default |
-| Re-check cycle | 20% or more content changed | Full rerun with #2, #11, or #12 | Mixed |
-| PR scope | 1-5 documentation files, mostly editorial or metadata changes | #8 PR Review standard pass | Tier 2 or Tier 3 |
-| PR scope | More than 5 files or major technical changes | #8 PR Review plus deep pass for high-risk files | Tier 1 on flagged files |
+| Single article claim volume | 1-15 claims and low ambiguity | Single Article | Tier 2 |
+| Single article claim volume | 16-40 claims or mixed ambiguity | Single Article (Tier 2 gather, Tier 1 adjudicate) | Tier 2 then Tier 1 |
+| Single article claim volume | More than 40 claims, cross-service scope, or safety-critical content | Fleet Batch (single-article track) | Tier 1-heavy |
+| Batch size | Multiple articles | Fleet Batch (one track per article) | Tier 2 orchestration, Tier 1 on contested claims |
+| PR scope | 1-5 documentation files, mostly editorial or metadata changes | PR Review standard pass | Tier 2 or Tier 3 |
+| PR scope | More than 5 files or major technical changes | PR Review plus deep pass for high-risk files | Tier 1 on flagged files |
 
 ### Escalation Triggers (Accuracy-First)
 
@@ -136,16 +117,13 @@ Escalate a claim or file to Tier 1 when any trigger matches:
 
 ---
 
-## Parallel verification workflows
+## Parallel verification
 
-These workflows extend the base verifier for scale and repeat checks:
+The **Fleet Batch** workflow scales verification across multiple articles:
 
-- **#11 Fleet Batch**: Parallel multi-article verification in Copilot CLI `/fleet` mode
-- **#12 Fan-Out Verify**: Deep single-article verification using parallel subagents per service area
-- **#13 Claim Manifest**: Claim extraction and categorization without verification (pre-stage)
-- **#14 Incremental Verify**: Cache-driven re-check that verifies only new, changed, or stale claims
-
-For large batches, run `scripts/batch-presearch.sh` first to warm search caches before verification.
+- Runs one independent track per article (Copilot CLI `/fleet` mode, or Chat `runSubagent`)
+- Builds a batch-wide `topic_key` index via the **Claim Manifest** supporting step before fan-out, so cross-article conflicts can be reconciled afterward
+- For large batches, run `scripts/batch-presearch.sh` first to warm search caches before verification
 
 ---
 
@@ -189,18 +167,6 @@ For large batches, run `scripts/batch-presearch.sh` first to warm search caches 
 
 ---
 
-## Agent variants
-
-| Agent file | Tools | Best for |
-|-----------|-------|----------|
-| `microsoft-fact-checker.agent.md` | ~95 | Full capability — all MCP tools available |
-| `microsoft-fact-checker-slim.agent.md` | 25 | Standard fact-checking — faster startup, lower token usage |
-| `microsoft-fact-checker-cia.agent.md` | 31 | Customer incident analysis — includes ADO work item tools |
-
-The slim agent is the default for Workflow 6 (Deep Agent). The CIA agent is used for Workflow 10 (CIA Analysis). The full agent is available as a fallback when the slim variant lacks a needed tool.
-
----
-
 ## History
 
-This skill consolidates the earlier `fact-checker` and `microsoft-doc-verifier` skills into a single unified tool. All workflows from both predecessors are preserved.
+This skill consolidates the earlier `fact-checker`, `microsoft-doc-verifier`, `microsoft-fact-checker`, and `fact-check-batch-subagent` skills into a single unified tool with four focused workflows.

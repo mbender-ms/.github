@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: "Extract and categorize all verifiable technical claims from a Microsoft documentation article. Produces a structured claim manifest (markdown table) without performing verification. Use as Phase 1 input for fan-out-verify or fleet-batch-verify."
+description: "Extract and categorize all verifiable technical claims from a Microsoft documentation article. Produces a structured claim manifest (markdown table) without performing verification. Use as the pre-stage input for fleet-batch-verify."
 tools:
   - read/readFile
   - read/problems
@@ -15,7 +15,7 @@ tools:
 Read a Microsoft documentation article and produce a **structured claim manifest** — every verifiable technical assertion cataloged by type, service area, and line number. No MCP calls, no verification. Pure text analysis.
 
 This is a lightweight helper. Use it to:
-- Pre-stage claims before running fan-out verification
+- Pre-stage claims before running fleet-batch verification
 - Audit an article's claim density before deciding on depth
 - Generate a manifest for external tools or scripts to consume
 
@@ -146,14 +146,6 @@ In chat, provide:
 - Estimated verification effort: "This article has N claims across M service areas → M parallel subagents needed"
 
 ## Usage with other workflows
-
-### As input to fan-out-verify
-
-```
-1. Run claim-manifest on the article
-2. Review the manifest (adjust groupings if needed)
-3. Run fan-out-verify — it will use the same grouping logic
-```
 
 ### As input to fleet-batch-verify
 

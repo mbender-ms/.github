@@ -1,7 +1,7 @@
 ---
 name: apply-factcheck-report
 description: >
-  Apply suggested fixes from a fact-check report produced by the fact-check-batch
+  Apply suggested fixes from a fact-check report produced by the doc-verifier
   skill. Use when the user says "apply changes from report", "apply the fixes",
   "apply low-risk fixes from {path}", "apply fact-check report at {path}", or
   hands off a fact-check report path with instructions to edit articles.

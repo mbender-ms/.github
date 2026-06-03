@@ -20,7 +20,15 @@ tools:
 
 # PR Fact-Check Review
 
-Fact-check all changed files in a GitHub pull request against official Microsoft documentation and generate a standalone verification report.
+Fact-check all changed files in a GitHub pull request against official Microsoft documentation and present a verification summary.
+
+## Report output (`--report`)
+
+By default this workflow is **chat-only** — it does not write a report file. Write a standalone markdown report only when the user asks for one:
+
+- If the user passes `--report <path>`, write the report to that exact path.
+- If the user requests a report but gives **no path**, ask for the path before completing — do not guess a default location.
+- If neither is present, present the findings in chat only.
 
 ## Step 0 — Scope
 
@@ -88,9 +96,9 @@ For each claim:
 - **❓ Unverifiable** — No authoritative source found
 - **🔗 Broken link** — URL doesn't resolve or anchor is missing
 
-## Step 5 — Generate report
+## Step 5 — Assemble findings
 
-Create `factcheck_PR{number}.md` using the report template from SKILL.md:
+Assemble the findings using the report structure from SKILL.md. If a report was requested (see **Report output**), write it to the resolved `--report` path; otherwise hold this structure in memory to present in chat at Step 6.
 
 1. **Header** — PR number, date, product area, files reviewed
 2. **Executive summary** — Overall assessment with counts
@@ -104,8 +112,8 @@ Create `factcheck_PR{number}.md` using the report template from SKILL.md:
 ## Step 6 — Present results
 
 - Summarize key findings in chat
-- Note the report file location
+- If a report was written, note the report file location
 - Ask if the user wants to:
-  - Commit the report to the PR branch
+  - Commit the report to the PR branch (only if a report was written)
   - Post findings as a PR comment
   - Apply corrections to the files
