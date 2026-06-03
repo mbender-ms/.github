@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: "Extract and categorize all verifiable technical claims from a Microsoft documentation article. Produces a structured claim manifest (markdown table) without performing verification. Use as Phase 1 input for fan-out-verify or fleet-batch-verify."
+description: "Extract and categorize all verifiable technical claims from a Microsoft documentation article. Produces a structured claim manifest (markdown table) without performing verification. Use as the pre-stage input for fleet-batch-verify."
 tools:
   - read/readFile
   - read/problems
@@ -15,7 +15,7 @@ tools:
 Read a Microsoft documentation article and produce a **structured claim manifest** — every verifiable technical assertion cataloged by type, service area, and line number. No MCP calls, no verification. Pure text analysis.
 
 This is a lightweight helper. Use it to:
-- Pre-stage claims before running fan-out verification
+- Pre-stage claims before running fleet-batch verification
 - Audit an article's claim density before deciding on depth
 - Generate a manifest for external tools or scripts to consume
 
@@ -55,6 +55,18 @@ Skip these — they're not verifiable against docs:
 - Structural text ("in this article, you learn how to...")
 - Navigation text ("see Related content below")
 - Generic descriptions that don't assert specific facts
+
+### Assign a `topic_key` to every claim (cross-article correlation)
+
+A `topic_key` is a short, stable, article-independent slug naming the *fact* a claim asserts — **not** the wording. Two claims in different files that describe the same underlying fact MUST share the same `topic_key`. This is what lets the batch reconciler catch cross-article conflicts (e.g., one article says an outbound idle timeout is 100 minutes while another says 120).
+
+Rules for forming a `topic_key`:
+- Use `{service}-{subject}-{attribute}` in kebab-case, lowercase. Examples: `loadbalancer-outbound-idle-timeout-max`, `loadbalancer-basic-sku-lifecycle`, `loadbalancer-udp-acronym`.
+- Name the fact, not the value. `...-idle-timeout-max` is correct; `...-idle-timeout-120min` is wrong (it bakes in the value you're trying to verify).
+- Reuse keys across articles. If you've already coined a key for this fact in another file, use the identical string.
+- Only **high-risk** claim types need a precise shared key: `config`, `limit`, `pricing`, `status`, `prereq`, and any `feature` claim that states a number, version, date, or lifecycle state. For pure prose `feature` claims and `link`/`code`/`cli` claims, set `topic_key` to `—`.
+
+Maintain a running **topic-key index** as you extract, so the same fact gets the same key every time.
 
 ## Step 3 — Group by service area
 
@@ -98,18 +110,18 @@ Create `claims_[articlename]_YYYYMMDD.md`:
 
 ### [Service Area 1] ([N] claims)
 
-| ID | Line | Type | Claim text | Include file |
-|----|------|------|-----------|-------------|
-| C001 | 23 | feature | "Health probes support HTTP, HTTPS, and TCP" | — |
-| C002 | 31 | config | "Default probe interval is 15 seconds" | — |
-| C003 | 45 | cli | "az network lb probe create --protocol Https" | — |
-| C004 | 52 | code | "`New-AzLoadBalancerProbeConfig -Protocol Tcp`" | — |
+| ID | Line | Type | topic_key | Claim text | Include file |
+|----|------|------|-----------|-----------|-------------|
+| C001 | 23 | feature | loadbalancer-probe-protocols | "Health probes support HTTP, HTTPS, and TCP" | — |
+| C002 | 31 | config | loadbalancer-probe-interval-default | "Default probe interval is 15 seconds" | — |
+| C003 | 45 | cli | — | "az network lb probe create --protocol Https" | — |
+| C004 | 52 | code | — | "`New-AzLoadBalancerProbeConfig -Protocol Tcp`" | — |
 
 ### [Service Area 2] ([N] claims)
 
-| ID | Line | Type | Claim text | Include file |
-|----|------|------|-----------|-------------|
-| C009 | 78 | feature | "VNet peering supports cross-region connectivity" | — |
+| ID | Line | Type | topic_key | Claim text | Include file |
+|----|------|------|-----------|-----------|-------------|
+| C009 | 78 | feature | vnet-peering-cross-region | "VNet peering supports cross-region connectivity" | — |
 
 ### Links ([N] links)
 
@@ -134,14 +146,6 @@ In chat, provide:
 - Estimated verification effort: "This article has N claims across M service areas → M parallel subagents needed"
 
 ## Usage with other workflows
-
-### As input to fan-out-verify
-
-```
-1. Run claim-manifest on the article
-2. Review the manifest (adjust groupings if needed)
-3. Run fan-out-verify — it will use the same grouping logic
-```
 
 ### As input to fleet-batch-verify
 

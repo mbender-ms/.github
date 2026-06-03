@@ -3,11 +3,10 @@ name: doc-verifier
 description: >-
   Verify technical accuracy of Microsoft documentation across all product areas
   (Azure, M365, Security, Power Platform, Dynamics 365, Windows, DevTools).
-  14 workflows: quick fix, full report, internal sources, freshness review,
-  deep agent check, batch report, PR review, research, single article,
-  customer incident analysis, fleet batch, fan-out verify, claim manifest,
-  and incremental verify. Tiered source hierarchy prioritizing learn.microsoft.com.
-argument-hint: "Describe what to verify — e.g., 'fact-check this article', 'verify PR #123', 'research Azure Front Door caching', 'CIA analysis for App Service'"
+  Four workflows: single article, PR review, research, and fleet batch.
+  Tiered source hierarchy prioritizing learn.microsoft.com. Reports are opt-in
+  via the --report flag.
+argument-hint: "Describe what to verify — e.g., 'fact-check this article', 'verify PR #123', 'research Azure Front Door caching', 'fact-check these 5 articles'"
 user-invocable: true
 ---
 
@@ -19,38 +18,40 @@ Verify technical accuracy of Microsoft documentation across **any product area**
 
 | # | Workflow | When to use | Output | Prompt asset |
 |---|---------|-------------|--------|--------------|
-| 1 | **Quick In-Place** | Fast fix; edit file directly, resolve INCLUDEs | Edits + chat refs | `fact-check-and-edit.prompt.md` |
-| 2 | **Single Article** | Full single-file check with product-area scoping | Edits + chat summary | `single-article-check.prompt.md` |
-| 3 | **Full Report** | Comprehensive audit with saved report artifact | Edits + `factcheck_*.md` | `complete-fact-check.prompt.md` |
-| 4 | **Internal + Public** | Cross-reference internal MS resources | Edits (public) + confidential report | `complete-fact-checker-internal.prompt.md` |
-| 5 | **Freshness Review** | Staleness + accuracy in one pass | Edits + chat summary | `complete-freshness-review.prompt.md` |
-| 6 | **Deep Agent** | Per-fact evidence for critical content | WHAT/WHY/EVIDENCE output | `microsoft-fact-checker-slim.agent.md` |
-| 7 | **Batch Report** | Verify folder or file set | `factcheck_*.md` report | `batch-report.prompt.md` |
-| 8 | **PR Review** | Fact-check all changed files in a PR | `factcheck_PR*.md` report | `pr-review.prompt.md` |
-| 9 | **Research** | Investigate a topic with citations, no edits | Research report | `microsoft-researcher.prompt.md` |
-| 10 | **CIA Analysis** | Customer incident patterns for a service area | Incident analysis report | `microsoft-fact-checker-cia.agent.md` |
-| 11 | **Fleet Batch** | Verify 2-10 articles in parallel (CLI `/fleet` or Chat `runSubagent`) | Per-article reports + consolidated | `fleet-batch-verify.prompt.md` |
-| 12 | **Fan-Out Verify** | Deep single-article check with parallel subagents per service area (CLI or Chat) | Edits + detailed report | `fan-out-verify.prompt.md` |
-| 13 | **Claim Manifest** | Pre-stage: extract and catalog claims without verification | Claim inventory file | `claim-manifest.prompt.md` |
-| 14 | **Incremental Verify** | Cache-based incremental checking; skip unchanged claims | Edits + incremental report | `incremental-verify.prompt.md` |
+| 1 | **Single Article** | Full single-file check with product-area scoping | Edits + chat summary | `single-article-check.prompt.md` |
+| 2 | **PR Review** | Fact-check all changed files in a PR | Chat summary | `pr-review.prompt.md` |
+| 3 | **Research** | Investigate a topic with citations, no edits | Chat findings | `microsoft-researcher.prompt.md` |
+| 4 | **Fleet Batch** | Verify multiple articles in parallel (CLI `/fleet` or Chat `runSubagent`) | Chat consolidated findings | `fleet-batch-verify.prompt.md` |
+
+All four workflows are **chat-only by default**. To save a markdown report, pass `--report <path>` (see **Report output** below). The Fleet Batch workflow uses the Claim Manifest extraction (`assets/claim-manifest.prompt.md`) internally to build its cross-article topic-key index — it is a supporting step, not a standalone workflow.
+
+### Report output (`--report`)
+
+Every workflow defaults to presenting findings in chat without writing files. Write a markdown report only when the user asks:
+
+- If the user passes `--report <path>`, write the report to that exact path (a directory for Fleet Batch, a file for the others).
+- If the user requests a report but gives **no path**, ask for the path before completing — do not guess a default location.
+- If no report is requested, present findings in chat only.
 
 ### Decision guide
 
-- **"Just fix this article"** → Workflow 1
-- **"Fact-check this Defender article"** → Workflow 2 (product-area scoped)
-- **"Audit and give me a report"** → Workflow 3
-- **"Check against internal docs too"** → Workflow 4
-- **"Is this article still current?"** → Workflow 5
-- **"Deep verification of every claim"** → Workflow 6
-- **"Fact-check these files / this folder"** → Workflow 7
-- **"Fact-check PR #12345"** → Workflow 8
-- **"Research topic X with sources"** → Workflow 9
-- **"Analyze customer incidents for Service Y"** → Workflow 10
-- **"Fact-check these 5 articles"** → Workflow 11 (Fleet Batch) via `/fleet` or Chat `runSubagent`
-- **"Deep verify every claim in this article"** → Workflow 12 (Fan-Out Verify)
-- **"How many claims does this article have?"** → Workflow 13 (Claim Manifest)
-- **"Pre-search claims before verification"** → Run `batch-presearch.sh` first, then Workflow 11 or 12
-- **"Re-check, skip unchanged claims"** → Workflow 14 (Incremental Verify)
+- **"Fact-check this article"** / **"Fact-check this Defender article"** → Workflow 1 (product-area scoped)
+- **"Fact-check PR #12345"** → Workflow 2
+- **"Research topic X with sources"** → Workflow 3
+- **"Fact-check these 5 articles" / "this folder"** → Workflow 4 (Fleet Batch) via `/fleet` or Chat `runSubagent`
+- **"Fact-check the top/most-viewed articles for `<service>`"** → run `/pageviews-query` first, then feed its JSON handoff into Workflow 4 (Fleet Batch), highest-traffic first (see **Page views entry point** below)
+- **"Save the findings to a report"** → add `--report <path>` to any of the above
+
+### Page views entry point (traffic-prioritized fact-checking)
+
+When the request is to fact-check by **traffic** rather than by a specific file — e.g. "fact-check the top 10 articles for `azure-load-balancer` in April 2026", "verify the most-viewed App Service docs", or "check the highest-traffic articles for `<service>`" — use the `pageviews-query` skill as the producer, then fact-check its output:
+
+1. **Get the ranked set** — run `/pageviews-query <service> <month> [count]` (count defaults to 10). It validates the `MSService` value, queries the Content Engagement Power BI model, and emits a JSON handoff block.
+2. **Consume the JSON contract** — read the fenced ` ```json ` block. Use `articles[].localPath` as the file to verify (fall back to `liveUrl` when `localPath` is `null`), and keep the array order — `rank`/`pageViews` is your priority order.
+3. **Route to a verification workflow** — feed the resolved paths into **Workflow 4 (Fleet Batch)**. Verify highest-traffic articles first so the most-read content is corrected soonest.
+4. **Skip null paths** — if `localPath` is `null` (unresolved/hub page), don't guess; note it as not-verified and continue.
+
+This keeps the two skills decoupled: `pageviews-query` owns traffic ranking, doc-verifier owns accuracy. The JSON block is the only contract between them.
 
 ### Threshold Matrix (Workflow and Tier Routing)
 
@@ -58,15 +59,12 @@ Use this matrix to select depth and workflow consistently.
 
 | Decision axis | Threshold | Route | Tier |
 |---|---|---|---|
-| Single article claim volume | 1-15 claims and low ambiguity | #2 Single Article | Tier 2 |
-| Single article claim volume | 16-40 claims or mixed ambiguity | Tier 2 extraction and evidence gathering, Tier 1 final verdicts | Tier 2 then Tier 1 |
-| Single article claim volume | More than 40 claims, cross-service content, or safety-critical scope | #12 Fan-Out Verify | Tier 1-heavy |
-| Batch size | 2-10 articles | #11 Fleet Batch (one track per article) | Tier 2 orchestration, Tier 1 for contested claims |
-| Batch size | More than 10 articles | #13 Claim Manifest, then chunked #11 runs | Tier 2 or Tier 3 first, escalate selectively |
-| Re-check cycle | Less than 20% changed content | #14 Incremental Verify | Tier 2 default |
-| Re-check cycle | 20% or more changed content | Full rerun with #2, #11, or #12 by scope | Mixed |
-| PR changed files | 1-5 files, mostly editorial or metadata changes | #8 PR Review standard pass | Tier 2 or Tier 3 |
-| PR changed files | More than 5 files or major technical changes | #8 plus deep pass on high-risk files | Tier 1 on flagged files |
+| Single article claim volume | 1-15 claims and low ambiguity | Single Article | Tier 2 |
+| Single article claim volume | 16-40 claims or mixed ambiguity | Single Article with Tier 2 extraction, Tier 1 final verdicts | Tier 2 then Tier 1 |
+| Single article claim volume | More than 40 claims, cross-service content, or safety-critical scope | Fleet Batch (single-article track, Tier 1-heavy) | Tier 1-heavy |
+| Batch size | Multiple articles | Fleet Batch (one track per article) | Tier 2 orchestration, Tier 1 for contested claims |
+| PR changed files | 1-5 files, mostly editorial or metadata changes | PR Review standard pass | Tier 2 or Tier 3 |
+| PR changed files | More than 5 files or major technical changes | PR Review plus deep pass on high-risk files | Tier 1 on flagged files |
 
 ### Escalation Triggers (Accuracy-First)
 
@@ -112,7 +110,7 @@ Always prefer the highest available tier. See [_shared/source-hierarchy.md](../_
 | **2** | TechCommunity, DevBlogs, GitHub repos | Announcements, API specs, code samples |
 | **3** | developer.microsoft.com, code.visualstudio.com | Platform docs, Graph API |
 | **4** | MS Q&A, Stack Overflow (verified MS employees only) | Edge cases, engineer Q&A |
-| **5–7** | Internal docs, code, metadata (Workflows 4 & 9 only) | Implementation truth |
+| **5–7** | Internal docs, code, metadata (Research workflow only) | Implementation truth |
 
 > Higher tier always wins. Internal sources never appear in public docs.
 
@@ -127,15 +125,32 @@ Always prefer the highest available tier. See [_shared/source-hierarchy.md](../_
 | ❓ | Unverifiable | Flag — do not remove |
 | 🔗 | Broken link | Fix or flag |
 
+## High-risk claim classes (verify deepest here)
+
+Defects concentrate in a few claim types. Treat these as **high-risk** and spend fetch budget on them first; for these, a search snippet is never sufficient to mark a claim accurate — confirm against a fetched Tier-1/2 page.
+
+| Class | Examples | Why high-risk |
+|-------|---------|---------------|
+| Numeric limit / quota | "4 to 120 minutes", "max 1000 rules" | Silently drift; often conflict across articles |
+| Config default | "default interval is 15 seconds" | Changes with releases |
+| Lifecycle / status | Basic SKU "(retired)", "(preview)" → GA | Time-sensitive; high reader impact |
+| Version / prereq | "requires CLI 2.50+" | Breaks copy-paste workflows |
+| Pricing / tier / SKU | tier names, SKU availability | Customer-facing accuracy |
+| Defined term / acronym | "User Datagram Protocol (UDP)" | Easy to mis-expand, erodes trust |
+
+All other claims (prose capability statements, links, code/CLI syntax) are **low-risk** and may be verified search-first, fetching only on an apparent discrepancy. See [_subagent-contract.md](assets/_subagent-contract.md) for the accurate-verdict gate and per-class fetch budget.
+
 ## Quality checklist
 
 - [ ] Every claim verified against at least one fetched source
 - [ ] Highest-tier source used per claim
+- [ ] High-risk claims (limits, defaults, lifecycle, versions, pricing, terms) confirmed by fetch, not snippet
 - [ ] URLs from allowed Microsoft domains only
-- [ ] `ms.date` updated if edits made
+- [ ] `ms.date` bumped only when at least one claim was fetch-verified — never on a search-only or "looks fine" pass
 - [ ] Code examples validated
 - [ ] Deprecation/retirement status checked
 - [ ] Unverifiable claims flagged, not removed
+- [ ] Cross-article conflicts reconciled by `topic_key` (batch/fleet runs)
 - [ ] Internal findings isolated (if applicable)
 
 See [references/workflows.md](references/workflows.md) for detailed per-workflow procedures.
@@ -144,35 +159,26 @@ See [references/workflows.md](references/workflows.md) for detailed per-workflow
 
 | File | Workflow |
 |------|----------|
-| `assets/fact-check-and-edit.prompt.md` | 1 — Quick In-Place |
-| `assets/single-article-check.prompt.md` | 2 — Single Article |
-| `assets/complete-fact-check.prompt.md` | 3 — Full Report |
-| `assets/complete-fact-checker-internal.prompt.md` | 4 — Internal + Public |
-| `assets/complete-freshness-review.prompt.md` | 5 — Freshness Review |
-| `assets/microsoft-fact-checker.agent.md` | 6 — Deep Agent |
-| `assets/batch-report.prompt.md` | 7 — Batch Report |
-| `assets/pr-review.prompt.md` | 8 — PR Review |
-| `assets/microsoft-researcher.prompt.md` | 9 — Research |
-| `assets/CIA-Analysis.prompt.md` | 10 — CIA Analysis |
-| `assets/fleet-batch-verify.prompt.md` | 11 — Fleet Batch |
-| `assets/fan-out-verify.prompt.md` | 12 — Fan-Out Verify |
-| `assets/claim-manifest.prompt.md` | 13 — Claim Manifest |
-| `assets/incremental-verify.prompt.md` | 14 — Incremental Verify |
+| `assets/single-article-check.prompt.md` | 1 — Single Article |
+| `assets/pr-review.prompt.md` | 2 — PR Review |
+| `assets/microsoft-researcher.prompt.md` | 3 — Research |
+| `assets/fleet-batch-verify.prompt.md` | 4 — Fleet Batch |
+| `assets/claim-manifest.prompt.md` | Supporting — claim extraction used by Fleet Batch |
 | `assets/_runtime-adapter.md` | Shared runtime dispatch rules |
 | `assets/_subagent-contract.md` | Shared subagent I/O contract |
 | `scripts/batch-presearch.sh` | Pre-processing helper |
 
-## Workflow comparison (parallel)
+## Workflow comparison
 
-| Feature | W11 Fleet | W12 Fan-Out | W13 Manifest | W14 Incremental |
-|---------|-----------|-------------|-------------|------------------|
-| Edits file | Optional | ✅ | ❌ | ✅ |
-| Report file | ✅ (per-article + consolidated) | ✅ | ✅ (manifest only) | ✅ |
-| Parallel execution | ✅ (one track per article) | ✅ (one subagent per service group) | ❌ (single pass) | Wraps W2/W11/W12 |
-| MCP calls | Yes (per track) | Yes (per subagent, capped) | None | Only for changed/stale claims |
-| INCLUDE resolution | ✅ | ✅ | ✅ | ✅ |
-| Token management | maxTokenBudget=2000 | maxTokenBudget=2000, max 3 fetches/subagent | N/A | Inherited from wrapped workflow |
-| Best runtime | Copilot CLI /fleet (preferred), Chat runSubagent equivalent | VS Code agent mode or Copilot CLI | Any | Any |
+| Feature | Single Article | PR Review | Research | Fleet Batch |
+|---------|----------------|-----------|----------|-------------|
+| Edits file | ✅ | Optional | ❌ | Optional |
+| Report file | Opt-in (`--report`) | Opt-in (`--report`) | Opt-in (`--report`) | Opt-in (`--report`) |
+| Parallel execution | ❌ | Optional (per service group) | ❌ | ✅ (one track per article) |
+| MCP calls | Yes | Yes | Yes | Yes (per track) |
+| INCLUDE resolution | ✅ | ✅ | N/A | ✅ |
+| Token management | maxTokenBudget=2000 | maxTokenBudget=2000 | maxTokenBudget=2000 | maxTokenBudget=2000 |
+| Best runtime | VS Code agent mode | VS Code agent mode | Any | Copilot CLI /fleet (preferred), Chat runSubagent equivalent |
 
 ## Pre-processing with batch-presearch.sh
 
@@ -192,8 +198,7 @@ For large batch runs, front-load search latency:
 
 ## Token budget controls
 
-All parallel workflows enforce token limits:
+All workflows enforce token limits:
 - `microsoft_docs_fetch` calls use `maxTokenBudget=2000`
-- Fan-Out subagents: max 3 fetch calls each
 - Fleet tracks: independent context windows (no shared state)
-- Incremental: only re-verifies changed or stale claims, reducing total MCP calls by 60-80%
+- Search first, fetch selectively — fetch only high-value pages per the source hierarchy

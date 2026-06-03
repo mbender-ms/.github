@@ -18,6 +18,14 @@ tools:
 
 Fact-check the currently open article against official Microsoft documentation. Verify every technical claim, apply corrections in-place, and present a summary with source citations.
 
+## Report output (`--report`)
+
+By default this workflow is **chat-only** — it does not write a report file. Write a standalone markdown report only when the user asks for one:
+
+- If the user passes `--report <path>`, write the report to that exact path.
+- If the user requests a report ("save a report", "write the findings to a file") but gives **no path**, ask for the path before completing — do not guess a default location.
+- If neither is present, present results in chat only.
+
 ## Setup
 
 Load [_shared/source-hierarchy.md](../../_shared/source-hierarchy.md) for the complete tiered source authority reference.
@@ -66,6 +74,8 @@ Edit the file directly. Preserve tone/style. Update `ms.date`. Do NOT remove unv
 ## Step 5 — Present results
 
 Summarize: total claims checked, issues by severity, per-issue details with source URLs. Ask to commit.
+
+If a report was requested (see **Report output**), write the summary and per-issue details to the resolved `--report` path before finishing.
 
 ## Quality
 
