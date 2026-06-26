@@ -28,9 +28,9 @@ By default this workflow is **chat-only** — it does not write a report file. W
 
 ## Setup
 
-Load [_shared/source-hierarchy.md](../../_shared/source-hierarchy.md) for the complete tiered source authority reference.
+Load [_shared/source-hierarchy.md](../_shared/source-hierarchy.md) for the complete tiered source authority reference.
 
-For product-area-specific repo lookups, consult [sources/routing-index.md](../../sources/routing-index.md) and load the matching category YAML only if you need repo-level detail.
+For product-area-specific repo lookups, consult [sources/routing-index.md](../sources/routing-index.md) and load the matching category YAML only if you need repo-level detail.
 
 ## Step 0 — Scope
 
@@ -42,6 +42,8 @@ Before starting, determine:
 Use the product area to select search domains (see SKILL.md → Product Area Search Domains).
 
 ## Step 1 — Identify claims
+
+Only proceed if the current file is a documentation text file (`.md`, `.yml`, or `.yaml`). If it is any other type (image, PDF, binary, media), stop and report that the file type is not verifiable — never open or attach it. Image references inside the article (`![alt](media/diagram.png)`) are checked as text/links only; never load the referenced image binary.
 
 Read the current file and extract every verifiable technical claim:
 - Product/service names, feature capabilities, limitations, SKU/tier requirements
@@ -79,4 +81,4 @@ If a report was requested (see **Report output**), write the summary and per-iss
 
 ## Quality
 
-See [_shared/quality-checklist.md](../../_shared/quality-checklist.md) — verify the fact-check quality section.
+See [_shared/quality-checklist.md](../_shared/quality-checklist.md) — verify the fact-check quality section.

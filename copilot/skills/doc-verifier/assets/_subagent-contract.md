@@ -17,7 +17,7 @@ Each subagent receives:
 
 Depth is driven by claim class, not a global quick/thorough toggle. Spend the fetch budget where defects concentrate.
 
-- **High risk** — `limit`, `config`, `pricing`, `status`, `prereq`, and any `feature` stating a number, version, date, or lifecycle state. Require a mandatory authoritative fetch; search alone can never yield `accurate`. Must capture `verified_value` from a fetched Tier-1/2 page.
+- **High risk** — `limit`, `config`, `pricing`, `status`, `prereq`, and any `feature` stating a number, version, date, or lifecycle state. Require a mandatory authoritative fetch; search alone can never yield `accurate`. Must capture `verified_value` from a fetched Tier-1/2 page. For **numeric limit/quota, config-default, and enum** claims, also confirm against a **Contract source** (Tier 1-C: ARM template schema or CLI/PS parameter reference); if the contract states a bound, it wins over prose. If the contract is silent on the bound and prose sources disagree, return `contested` (not `accurate`/`inaccurate`).
 - **Low risk** — prose `feature`, `cli`, `code`, `link`. Search-only is acceptable; fetch only on an apparent discrepancy.
 
 High-risk claims carry a non-`—` `topic_key` and feed cross-track reconciliation.
@@ -46,9 +46,11 @@ Each subagent returns one result per claim:
 {
   "claim_id": "C001",
   "topic_key": "loadbalancer-probe-protocols",
-  "status": "accurate|partial|inaccurate|outdated|unverifiable|broken",
+  "status": "accurate|partial|inaccurate|outdated|unverifiable|contested|broken",
   "verified_value": "4 to 120 minutes",
-  "verification_method": "search|fetch|code-sample",
+  "verification_method": "search|fetch|code-sample|contract|live",
+  "contract_value": "value the API contract states, or null",
+  "contract_source": "https://learn.microsoft.com/azure/templates/... or null",
   "confidence": "high|medium|low",
   "evidence": "Short paraphrase of official guidance",
   "source_url": "https://learn.microsoft.com/...",
@@ -74,6 +76,7 @@ A claim may be scored `accurate` **only** when all of the following hold. Otherw
 
 - `source_tier ≤ 2`, and
 - for **high-risk** claims, `verification_method` is `fetch` (or `code-sample`) and `verified_value` matches the article text. A search snippet is not sufficient evidence for a high-risk `accurate`.
+- for **numeric limit/quota, config-default, or enum** claims, an agreeing **Contract source** (Tier 1-C) is required for `accurate`; prose agreement alone is `confidence: medium` at best and cannot be `accurate` if a Contract source is absent and prose pages conflict.
 - low-risk claims may be `accurate` via `search` when the snippet is unambiguous; set `confidence: medium`.
 
 If no Tier-1/2 source is found, return `unverifiable` and keep the claim in the report — do not drop or guess.
@@ -117,6 +120,7 @@ After all tracks return, the orchestrator MUST run a reconciliation pass before 
 
 1. **Group** every returned result by `topic_key`, ignoring groups where `topic_key` is `—` and singletons (a key that appears in only one file).
 2. **Compare `verified_value`** within each multi-file group:
+   - If any track in the group returned `verification_method: contract` or `live`, that value is authoritative and outranks every `fetch`/`search` prose value — propagate it and mark conflicting prose files `inaccurate`/`outdated`.
    - All values agree and at least one is fetch-verified (`source_tier ≤ 2`) → the group is consistent. Propagate the authoritative value to any track that marked the claim `unverifiable`.
    - Values disagree → raise a **conflict**. The correct value is the one backed by the highest-tier source; every file whose text states a different value is `inaccurate` (or `outdated` if it was historically correct), regardless of how the owning track originally scored it. A track's local ✅ does **not** override a cross-track conflict.
    - No value in the group is fetch-verified → mark the whole group `unverifiable` and flag for a deep pass; do not let mutual agreement between unverified snippets count as accurate.

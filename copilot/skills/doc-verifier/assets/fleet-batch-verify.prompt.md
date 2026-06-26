@@ -49,10 +49,11 @@ Ask the user (skip if already clear):
 2. **Depth** — Quick (search-only) or thorough (search + fetch + code samples)?
 3. **Output** — Corrections, reports, or both? Reports are written only when requested via `--report <dir>` (see **Report output**); otherwise findings are chat-only.
 
-Discover files:
-- If folder: list all `.md` files recursively
-- If glob: expand the pattern
-- If file list: validate each path exists
+Discover files (documentation text only — `.md`, `.yml`, `.yaml`):
+- If folder: list files recursively, then keep only `.md`/`.yml`/`.yaml`
+- If glob: expand the pattern, then filter to `.md`/`.yml`/`.yaml`
+- If file list: validate each path exists, then drop any non-`.md`/`.yml`/`.yaml` entry
+- **Skip every other file type** (images such as `.png`/`.jpg`/`.svg`, PDFs, binaries, media). Never read or attach them — doing so causes `Too many images in request` failures. Record dropped paths as `skipped (non-doc file type)`.
 
 **Decomposition rule**: Map every article to one concrete output artifact. The orchestrator should see a structure like:
 
@@ -100,6 +101,7 @@ For each claim, search in priority order:
 1. `microsoft_docs_search` — use service-area-specific queries
 2. `microsoft_docs_fetch` — fetch full pages only for high-value matches (max 2-3 per service group)
 3. `microsoft_code_sample_search` — validate code examples
+4. For numeric/enum/default claims, also fetch the Contract source (Tier 1-C): the `learn.microsoft.com/azure/templates/<provider>` schema page (and/or the CLI parameter reference). Record `contract_value` + `contract_source`.
 
 **Token budget**: Use `maxTokenBudget=2000` on fetch calls to cap context size. Search first, fetch selectively.
 
@@ -112,6 +114,7 @@ For each claim:
 - **🕐 Outdated** — Was correct but superseded
 - **❓ Unverifiable** — No authoritative source found — flag, do not remove
 - **🔗 Broken link** — URL doesn't resolve or anchor is missing
+- **⚖️ Contested** — Authoritative prose sources disagree and the API contract doesn't pin the value — flag; do not assert a verdict
 
 ### 1d. Produce the per-article finding set
 

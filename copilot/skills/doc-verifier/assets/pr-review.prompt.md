@@ -42,9 +42,9 @@ Ask the user (skip if already clear):
 
 1. Fetch PR metadata (title, author, branch, description)
 2. List all changed files
-3. Filter to documentation files (`.md`, `.yml`)
-4. Read the content of each changed file (from patches or file read)
-5. Report the file count and ask for confirmation
+3. Filter to documentation text files only — keep `.md`, `.yml`, and `.yaml`; **skip every other file type** (images such as `.png`/`.jpg`/`.svg`, PDFs, binaries, media). Reading non-text files attaches them as images to the request and triggers `Too many images in request` failures.
+4. Read the content of each **kept** file only (from patches or file read). Record skipped files as `skipped (non-doc file type)`.
+5. Report the file count (kept vs. skipped) and ask for confirmation
 
 ## Step 1.5 — Quick triage checklist (apply threshold matrix)
 
@@ -76,7 +76,7 @@ For each file:
 
 Process files grouped by service area:
 
-> **Multi-agent optimization**: When the PR contains files across 3+ service groups, spawn one `runSubagent` per service group for parallel verification. Each sub-agent receives its file list, the source hierarchy, and the matching category YAML from `copilot/skills/sources/`.
+> **Multi-agent optimization**: When the PR contains files across 3+ service groups, spawn one `runSubagent` per service group for parallel verification. Each sub-agent receives its file list, the source hierarchy, and the matching category YAML from `../sources/`.
 
 1. Search `microsoft_docs_search` for each service area
 2. Use `microsoft_docs_fetch` for full reference pages

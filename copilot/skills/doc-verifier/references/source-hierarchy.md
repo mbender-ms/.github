@@ -1,6 +1,6 @@
 # Source Authority Hierarchy
 
-> **Consolidated**: This file is maintained at [_shared/source-hierarchy.md](../../_shared/source-hierarchy.md). Load the shared version for the complete reference including repository catalog integration.
+> **Consolidated**: This file is maintained at [_shared/source-hierarchy.md](../_shared/source-hierarchy.md). Load the shared version for the complete reference including repository catalog integration.
 
 ## Public Sources (All Workflows)
 

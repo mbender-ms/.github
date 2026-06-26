@@ -130,7 +130,6 @@ Escalate a claim or file to Tier 1 when any trigger matches:
 ### When to use
 
 - Verify multiple articles in parallel
-- Fact-check by traffic (feed `pageviews-query` JSON into this workflow)
 
 ### Key features
 

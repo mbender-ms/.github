@@ -1,6 +1,6 @@
 # Comprehensive Fact-Checking Sources for Microsoft Documentation
 
-> **Consolidated**: The structured hierarchy is maintained at [_shared/source-hierarchy.md](../../_shared/source-hierarchy.md). This prose guide provides extended discussion and footnotes for each source tier. Load `_shared/source-hierarchy.md` for the concise tiered reference.
+> **Consolidated**: The structured hierarchy is maintained at [_shared/source-hierarchy.md](../_shared/source-hierarchy.md). This prose guide provides extended discussion and footnotes for each source tier. Load `_shared/source-hierarchy.md` for the concise tiered reference.
 
 ## Key Public Authoritative Sources
 

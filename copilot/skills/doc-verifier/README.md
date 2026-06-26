@@ -1,8 +1,10 @@
 # Documentation Verifier
 
+> **Version:** 1.1.0 · **Last updated:** 2026-06-26
+
 A VS Code Copilot skill that fact-checks Microsoft documentation against official sources across **all product areas** — Azure, Microsoft 365, Microsoft Security, Power Platform, Dynamics 365, Windows, Developer Tools, and more.
 
-Four workflows: single-article check, PR review, research, and fleet batch (parallel multi-article). A tiered source hierarchy prioritizes learn.microsoft.com. Reports are opt-in via the `--report` flag — every workflow is chat-only by default.
+Four primary workflows — single-article check, PR review, research, and fleet batch (parallel multi-article) — plus a fifth gated **Live Validation** escalation that empirically settles contested numeric/behavioral claims. A tiered source hierarchy prioritizes learn.microsoft.com, with a dedicated **Tier 1-C API Contract** tier (ARM/Bicep templates, CLI/PowerShell parameter reference, REST specs) that outranks prose for numeric, default, and enum claims. Reports are opt-in via the `--report` flag — every workflow is chat-only by default.
 
 ---
 
@@ -54,23 +56,38 @@ doc-verifier/
 │   ├── pr-review.prompt.md                      # PR Review workflow
 │   ├── microsoft-researcher.prompt.md           # Research workflow
 │   ├── fleet-batch-verify.prompt.md             # Fleet Batch workflow
+│   ├── live-validation.prompt.md                # Live Validation (gated escalation)
 │   ├── claim-manifest.prompt.md                 # Supporting: claim extraction for Fleet Batch
 │   ├── _runtime-adapter.md                      # Shared runtime dispatch rules
 │   └── _subagent-contract.md                    # Shared subagent I/O contract
 ├── scripts/
-│   └── batch-presearch.sh                       # Pre-search helper for large batches
+│   ├── batch-presearch.sh                       # Pre-search helper for large batches
+│   └── contract-lookup.sh                       # API Contract (Tier 1-C) cache helper
 ├── TEST-PROTOCOLS.md                           # Validation procedures for the 4 workflows
+├── _shared/                                     # Vendored shared references (self-contained)
+│   ├── source-hierarchy.md                      # Canonical tiered source authority reference
+│   ├── quality-checklist.md                     # Shared quality checklist
+│   ├── formatting-rules.md
+│   ├── seo-and-metadata.md
+│   └── writing-style.md
+├── sources/                                     # Vendored repository catalog (self-contained)
+│   ├── routing-index.md                         # Product-area → category YAML routing
+│   ├── categories-index.yml
+│   └── *.yml                                     # Per-category repo catalogs (azure-networking.yml, ...)
 └── references/
     ├── source-hierarchy.md                      # Local pointer → _shared/source-hierarchy.md
     ├── source-guide.md                          # Educational guide to sources
     └── workflows.md                             # Detailed per-workflow procedures
 ```
 
-### Cross-skill dependencies
+### Bundled dependencies (self-contained)
+
+`_shared/` and `sources/` are vendored into this folder so the skill is fully portable — copying just `doc-verifier/` to your skills directory brings everything it needs.
 
 | Dependency | Purpose |
 |-----------|----------|
 | `_shared/source-hierarchy.md` | Canonical tiered source authority reference |
+| `_shared/quality-checklist.md` | Shared quality checklist |
 | `sources/` | Repository catalog — Step 0 loads category YAML for Tier 2 verification |
 
 ---
@@ -87,7 +104,7 @@ Open **GitHub Copilot Chat** in agent mode and describe what you want verified. 
 | "Fact-check PR #12345" | PR Review |
 | "Research Azure Front Door caching" | Research |
 | "Fact-check these 5 articles" / "this folder" | Fleet Batch |
-| "Fact-check the top articles for `<service>`" | `pageviews-query` → Fleet Batch |
+| "Settle this contested limit empirically" | Live Validation (gated) |
 | "...and save the findings to a report" | add `--report <path>` to any workflow |
 
 ---
@@ -104,6 +121,7 @@ Use these thresholds to right-size verification depth while preserving accuracy.
 | Batch size | Multiple articles | Fleet Batch (one track per article) | Tier 2 orchestration, Tier 1 on contested claims |
 | PR scope | 1-5 documentation files, mostly editorial or metadata changes | PR Review standard pass | Tier 2 or Tier 3 |
 | PR scope | More than 5 files or major technical changes | PR Review plus deep pass for high-risk files | Tier 1 on flagged files |
+| Claim class | limit / quota / config-default / enum | Require Tier 1-C contract confirmation; if contested, route to Live Validation | Tier 1-C |
 
 ### Escalation Triggers (Accuracy-First)
 
@@ -114,6 +132,33 @@ Escalate a claim or file to Tier 1 when any trigger matches:
 - Safety impact: claims affect RBAC, authentication, encryption, or production availability.
 - Confidence drop: reviewer confidence is below high after Tier 2 analysis.
 - Policy or retirement risk: deprecation or retirement timelines are present.
+- Contract conflict: a Contract source (Tier 1-C) disagrees with Tier-1 prose, OR two prose sources conflict and the contract is silent → escalate to Live Validation.
+
+---
+
+## API contract verification (Tier 1-C)
+
+For **numeric limit/quota, configuration-default, and enum/allowed-value** claims, prose pages alone are not authoritative. The skill confirms these against a dedicated **Tier 1-C API Contract** tier and prefers it over prose when they disagree:
+
+| Source | Content type |
+|--------|-------------|
+| `learn.microsoft.com/azure/templates/*` | ARM/Bicep/Terraform resource schema — property min/max, defaults, enums |
+| `learn.microsoft.com/cli/azure/*` | Azure CLI parameter reference and `--help` (accepted ranges, defaults) |
+| `learn.microsoft.com/powershell/module/*` | Az PowerShell cmdlet parameter reference |
+| `github.com/Azure/azure-rest-api-specs` | Swagger — authoritative property constraints |
+
+When a Contract source pins the bound, it wins over prose (the prose is the defect). When the contract is **silent** on a bound and prose pages disagree, the claim is marked **⚖️ Contested** rather than guessed — and can be routed to **Live Validation** for empirical confirmation. The `scripts/contract-lookup.sh` helper caches the templates schema page and CLI `--help` once so every fleet track reuses one lookup.
+
+---
+
+## Live Validation (gated escalation)
+
+When a claim is **⚖️ Contested** or a contract conflict fires, the **Live Validation** workflow can settle it empirically — always gated and safe:
+
+- **Tier 4a — read-only introspection (default):** `az <cmd> --help`, `Get-Help -Full`, `az rest --method get` against provider metadata. No resources are created or modified.
+- **Tier 4b — mutating probe (opt-in only):** generates a boundary-probe script for explicit user approval; never auto-runs, requires a non-production subscription, and always cleans up resources.
+
+Results are recorded as `verification_method: live` and outrank prose during reconciliation.
 
 ---
 
@@ -151,6 +196,7 @@ The **Fleet Batch** workflow scales verification across multiple articles:
 | 🕐 | Outdated | Was correct but superseded |
 | ❓ | Unverifiable | No authoritative source found (flagged, not removed) |
 | 🔗 | Broken link | URL doesn't resolve or anchor is missing |
+| ⚖️ | Contested | Prose sources disagree AND the API contract is silent — flagged for Live Validation or product-team confirmation; no value asserted |
 
 ---
 
@@ -163,6 +209,7 @@ The **Fleet Batch** workflow scales verification across multiple articles:
 | PR workflow can't load PR | Ensure GitHub MCP Server configured and `gh auth status` shows authenticated. |
 | Fleet workflow not parallelizing | Use Copilot CLI `/fleet`; VS Code agent mode may run sequentially. |
 | `batch-presearch.sh` fails | Install `@microsoft/learn-cli` and run from a shell with bash support. |
+| `contract-lookup.sh` finds no contract | Verify the provider path (e.g. `microsoft.network/loadbalancers`); fetch the templates schema page in-agent via `microsoft_docs_fetch` if the helper can't reach it. |
 | Agent doesn't ask scoping questions | Add context: "fact-check this M365 Security article about Defender for Endpoint" |
 
 ---
@@ -170,3 +217,25 @@ The **Fleet Batch** workflow scales verification across multiple articles:
 ## History
 
 This skill consolidates the earlier `fact-checker`, `microsoft-doc-verifier`, `microsoft-fact-checker`, and `fact-check-batch-subagent` skills into a single unified tool with four focused workflows.
+
+---
+
+## Changelog
+
+### 1.1.0 — 2026-06-26
+
+**Added — API contract verification & gated live validation**
+
+- **Tier 1-C API Contract sources** in the source hierarchy (ARM/Bicep templates, CLI/PowerShell parameter reference, REST API specs). For numeric limit/quota, config-default, and enum claims, a Contract source outranks Tier-1 prose.
+- **Contract gate for numeric claims**: numeric/limit/quota/config-default/enum claims now require an agreeing Contract source to be scored `accurate`; prose agreement alone caps at `confidence: medium`.
+- **⚖️ Contested classification**: emitted when prose sources disagree and the API contract is silent — no value is guessed. Added to the `status` enum and the fleet classification list.
+- **Live Validation workflow (5)**: new gated escalation (`assets/live-validation.prompt.md`) — read-only introspection by default, mutating boundary probes only on explicit opt-in.
+- **Subagent contract fields**: `verification_method` extended with `contract|live`; new optional `contract_value` and `contract_source` fields; cross-track reconciliation now prefers `contract`/`live` values over prose.
+- **`scripts/contract-lookup.sh`**: caches a provider's templates schema page and CLI `--help` so fleet tracks reuse a single contract lookup.
+- Quality checklist and Threshold Matrix updated with contract-confirmation and contested-routing items.
+
+### 1.0.0 — Initial release
+
+- Consolidated the earlier `fact-checker`, `microsoft-doc-verifier`, `microsoft-fact-checker`, and `fact-check-batch-subagent` skills into one tool.
+- Four workflows: Single Article, PR Review, Research, Fleet Batch.
+- Tiered source hierarchy (Tiers 1–7) prioritizing learn.microsoft.com; opt-in `--report` output; vendored `_shared/` and `sources/` for portability.
