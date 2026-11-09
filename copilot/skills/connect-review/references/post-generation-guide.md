@@ -95,7 +95,7 @@ The paste version file (`connect-text-for-tool.html`) should follow this exact s
 
 **7. Future SMART Goals** — labeled by Connects field ("Plan for the future" — Goal 1/2/3)
 - Written as full SMART goals with "By {date}" framing
-- Include both planned continuations AND new goals (e.g., workflow video, CDA evangelism)
+- Include both planned continuations AND new goals (e.g., workflow video, automation adoption)
 
 ### Example — Goal Section for Connects Tool
 

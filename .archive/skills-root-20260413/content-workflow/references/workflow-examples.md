@@ -58,7 +58,7 @@ User: "I need to do a freshness review of ExpressRoute documentation. Create a w
    - IterationPath: Assume current date is December 1, 2025
      ΓåÆ FY = 2025 + 1 = 26, Quarter = Q2, Month = 12 Dec
      ΓåÆ Content\FY26\Q2\12 Dec
-   - Tags: "content-maintenance; ExpressRoute; cda"
+   - Tags: "content-maintenance; ExpressRoute"
    - ProposalType: "Review" (freshness review)
    - Modality: "Documentation"
    - StartDate: "2025-12-01T00:00:00Z"
@@ -71,7 +71,7 @@ User: "I need to do a freshness review of ExpressRoute documentation. Create a w
      - System.Title: "Freshness review of ExpressRoute documentation"
      - System.AreaPath: "Content\Production\Infrastructure\Azure Networking\ExpressRoute"
      - System.IterationPath: "Content\FY26\Q2\12 Dec"
-     - System.Tags: "content-maintenance; ExpressRoute; cda"
+     - System.Tags: "content-maintenance; ExpressRoute"
      - Custom.Modality: "Documentation"
      - Custom.ProposalType: "Review"
      - Microsoft.VSTS.Scheduling.StartDate: "2025-12-01T00:00:00Z"

@@ -10,7 +10,7 @@ disable-model-invocation: false
 
 # Session Summary Skill
 
-Generate a comprehensive, validated daily session summary by gathering data from multiple sources (session memory, ADO, GitHub, WorkIQ) in managed phases to prevent context window overflow. Produces a structured markdown file in the CDA export directory under the `Session Summaries` subfolder.
+Generate a comprehensive, validated daily session summary by gathering data from multiple sources (available conversation history or user-provided session exports, ADO, GitHub, WorkIQ) in managed phases to prevent context window overflow. Produces a structured markdown file in the user-confirmed export directory under the `Session Summaries` subfolder.
 
 **Invocation:**
 - `/session-summary` or `/session-summary today` — Generate summary for today
@@ -18,19 +18,19 @@ Generate a comprehensive, validated daily session summary by gathering data from
 
 **CRITICAL**: Every data point in the summary must trace to an API response. NEVER estimate metrics from session memory or assume titles/states from conversation context.
 
-**Token management**: This workflow is split into 7 phases because loading all data at once (session JSON + ADO work items + GitHub PRs + comments + meetings) can exceed the context window. Use `manage_todo_list` to track phase progress and manage token budget.
+**Token management**: This workflow is split into 7 phases because loading all data at once (conversation history + ADO work items + GitHub PRs + comments + meetings) can exceed the context window. Use `manage_todo_list` to track phase progress and manage token budget.
 
 ---
 
 ## Phase 1: Extract Session Data
 
-> **Tool note**: `session_get_ids`, `session_recall`, and `session_end` are **VS Code extension tools** (provided by the Session Memory extension), NOT MCP tools. They run in-process inside VS Code reading from the configured memory storage directory. Do NOT call `session_log_exchange`, `session_track_git`, `session_checkpoint`, or `session_focus` during summary generation — those are auto-captured throughout the day.
+Use available conversation-history tools or explicit user-provided session exports for the requested date. If neither source is available, ask the user for the missing evidence before continuing. This workflow does not require a separate session-memory extension.
 
 **Create todo list and start Phase 1:**
 
 ```
 manage_todo_list([
-  { id: 1, title: "Extract session data", description: "Call session_get_ids + session_recall for IDs and narrative", status: "in-progress" },
+  { id: 1, title: "Extract session data", description: "Read available conversation history or user-provided session exports for IDs and narrative", status: "in-progress" },
   { id: 2, title: "Fetch ADO work items", description: "Call mcp_ado_wit_get_work_items_batch_by_ids for all work item IDs", status: "not-started" },
   { id: 3, title: "Fetch GitHub PRs", description: "Cross-verify session PRs with GitHub search (involves:{username} updated:{date}), merge lists, then call mcp_github_pull_request_read for all PR numbers", status: "not-started" },
   { id: 4, title: "Fetch ADO comments", description: "Get comments for work items updated today", status: "not-started" },
@@ -42,17 +42,13 @@ manage_todo_list([
 
 **Actions:**
 
-1. Call `session_get_ids` — Returns structured data:
-   - `workItemIds`: Array of ADO work item IDs
-   - `pullRequestNumbers`: Array of GitHub PR numbers
-   - `decisions`: Array of decisions made
-   - `lessons`: Array of lessons learned
-   - Counts for files, exchanges, etc.
+1. Read the available history or supplied exports for the requested date and extract:
+   - ADO work item IDs
+   - GitHub repository names and PR numbers
+   - Decisions and lessons learned
+   - File changes and timestamps explicitly present in the evidence
 
-2. Call `session_recall` — Returns full session JSON including `sessionPhases`
-   - **Use `sessionPhases` as the narrative backbone** — each phase has a label, time range, exchange count, work items, PRs, and top tools
-   - **IGNORE `chatSessionData.exchangeTimeline`** — this is raw exchange data and will bloat context. The phases are the summarized version.
-   - If `sessionPhases` is empty, fall back to `decisions` + `lessons` from `session_get_ids`
+2. Group the evidence into chronological work phases for the narrative backbone. Summarize the history rather than loading raw exchanges into later phases. Do not invent missing timestamps or activity counts.
 
 3. **Output to pass to next phase:**
    - List of work item IDs: [540865, 536997, ...]
@@ -293,11 +289,10 @@ Follow the [session summary template](./templates/session-summary-template.md) f
 
 ### Storage Location
 
-**Output path precedence** (first non-empty value wins):
-1. Agent file setting (if the agent file specifies an explicit export path)
-2. `cda.sessionExportDir` VS Code setting + `Session Summaries/` subfolder (configured via sidebar → Session Memory section)
-3. Nothing set → ask the user where to store exports, suggest setting `cda.sessionExportDir`
-4. Default fallback: `C:/CDA/Session Summaries/` (Windows) or `~/CDA/Session Summaries/` (macOS/Linux)
+**Output path precedence**:
+1. Use an export path explicitly provided by the user for this request.
+2. Otherwise, use an explicit export path in the agent instructions.
+3. If neither is configured, ask the user where to store exports before writing any files.
 
 > **Note:** Each skill writes to its own subfolder under the export directory (`Session Summaries`, `Monthly Reports`, `PR Reviews`). If the export directory already ends with a known subfolder name, it's used directly without doubling.
 
@@ -317,25 +312,18 @@ Follow the [session summary template](./templates/session-summary-template.md) f
 1. Check if `{export-directory}/Session Summaries/session-summary-YYYY-MM-DD.md` exists
 2. If exists: Use `replace_string_in_file` to update
 3. If not: Use `create_file` to create new
-4. **Call `session_end`** with a comprehensive summary string to mark session complete:
-   ```
-   session_end(summary: "Brief 2-3 sentence summary of the day's work")
-   ```
-5. **Use the returned stats** from `session_end` to update the summary's Metrics table and Time Tracking section:
-   - `Duration` → Time Tracking session duration
-   - `Checkpoints` → checkpoint count
-   - `Work Items` → total ADO items touched
-   - `Pull Requests` → total PRs touched
-   - `Files Modified` → files count
-   - If the summary was already written in step 2/3, go back and update the Metrics/Time Tracking sections with the actual stats from `session_end`
-6. **`session_end` must be the LAST tool call** — it marks the session as complete and exports the session JSON. Calling it before writing the summary means the summary won't include the final stats.
+4. Populate the Metrics table and Time Tracking section from verified API responses and timestamped history:
+   - Count distinct work items and PRs from the verified lists.
+   - Include file counts and duration only when the evidence supports them.
+   - Explicitly mark unavailable metrics as unavailable; do not estimate them.
+5. Confirm the summary file was saved. Saving a report does not close or export the underlying chat session.
 
 **Correct ordering:**
 ```
 Phase 6: Generate summary content (all narrative, tables, accomplishments)
-Phase 7 step 1-3: Write summary file (without final metrics)
-Phase 7 step 4: Call session_end → get stats
-Phase 7 step 5: Update summary file with session_end stats (Metrics table, Time Tracking)
+Phase 7 step 1-3: Write summary file
+Phase 7 step 4: Complete metrics using verified evidence
+Phase 7 step 5: Verify the saved file
 ```
 
 **Mark all todos complete.**
@@ -348,7 +336,7 @@ Phase 7 step 5: Update summary file with session_end stats (Metrics table, Time 
 
 | Data Type | Approximate Tokens | Strategy |
 |-----------|-------------------|----------|
-| Session JSON (50 exchanges) | ~5,000 | Summarize, don't include full text |
+| Conversation history (50 exchanges) | ~5,000 | Summarize, don't include full text |
 | Each ADO work item | ~500 | Fetch only needed fields |
 | Each GitHub PR | ~300 | Extract title/state only |
 | Each ADO comment | ~200 | Get latest only, summarize |
@@ -411,11 +399,10 @@ Phase 7 step 5: Update summary file with session_end stats (Metrics table, Time 
 
 ## Tool Categorization
 
-This Skill uses three categories of tools:
+This skill uses two categories of tools:
 
 | Category | Prefix | Served by | Tools Used |
 |----------|--------|-----------|------------|
-| **VS Code extension tools** | No prefix | Session Memory extension (in-process) | `session_get_ids`, `session_recall`, `session_end` |
 | **MCP tools** | `mcp_` | External MCP server processes | `mcp_ado_wit_*`, `mcp_github_*`, `mcp_workiq_*` |
 | **Built-in tools** | No prefix | VS Code itself | `manage_todo_list`, `create_file`, `replace_string_in_file`, `read_file` |
 
@@ -430,31 +417,6 @@ This Skill uses three categories of tools:
 
 **Pattern**: Activate once per session before first use of that tool group. If a call fails, activate and retry before reporting failure.
 
-### Session Memory Tools — Do NOT Call List
+## Why This Phased Workflow
 
-These are auto-captured by the VS Code extension throughout the day. Do NOT call during summary generation:
-- `session_log_exchange`
-- `session_track_git`
-- `session_checkpoint`
-- `session_focus`
-
-Do NOT call `session_recall` at conversation start — only call it in Phase 1 of this workflow.
-
----
-
-## Why This Workflow vs Just `session_end`
-
-*Design context — not needed during execution. Explains why the phased approach exists.*
-
-| Aspect | `session_end` alone | This Phased Workflow |
-|--------|---------------------|----------------------|
-| **Data source** | Session JSON only | Session JSON + ADO API + GitHub API + WorkIQ |
-| **Work item titles** | Numbers only (no titles) | Actual titles from API |
-| **PR titles** | Numbers only | Actual titles from API |
-| **Validation** | None — uses cached data | Every data point verified |
-| **Metrics** | Not computed | Computed from verified API responses |
-| **Meetings** | Not captured | Fetched from WorkIQ |
-| **Reconciliation** | No — overwrites | Yes — merges with existing summary |
-| **Token management** | Single context load | Distributed across 7 phases |
-
-**Use `session_end` only as the final step** (Phase 7) after Phases 1-6 have generated the validated summary.
+Conversation history supplies narrative context, while ADO and GitHub APIs supply verified titles, states, and counts. WorkIQ supplies meeting evidence when available. The phased workflow reconciles this evidence with the existing summary and limits how much raw data must remain in context at once.

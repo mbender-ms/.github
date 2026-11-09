@@ -41,7 +41,7 @@ Before processing a request inline, check whether a sibling skill or sub-agent s
 | Create/validate ADO work items | `ado-work-items` skill | Invoke skill directly |
 | SEO, metadata, editorial review | `documentor-workflow` skill | Invoke skill directly |
 | Codebase exploration or research | `Explore` agent | Spawn sub-agent with thoroughness level |
-| PR description generation | `generate_pr_description` MCP tool | Fall back to [references/pr-framework.md](references/pr-framework.md) |
+| PR description generation | [PR framework](references/pr-framework.md) | Draft from the verified changes using the framework |
 | Branch, commit, push, create PR | `git-workflow` prompt | Invoke prompt; uses `gh` CLI for PRs |
 | Complex multi-step workflows | Spawn sub-agents in parallel | See [Sub-agent patterns](#sub-agent-patterns) below |
 
@@ -152,7 +152,7 @@ Load [references/pr-framework.md](references/pr-framework.md) when drafting PRs.
 ### Work items
 
 - Title format: `{Service} | {WorkflowType} | {Brief Description}`
-- Tags: service tag, area tag (`Networking`), workflow type, `cda`
+- Tags: service tag, area tag (`Networking`), workflow type
 - For full standards, delegate to the `ado-work-items` skill
 
 ---
@@ -167,4 +167,3 @@ Load [references/pr-framework.md](references/pr-framework.md) when drafting PRs.
 6. **Sentence casing** for all headings in documentation articles
 7. **Lazy-load references** — don't read `pr-framework.md`, `repos.md`, or source YAMLs unless the task needs them
 8. **Efficiency over verbosity** — use direct commands and tools, don't over-explain. But never sacrifice research depth or clarity for brevity. When in doubt, ask rather than assume.
-

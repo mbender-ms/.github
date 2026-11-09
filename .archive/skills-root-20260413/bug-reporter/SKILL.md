@@ -52,7 +52,7 @@ Create a Bug (not User Story) work item with these fields:
     {"name": "System.IterationPath", "value": "{calculate using iteration calculator}"},
     {"name": "System.AssignedTo", "value": "duau@microsoft.com"},
     {"name": "Microsoft.VSTS.Common.Priority", "value": 2},
-    {"name": "System.Tags", "value": "cda; bug-tracking; bug"},
+    {"name": "System.Tags", "value": "bug-tracking; bug"},
     {
       "name": "System.Description",
       "value": "## Problem / Impact\n{what_happened}\n\n## Expected Behavior\n{expected}\n\n## Actual Behavior\n{actual}",

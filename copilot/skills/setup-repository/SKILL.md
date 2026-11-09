@@ -55,12 +55,9 @@ git config --global user.email
 
 Microsoft Learn articles are backed by GitHub repos. The user may give a Learn URL (we extract the repo from the page's edit link) or a repo name directly. Most private repos use a `-pr` suffix.
 
-Read VS Code setting `cda.team`.
+Ask the user what to clone:
 
-- If `cda.team` is set, ask:
-  > What do you want to clone for the **{cda.team}** team? You can give me a Learn article URL (e.g. `https://learn.microsoft.com/azure/expressroute/...`) or the repo name directly (e.g. `azure-docs-pr`).
-- If `cda.team` is empty, keep the existing prompt:
-  > What do you want to clone? You can give me a Learn article URL (e.g. `https://learn.microsoft.com/azure/expressroute/...`) or the repo name directly (e.g. `azure-docs-pr`).
+> What do you want to clone? You can give me a Learn article URL (e.g. `https://learn.microsoft.com/azure/expressroute/...`) or the repo name directly (e.g. `azure-docs-pr`).
 
 **If given a Learn URL:**
 
@@ -121,4 +118,4 @@ Tell the user:
 - Repository cloned to: `/c/GitHub/{repo}` ✅
 - Remotes: `origin` → their fork, `upstream` → `{org}/{repo}` ✅
 
-They can now start their first session with "@cda".
+They can now open the repository in VS Code and start a Copilot session.

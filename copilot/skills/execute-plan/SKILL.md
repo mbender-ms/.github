@@ -22,16 +22,16 @@ Execute an existing queued todo plan by walking through its phases step by step.
 
 ## Step 1: Locate the plans directory
 
-Read the `cda.plansDir` VS Code setting to find the plans directory. Default is `~/.copilot/cda/plans/`.
+Use the plans directory explicitly provided by the user or configured in the agent instructions. Otherwise, use `~/.copilot/plans/`.
 
 ```
-run_in_terminal: cat ~/.copilot/cda/plans/*.md | head -5
+run_in_terminal: cat ~/.copilot/plans/*.md | head -5
 ```
 
 Or list plan files:
 
 ```
-run_in_terminal: ls ~/.copilot/cda/plans/*.md
+run_in_terminal: ls ~/.copilot/plans/*.md
 ```
 
 ## Step 2: Find the matching plan
@@ -89,7 +89,7 @@ When all phases are complete:
 
 1. Set `status: completed` in frontmatter
 1. Inform the user: "All phases complete! Plan '{title}' is done."
-1. Ask: "Should I archive this plan?" (moves to `~/.copilot/cda/plans/archive/`)
+1. Ask: "Should I archive this plan?" (moves to the `archive/` subfolder of the selected plans directory)
 1. If the plan has a `work-item` field, ask: "Should I update ADO work item #{work-item} with a progress comment?"
 
 ---

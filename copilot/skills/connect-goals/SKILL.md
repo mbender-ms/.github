@@ -27,8 +27,8 @@ Track semester SMART goal progress by querying ADO, GitHub, and session summarie
 
 Before running setup, the agent should gather context:
 
-1. **Author settings** — Call `get_author_settings` to get the user's ADO org, project, team, and service area
-2. **Session export directory** — Read from `cda.sessionExportDir` setting (session summaries are in `{export-directory}/Session Summaries/`)
+1. **Author context** — Read the user's ADO org, project, team, and service area from explicit agent instructions or ask the user to confirm missing values
+2. **Session export directory** — Use the export directory explicitly provided by the user or agent instructions (session summaries are in `{export-directory}/Session Summaries/`); ask if no directory is configured
 3. **Connect document path** — User provides this as the argument to `/connect-goals setup`
 
 If the user doesn't provide a path, prompt: *"Where is your Connect document? Provide the file path (e.g., `D:\Documents\My-Connect-FY26H2.md`)"*
@@ -44,8 +44,8 @@ If the user doesn't provide a path, prompt: *"Where is your Connect document? Pr
 ### Step 1: Gather user context
 
 ```
-# Get author settings for ADO org/project
-get_author_settings → { adoOrg, adoProject, name, team, ... }
+# Confirm author context from agent instructions or user input
+author_context → { adoOrg, adoProject, name, team, ... }
 
 # Read the Connect document
 read_file(connect_doc_path)
@@ -60,7 +60,7 @@ Extract the **"Plan for the future"** section. Parse each SMART goal, identifyin
 
 ### Step 2: Build queries for each goal
 
-For each goal, construct the stored queries that `/connect-goals update` will run later. Use the author's ADO org and project from `get_author_settings`.
+For each goal, construct the stored queries that `/connect-goals update` will run later. Use the author's confirmed ADO org and project.
 
 **ADO-based goals** — Build a WIQL query:
 
@@ -93,11 +93,11 @@ Goal: "Attend team meetings 3+ days/week"
 
 ### Step 3: Run baseline queries
 
-For each quantitative goal, run the query NOW to establish the starting point. Use the ADO org from author settings:
+For each quantitative goal, run the query NOW to establish the starting point. Use the confirmed ADO org:
 
 Call `mcp_ado_wit_query` with:
 - `query`: the stored `wiql_query` for this goal
-- `project`: `{ado_project}` (from `get_author_settings`)
+- `project`: `{ado_project}` (from the confirmed author context)
 
 The MCP tool returns structured JSON — count the results directly (no temp files or BOM stripping needed).
 
@@ -137,11 +137,11 @@ Display summary:
 
 **When to run:** After generating a monthly report, before 1:1s, or during Connect review writing.
 
-### Step 1: Read current GOALS.md and author settings
+### Step 1: Read current GOALS.md and confirm author context
 
 ```
 read_file("~/.copilot/skills/connect-goals/GOALS.md")
-get_author_settings → { adoOrg, adoProject, ... }
+author_context → { adoOrg, adoProject, ... }
 ```
 
 Parse all goals, their stored queries, and current values.
@@ -152,7 +152,7 @@ Parse all goals, their stored queries, and current values.
 
 Call `mcp_ado_wit_query` with:
 - `query`: the stored `wiql_query` for this goal
-- `project`: `{ado_project}` (from `get_author_settings`)
+- `project`: `{ado_project}` (from the confirmed author context)
 
 The MCP tool returns structured JSON — count the results directly.
 
@@ -164,7 +164,7 @@ Use `mcp_github_search_pull_requests` or `mcp_github_list_pull_requests` to coun
 
 **For recurring/manual goals:**
 
-Read the latest session summaries for the current month from the CDA export directory (`{export-directory}/Session Summaries/`). Look for evidence patterns matching the goal's keywords.
+Read the latest session summaries for the current month from the confirmed export directory (`{export-directory}/Session Summaries/`). Look for evidence patterns matching the goal's keywords.
 
 Ask the user to confirm any manual goals with the stored `update_prompt`.
 

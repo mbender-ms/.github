@@ -109,7 +109,7 @@ Example: `Load Balancer | Maintenance | Github Issues & PR Review`
 
 ## Tags
 
-Always include: service tag (e.g., `azure-load-balancer`), area tag (e.g., `Networking`), workflow type (e.g., `content-maintenance`), and `cda`.
+Always include: service tag (e.g., `azure-load-balancer`), area tag (e.g., `Networking`), and workflow type (e.g., `content-maintenance`).
 
 ### Required tags
 

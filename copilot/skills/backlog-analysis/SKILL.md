@@ -18,7 +18,7 @@ All backlog analysis files go to:
 {SESSION_DIR}/analysis/backlog/{YYYY-MM-DD}/
 ```
 
-Example: `D:\OneDrive - Microsoft\Content Dev\CDA things\Reports\analysis\backlog\2026-04-27\`
+Example: `D:\Reports\analysis\backlog\2026-04-27\`
 
 Files produced:
 - `backlog-review-{YYYY-MM-DD}.html` — styled HTML report with tier tables

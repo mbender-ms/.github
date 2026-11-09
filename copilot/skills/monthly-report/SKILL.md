@@ -29,7 +29,7 @@ If `~/.copilot/skills/connect-goals/GOALS.md` exists, the report includes a seme
 2. **MCP batch-fetch + GitHub API → detail enrichment** — titles, descriptions, PR stats, merge dates
 3. **Session summaries → narrative context** — the story behind each item: decisions, blockers, technical details ADO metadata doesn't capture
 
-**Output** (uses the CDA export directory configured in extension settings, under `Monthly Reports` subfolder):
+**Output** (uses the export directory explicitly provided by the user or agent instructions, under the `Monthly Reports` subfolder; ask the user if no directory is configured):
 - **Markdown**: `{export-directory}/Monthly Reports/monthly-report-{month}-{year}.md`
 - **HTML**: `{export-directory}/Monthly Reports/monthly-report-{month}-{year}.html`
 
@@ -37,7 +37,7 @@ If `~/.copilot/skills/connect-goals/GOALS.md` exists, the report includes a seme
 
 **Dual theme + Lucide icons (v3)**: The template ships two themes — **dark** (default, for personal use) and **executive** (light, navy + gold, for sharing with managers / Connect docs). Users toggle via the Lucide `moon` / `landmark` icon in the top-right controls; preference persists in `localStorage('report-theme-v2')`. Both themes use Segoe UI throughout. All icons are Lucide SVGs loaded via the CDN at the bottom of `<body>` — use `<i data-lucide="NAME" class="lui"></i>` wherever you'd previously have used an emoji.
 
-**Author identity**: Before generating reports, call the `get_author_settings` tool to get the user's name, email, team, role, and service area. Use these values to fill in template placeholders like `{Author Name}`, `{email}`, `{Team Name}`, and `{Role/Lead Title}`.
+**Author identity**: Before generating reports, read the user's name, email, team, role, and service area from explicit agent instructions or ask the user to confirm missing values. Use these values to fill in template placeholders like `{Author Name}`, `{email}`, `{Team Name}`, and `{Role/Lead Title}`.
 
 ---
 
@@ -97,7 +97,7 @@ manage_todo_list([
    - **Content Maintenance**: UUF fixes, freshness reviews, migrations, link fixes
    - **Automation/Tooling**: MCP server work, VS Code extension, team configurations
    - **PR Reviews**: External and team PR reviews, style guide enforcement
-   - **Compliance/Admin**: CDA reviews, ADO management, reporting
+   - **Compliance/Admin**: Content reviews, ADO management, reporting
    - **Analysis**: Content audits, architecture research
 4. Identify recurring work themes (Big Rocks candidates):
    - Multi-day work items (appear in multiple sessions)
@@ -286,7 +286,7 @@ WHERE [System.WorkItemType] IN ('User Story','User Feedback')
 
 **Format as 3–4 themed priority bullets, NOT a raw ADO table:**
 
-1. Group items by strategic theme (e.g., "SQL Security depth", "CDA & Automation", "Recurring")
+1. Group items by strategic theme (e.g., "SQL Security depth", "Workflow Automation", "Recurring")
 1. Write 2–3 sentences per theme describing the strategic goal and key deliverables
 1. Include inline ADO hyperlinks for every item: `[#ID](url)` in markdown, `<a href>` in HTML
 1. Show SP per item inline: `([#558231](url), 5 SP)` and total SP per theme in the heading

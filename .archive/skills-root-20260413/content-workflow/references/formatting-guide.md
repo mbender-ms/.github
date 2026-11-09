@@ -22,7 +22,7 @@ When creating or updating ADO work items:
 | `Microsoft.VSTS.Scheduling.StartDate` | Current date ISO 8601 | Set at create-time |
 | `Microsoft.VSTS.Scheduling.TargetDate` | End of current month | Unless user provides target date |
 | `Custom.ProposalType` | Based on action | New, Update, Review, Remove, Retire, Migrate |
-| `System.Tags` | From approved list | Semicolon-separated, always include service name + `cda` |
+| `System.Tags` | From approved list | Semicolon-separated, always include service name |
 
 For `User Story`, include `Microsoft.VSTS.Scheduling.StoryPoints`.
 
@@ -70,7 +70,7 @@ Use `"format": "Markdown"` when setting `System.Description`:
 - PM Contact: [name] ([email])
 - Start Date: [YYYY-MM-DD]
 - Target Date: [YYYY-MM-DD]
-- Tags: [workflow-tag]; [service-tag]; cda
+- Tags: [workflow-tag]; [service-tag]
 - Modality: Documentation
 - Proposal Type: [value]
 - PR: [#PR_NUMBER](https://github.com/MicrosoftDocs/<repo>/pull/PR_NUMBER) (if applicable)
@@ -160,7 +160,7 @@ Use `AAC` as the canonical Architecture Center tag. If legacy content uses `ACC`
 
 Always add the service name (for example, `ExpressRoute`) as an additional tag.
 
-Always add `cda` as an additional tag.
+Always include the service and workflow tags.
 
 ## ProposalType values
 

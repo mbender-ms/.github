@@ -116,24 +116,22 @@ graph TD
         V[VS Code]
     end
 
-    subgraph ConfigScript["configure-vscode-winget.ps1 (10 phases)"]
+    subgraph ConfigScript["Retained setup responsibilities (retired internal server omitted)"]
         P1[Phase 1: Pre-flight checks]
         P2[Phase 2: Parallel winget installs]
         P3[Phase 3: PATH refresh]
         P4[Phase 4: Tool verification]
         P5[Phase 5: ADO MCP npm install]
-        P6[Phase 6: Hosts file patch\n10.135.28.11 → roguereporting2]
-        P7[Phase 7: VS Code extensions]
-        P8[Phase 8: settings.json merge]
-        P9[Phase 9: mcp.json merge\nRole-aware server selection]
-        P10[Phase 10: Agent file download\nVPN fallback]
+        P6[Phase 6: VS Code extensions]
+        P7[Phase 7: settings.json merge]
+        P8[Phase 8: mcp.json merge\nRole-aware server selection]
+        P9[Phase 9: Agent file download\nVPN fallback]
     end
 
     subgraph MCPServers["MCP Servers (always)"]
         MSD[microsoft-docs]
         GHM[github]
         ADO[ado-content\nmsft-skilling org]
-        CDA[content-developer-assistant\nroguereporting2:8000]
     end
 
     subgraph RoleMCP["MCP Servers (role-specific)"]
@@ -154,10 +152,10 @@ graph TD
     B --> WingetPhase
     B --> ConfigScript
     P2 --> WingetPhase
-    P9 --> MCPServers
-    P9 --> RoleMCP
-    P10 --> AgentFiles
-    P7 --> Extension
+    P8 --> MCPServers
+    P8 --> RoleMCP
+    P9 --> AgentFiles
+    P6 --> Extension
 
     AgentFiles["Agent .md Files\ncontent-developer / technical-advisor / product-manager"]
     EXT --> SM
@@ -191,11 +189,10 @@ sequenceDiagram
     BAT->>PS1: Execute with role/email/alias params
     PS1->>PS1: Phase 1-4: verify tools
     PS1->>PS1: Phase 5: npm install @modelcontextprotocol/ado-content
-    PS1->>PS1: Phase 6: patch hosts → 10.135.28.11 roguereporting2
-    PS1->>VSC: Phase 7: Install ~15 VS Code extensions
-    PS1->>VSC: Phase 8: Merge settings.json
-    PS1->>VSC: Phase 9: Merge mcp.json (role-aware MCP servers)
-    PS1->>PS1: Phase 10: Download agent .md (VPN check → fallback)
+    PS1->>VSC: Phase 6: Install ~15 VS Code extensions
+    PS1->>VSC: Phase 7: Merge settings.json
+    PS1->>VSC: Phase 8: Merge mcp.json (role-aware MCP servers)
+    PS1->>PS1: Phase 9: Download agent .md (VPN check → fallback)
     PS1-->>User: Print summary + backup location
 ```
 
@@ -246,13 +243,11 @@ classDiagram
 
 | Risk | Severity | Detail |
 |------|----------|--------|
-| **Hosts file dependency** | High | `roguereporting2:8000` must map to `10.135.28.11` via `C:\Windows\System32\drivers\etc\hosts`. Requires admin. Bypassed by DNS or Azure Private DNS if infrastructure allows. |
-| **Internal MCP server availability** | High | `content-developer-assistant` MCP is internal-only (VPN-gated). Extension has a VPN status bar but setup fails silently if VPN is absent during install. |
 | **mcp.json overwrite** | Medium | VS Code can silently overwrite `mcp.json` when a workspace is opened that contains a `.vscode/mcp.json`. Installer saves a backup to `%PUBLIC%\Desktop\mcp.json` but recovery is manual. |
 | **WiX v3 EOL** | Medium | WiX v3 is in maintenance mode. WiX v4/v5 have breaking changes. Migration effort is moderate but not urgent unless upgrading toolchain. |
 | **BUGS.md BUG-001** | Low-Medium | `SessionMemoryManager` logs PRs and work items from LM tool call *arguments* before confirming success. Partial mitigation via `isError` checks in PR #15/#17, but text-pattern capture accepted as known limitation. |
 | **Role selection immutability** | Medium | Role is captured once at install time. Changing roles requires re-running the installer. |
-| **Windows-only** | Low (for target users) | All team members are on Windows. If team expands to macOS, VS Code extension and most scripts are portable but WiX and hosts-patching are not. |
+| **Windows-only** | Low (for target users) | All team members are on Windows. If team expands to macOS, VS Code extension and most scripts are portable but WiX is not. |
 | **Node.js version pinning** | Low | Bundle installs "Node.js LTS" (unpinned). ADO MCP npm package could break with a major Node upgrade. |
 
 ---
@@ -270,7 +265,6 @@ classDiagram
 | **Role-aware MCP server selection** | Install-time role dialog → conditional PS1 logic | Multiple workspace profiles or per-role repo branches | **CONDITIONAL** — VS Code doesn't have native "role mode"; could use separate repos or a setup script that copies the right mcp.json |
 | **Deploy Copilot agent files** | Bundle payload → copy to `%APPDATA%\Code\User\prompts\` | `git clone` a shared prompts repo OR VS Code team policy | **GO** — agent `.md` files are portable; just need to land in the prompts folder |
 | **Deploy skills** | Bundle payload | Same `git clone` approach; skills live in `.github` repo | **GO** |
-| **Patch hosts file** | PS1 admin block writes `10.135.28.11 roguereporting2` | Azure Private DNS zone or split-tunnel DNS | **CONDITIONAL** — if the team can control DNS, hosts patching is eliminated. Otherwise a one-time manual step or Intune-deployed config |
 | **Install VS Code extension (VSIX)** | PS1 `code --install-extension` | Publish extension to VS Code Marketplace (private or public) | **GO** — marketplace install is one command |
 | **Session memory & LM tools** | VS Code extension | VS Code extension (this doesn't change; extension is the delivery mechanism) | **NO-GO for eliminating** — extension is the value; only the *installer* can be eliminated |
 | **VPN detection** | Extension `vpn-checker.ts` | Extension continues to do this | n/a |

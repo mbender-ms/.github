@@ -11,7 +11,7 @@ user-invocable: true
 
 # Content workflow skill
 
-This skill orchestrates the full Azure documentation content development lifecycle. It replaces five MCP server tools (`create_work_item_template`, `generate_git_workflow_context`, `generate_pr_description`, `calculate_work_item_completion`, `get_workflow_example`) with portable instructions that Copilot executes directly.
+This skill orchestrates the full Azure documentation content development lifecycle with portable instructions that Copilot executes directly for work item templates, Git workflows, PR descriptions, completion checks, and workflow examples.
 
 ## Workflow 1: Session startup
 
@@ -86,7 +86,7 @@ Calculate all fields from the conversation context and reference data.
 | `System.IterationPath` | Calculated current iteration from `references/iteration-calculator.md` |
 | `System.Description` | Markdown template below |
 | `Microsoft.VSTS.Common.AcceptanceCriteria` | Markdown template below |
-| `System.Tags` | Approved tags + service name + `"cda"` (semicolon-separated) |
+| `System.Tags` | Approved tags + service name (semicolon-separated) |
 | `System.Parent` | Parent from `references/ado-hierarchy.md` (linked in Step 3) |
 | `Microsoft.VSTS.Common.Priority` | `2` unless user provides a different priority |
 | `Custom.Modality` | `"Documentation"` |
@@ -111,7 +111,7 @@ For `Feature` items, also set `Custom.TeeShirtSize`.
 
 **Valid workflow types:** `content-maintenance`, `new-feature`, `pm-enablement` (legacy alias: `pm-content`), `css-support`, `partnership`, `content-gap`, `mvp-feedback`, `architecture-center`, `curation`
 
-**Approved tags (ONLY use these):** `content-maintenance`, `mvp-feedback`, `AAC`, `new-feature`, `PM-enablement`, `css-support`, `acc-horizontal-security`, `acc-horizontal-reliability`, `acc-horizontal-supportability`, `curation`, `CSAT`, `Linux`, `content-gap`, `Process`, `Training`. Always add the service name as a tag. Always add `"cda"` as a tag.
+**Approved tags (ONLY use these):** `content-maintenance`, `mvp-feedback`, `AAC`, `new-feature`, `PM-enablement`, `css-support`, `acc-horizontal-security`, `acc-horizontal-reliability`, `acc-horizontal-supportability`, `curation`, `CSAT`, `Linux`, `content-gap`, `Process`, `Training`. Always add the service name as a tag.
 
 Use `AAC` as the canonical Architecture Center tag. If legacy content uses `ACC`, normalize to `AAC` on update.
 
@@ -141,7 +141,7 @@ Use `AAC` as the canonical Architecture Center tag. If legacy content uses `ACC`
 - PM Contact: [name] ([email])
 - Start Date: [YYYY-MM-DD]
 - Target Date: [YYYY-MM-DD]
-- Tags: [workflow-tag]; [service-tag]; cda
+- Tags: [workflow-tag]; [service-tag]
 - Modality: Documentation
 - Proposal Type: [value]
 - PR: [#PR_NUMBER](https://github.com/MicrosoftDocs/<repo>/pull/PR_NUMBER) (if applicable)

@@ -16,22 +16,19 @@ When user asks to review a PR, this skill runs a systematic style analysis on ch
 
 1. **Fetch files**: Get changed `.md` files via `pull_request_read` (`method: "get_files"`), then read each file's content via `get_file_contents` (`ref: "refs/pull/{pr_number}/head"`)
 
-2. **Run analysis**: Call `generate_pr_review` with the file contents, PR URL, author, and title
+2. **Run analysis**: Review the changed passages against the Microsoft Writing Style Guide using the PR URL, author, title, and file contents as context. Record each actionable suggestion with its file, line, original text, proposed replacement, and rationale.
 
-3. **Process rewrites (REQUIRED)**: The style engine flags some violations (passive voice, dangling modifiers) but can't deterministically produce the corrected text — it leaves `[AGENT: Rewrite this line — {hint}]` markers that you must resolve. Delivering a review file with unresolved markers looks broken to the user and makes the review unusable. For EACH item in `suggestions_needing_rewrite`:
-   - Read the `original_text` and `hint` from the response
-   - Write a corrected version based on the hint (e.g., passive → active voice)
-   - Use `replace_string_in_file` on the review file to replace the `[AGENT: ...]` marker + original text with your corrected version
+3. **Write suggestions (REQUIRED)**: Produce a complete proposed replacement for each finding while preserving its technical meaning. Save the structured suggestions document to a user-confirmed location. Do not leave rewrite placeholders or incomplete recommendations.
 
 4. **Present results**: Tell the user the file location, suggestion count, and remind them to evaluate in context
 
 ### Key gates
-- `generate_pr_review` required for style analysis
-- ALL `[AGENT: ...]` rewrite markers must be processed before presenting results — if the file still has markers, the review is incomplete
+- Ground each finding in a specific passage and writing-style rule.
+- Complete every proposed rewrite before presenting results.
 
 ### Edge cases
 - **PR has no `.md` files changed**: Tell the user "No markdown files found in this PR — style review only applies to documentation files."
 - **Zero suggestions returned**: Tell the user the PR looks clean — no style issues detected.
 - **Review file write fails**: Surface the error and offer to display suggestions directly in chat instead.
 
-**Need details?** → `get_workflow_example workflow_type='pr-review'`
+**Scope:** Suggest edits for review; do not modify the pull request without the user's approval.

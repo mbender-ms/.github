@@ -217,7 +217,7 @@ Review and update {service} documentation following Microsoft Writing Style Guid
 - **Start Date**: {YYYY-MM-DD}
 - **Target Date**: {targetDate} ← only if provided
 - **PM Contact**: {pmContact} ← only if provided
-- **Tags**: {workflowType}; {service}; cda
+- **Tags**: {workflowType}; {service}
 - **Modality**: Documentation
 - **Proposal Type**: {New|Update|Review|Remove|Retire|Migrate}
 - **Article**: [Article title](https://learn.microsoft.com/en-us/azure/...)

@@ -72,7 +72,7 @@ Every task gets a plan `.md` file — this is the single source of truth for the
 
 ### File location
 
-Read the `cda.plansDir` VS Code setting. Default: `~/.copilot/cda/plans/`.
+Use the plans directory explicitly provided by the user or configured in the agent instructions. Otherwise, use `~/.copilot/plans/`.
 
 ### File naming
 

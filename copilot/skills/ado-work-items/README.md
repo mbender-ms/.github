@@ -121,5 +121,5 @@ Fill every row and use `0` when a metric does not apply.
 - Specific file paths in the solution section
 - Measurable outcomes in success metrics
 - Markdown format for all ADO fields (`format: "markdown"`)
-- `cda` tag always included for tracking
+- Service, area, and workflow tags included for tracking
 - `AAC` is the canonical Architecture Center tag (`ACC` is legacy and should be normalized)
