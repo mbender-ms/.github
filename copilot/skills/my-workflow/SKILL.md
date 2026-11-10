@@ -1,11 +1,11 @@
 ---
 name: my-workflow
 description: >-
-  Default working instructions for Michael Bender (@mbender-ms). Covers Azure
-  networking documentation responsibilities, repo conventions, environment
-  commands, and PR/work-item standards. Delegates specialized work to sibling
-  skills and sub-agents for efficiency.
-argument-hint: "e.g., 'sync prompts', 'list my repos', 'draft PR description for Load Balancer article', 'what services do I own?'"
+  Default working instructions for Michael Bender (@mbender-ms), Knowledge
+  Engineer. Covers role context, repo conventions, environment commands, and
+  work-item standards. Delegates specialized work to sibling skills and
+  sub-agents for efficiency.
+argument-hint: "e.g., 'sync prompts', 'list my repos', 'create a work item', 'plan this automation'"
 user-invocable: true
 ---
 
@@ -22,7 +22,7 @@ Personal working context for **Michael Bender** (`@mbender-ms`). Provides agents
 | **Name** | Michael Bender |
 | **GitHub** | `@mbender-ms` |
 | **MS Alias** | `mbender` |
-| **Role** | Content Developer — Azure Networking |
+| **Role** | Knowledge Engineer — builds AI automation and reusable tooling for Knowledge Managers, Knowledge Program Managers, and PMs |
 | **Team** | Azure Core Content |
 | **ADO Organization** | `msft-skilling` |
 | **ADO Project** | `Content` |
@@ -36,10 +36,7 @@ Before processing a request inline, check whether a sibling skill or sub-agent s
 
 | Task pattern | Delegate to | How |
 |---|---|---|
-| Write/scaffold a new article | `doc-writer` skill | Invoke skill directly |
-| Fact-check or verify accuracy | `doc-verifier` skill or `microsoft-fact-checker` agent | Use `doc-verifier` threshold matrix first; escalate only contested or high-risk claims to deep agent |
 | Create/validate ADO work items | `ado-work-items` skill | Invoke skill directly |
-| SEO, metadata, editorial review | `documentor-workflow` skill | Invoke skill directly |
 | Codebase exploration or research | `Explore` agent | Spawn sub-agent with thoroughness level |
 | PR description generation | [PR framework](references/pr-framework.md) | Draft from the verified changes using the framework |
 | Branch, commit, push, create PR | `git-workflow` prompt | Invoke prompt; uses `gh` CLI for PRs |
@@ -47,51 +44,24 @@ Before processing a request inline, check whether a sibling skill or sub-agent s
 
 **Rule**: If a task maps to a row above, delegate it — don't re-implement the logic inline.
 
+Content Development authoring skills are retired. See `mbender-ms/mbender-private` → `Archives/Content-Development/CATALOG.md`.
+
 ### Model routing defaults
 
-Use this default model routing when a task spans drafting, verification, and cleanup:
+Use this default model routing when a task spans planning, execution, and cleanup:
 
-- Tier 1 (Reasoning): final factual adjudication, source conflicts, architecture or risk judgment.
-- Tier 2 (Execution): draft or rewrite from clear briefs, structured PR review, evidence gathering.
-- Tier 3 (Cleanup): proofreading, formatting, metadata consistency, and mechanical transforms.
-
-For fact-checking and verification depth, follow the thresholds in [doc-verifier/SKILL.md](../doc-verifier/SKILL.md).
+- Tier 1 (Reasoning): source conflicts, architecture or risk judgment.
+- Tier 2 (Execution): build or rewrite from clear briefs, structured review, evidence gathering.
+- Tier 3 (Cleanup): proofreading, formatting, consistency, and mechanical transforms.
 
 ### Sub-agent patterns
 
 Use `runSubagent` for independent, parallelizable work:
 
-- **Fact-check + editorial review** — Spawn `microsoft-fact-checker` and a second agent for `documentor-workflow` SEO/engagement checks simultaneously, then merge results.
-- **Multi-file verification** — Spawn one `Explore` agent per file group to gather context, then process findings.
-- **Research + writing** — Spawn `Explore` agent for research while you scaffold the article structure, then integrate findings.
+- **Multi-file analysis** — Spawn one `Explore` agent per file group to gather context, then process findings.
+- **Research + build** — Spawn `Explore` agent for research while you scaffold the deliverable, then integrate findings.
 
 **When NOT to spawn**: Single-file edits, quick commands, simple lookups. Sub-agents have overhead — only use them when the task is complex enough to benefit from parallelism.
-
----
-
-## Services & Responsibilities
-
-### Primary services (I own these)
-
-| Service | Repo path | ms.service |
-|---------|-----------|------------|
-| Azure Load Balancer | `articles/load-balancer/` | `azure-load-balancer` |
-| Azure Virtual Network Manager | `articles/virtual-network-manager/` | `azure-virtual-network-manager` |
-| Azure Networking (cross-service) | `articles/networking/` | `azure-networking` |
-| Azure Network Security Perimeter | `articles/private-link/` | `azure-network-security-perimeter` |
-| Azure Application Gateway | `articles/application-gateway/` | `azure-application-gateway` |
-
-### Secondary services (I contribute to)
-
- DDoS Protection · Web Application Firewall · Azure Firewall · Bastion · Front Door · DNS · VPN Gateway · ExpressRoute
-
-> **Need repo paths or ms.service values for secondary services?** Ask, or look up in the sources catalog at `copilot/skills/sources/azure-networking.yml`.
-
-### Spotlight / project work
-
-- Zero Trust networking documentation
-- Secure network foundation architectures (hub-spoke, layered security)
-- Cross-service networking scenarios
 
 ---
 

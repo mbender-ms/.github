@@ -89,7 +89,7 @@ Score = (Customer Impact × 2) - Implementation Effort + Age Bonus
 3. Exclude:
    - Closed or Removed items
    - Items assigned to other team members (verify `AssignedTo = {USER_EMAIL}`)
-   - User Feedback (UUF) items (`System.WorkItemType = 'User Feedback'`) — these have their own analysis workflow via the uuf-analysis skill
+   - User Feedback (UUF) items (`System.WorkItemType = 'User Feedback'`) — out of scope for backlog scoring
 
 ### Phase 2: Score items
 

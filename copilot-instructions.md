@@ -19,36 +19,16 @@ These instructions are loaded into **every** Copilot conversation automatically.
 
 | Task type | Route to | Trigger words |
 |-----------|----------|---------------|
-| Write / scaffold article | `doc-writer` skill | "write", "draft", "scaffold", "new article" |
-| Fact-check / verify accuracy | `doc-verifier` skill | "verify", "fact-check", "validate", "check accuracy" |
-| Full freshness pass | `freshness-pass` skill | "freshness", "refresh", "update article" |
 | ADO work items | `ado-work-items` skill | "work item", "ADO", "task", "user story" |
-| SEO / editorial review | `documentor-workflow` skill | "SEO", "metadata", "editorial", "engagement" |
 | Research / exploration | `Explore` agent | "explore", "research", "investigate" |
 | Git operations | `git-workflow` prompt | "commit", "push", "branch", "PR" |
 | Release branch checkout | `release-branch` prompt | "release branch", "create release branch", "create rb", optional trailing repo name or alias |
-| PR description | `pr-description-template` prompt | "PR description", "PR body" |
 | Convert file to markdown | `artifact-conversion` skill | "convert", "to markdown", ".pdf", ".docx", ".xlsx", ".pptx", "extract text", "image to text" |
-| Screenshot alt text | `learn-screenshot-alt-text` or `learn-screenshot-alt-text-lint` skill | "alt text", "screenshot description", "accessibility", "image alt text" |
 
 ## Skill Loading
 
 For deeper context (services, repos, conventions, sub-agent patterns), load the `my-workflow` skill (`copilot/skills/my-workflow/SKILL.md`). Don't load it unless the task needs it — these global rules cover most interactions.
 
-## Content verification gate
+## Retired authoring tools
 
-All documentation drafts, release notes, how-to articles, and procedure guides
-require a content verification pass before delivery.
-
-**Skills:**
-- `skills/content-verification/` — runs the 30-rule AI anti-pattern pass
-- `skills/verification-reporter/` — formats findings as a Markdown PR report
-
-**When to invoke:**
-- After any agent finishes drafting or editing a documentation file
-- When asked to "check for AI patterns," "make this sound more human," or "run a style pass"
-- Before delivering any written artifact longer than 200 words
-
-**When not to invoke:**
-- Code comments, commit messages, log output, UI label strings
-- Content inside code blocks or callout syntax (> [!NOTE], > [!TIP])
+Content Development authoring skills (doc-writer, doc-verifier, freshness-pass, documentor-workflow, content-verification, and related prompts) are retired. See `mbender-ms/mbender-private` → `Archives/Content-Development/CATALOG.md`. For authoring, use organization-approved tooling such as Content Mentor.

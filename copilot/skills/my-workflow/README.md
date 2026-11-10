@@ -18,15 +18,14 @@ When you invoke this skill (or reference it as `#my-workflow`), agents automatic
 In GitHub Copilot Chat:
 
 ```
-#my-workflow what services do I own?
-#my-workflow draft a PR description for this Load Balancer update
+#my-workflow what's my role context?
 #my-workflow sync prompts
 ```
 
 Or as context for other skills:
 
 ```
-#my-workflow #doc-writer write a how-to for Azure Load Balancer health probes
+#my-workflow #ado-work-items create a task for the intake automation prototype
 ```
 
 ## Files
